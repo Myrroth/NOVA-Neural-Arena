@@ -14,3 +14,6 @@ Python 3.11+, Gymnasium para API, NumPy para observações, PyTorch para DQN, py
 
 ## 2026-11-01 — Validação e automação
 Seeds de avaliação separadas (seed + 100000); DQN greedy versus baseline aleatória nas mesmas seeds; relatório contém média, mediana, desvio, mínimos e máximos. Actions somente por acionamento manual, limites explícitos, permissões read-only e artifacts com retenção de 30 dias. Resultados de treino curto não equivalem a generalização. Checkpoint permite inferência; replay e estados de RNG ainda não são persistidos.
+
+## 2026-11-01 — Validação técnica da PR #1
+Adotar Gymnasium oficial 1.4.0 no CI e pin de dependências diretas (requirements-ci.txt); registrar dependências resolvidas com pip freeze. O CI de testes aceita evento de pull_request, necessário para testar antes de merge, enquanto treinamento permanece exclusivamente via workflow_dispatch. Testes de contrato usam env_checker real, sem fallback/skip. A impossibilidade de instalar dependências na máquina de verificação local não deve ser relatada como aprovação oficial. Fixar algoritmos determinísticos PyTorch (CPU, thread única) e comparar métricas de execuções curtas com mesma seed.

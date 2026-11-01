@@ -20,9 +20,21 @@ python -m arena.training.train --episodes 100 --eval-episodes 20 --seed 42 --out
 
 Treino curto pode não melhorar a política aleatória. Avalie em múltiplas seeds e observe a variabilidade.
 
+## Validação reprodutível de desenvolvimento
+
+O CI utiliza Python 3.11 e versões fixadas das dependências principais em `requirements-ci.txt` (Gymnasium 1.4.0, CPU PyTorch 2.10.0, NumPy 2.3.5, pytest 9.0.2). Para espelhar o ambiente de CI:
+
+~~~bash
+python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+python -m pip install -c requirements-ci.txt -e '.[dev]'
+python -m pytest -q
+~~~
+
+A suíte inclui `env_checker` oficial em modo normal e ANSI, além de teste de repetição de métricas com seed fixa. Versões transitivas não estão completamente travadas; CI registra `pip freeze` para auditoria. Checkpoints não permitem retomada exata (replay/RNG não persistidos).
+
 ## GitHub Actions
 
-Em **Actions**, selecione "Manual tests" ou "Manual short DQN train" e use **Run workflow**. Ambos exigem acionamento manual, e o treino limita episódios e publica os artefatos por 30 dias. Preserve modelos importantes fora desses artefatos temporários.
+Para validar a PR sem alterar `main`, o workflow de **testes** também roda em eventos de `pull_request`; **treinamento continua exclusivamente manual** (`Manual short DQN train`). `workflow_dispatch` só fica disponível quando o workflow estiver na branch padrão; até lá, não presumir que o botão manual funciona. O treino limita episódios e publica os artefatos por 30 dias. Preserve modelos importantes fora desses artefatos temporários.
 
 ## Organização
 

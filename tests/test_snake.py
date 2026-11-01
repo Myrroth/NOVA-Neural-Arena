@@ -70,6 +70,11 @@ def test_render():
     assert len(frame.splitlines()) == 6
 
 
-def test_official_gymnasium_env_checker():
-    checker = pytest.importorskip("gymnasium.utils.env_checker")
-    checker.check_env(SnakeEnv(width=8, height=8, max_steps=40))
+@pytest.mark.parametrize("render_mode", [None, "ansi"])
+def test_official_gymnasium_env_checker(render_mode):
+    from gymnasium.utils.env_checker import check_env
+    env = SnakeEnv(width=8, height=8, max_steps=40, render_mode=render_mode)
+    try:
+        check_env(env, skip_render_check=False)
+    finally:
+        env.close()

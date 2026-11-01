@@ -19,6 +19,7 @@ def train(*, episodes: int = 100, eval_episodes: int = 20, width: int = 10,
           out: str | Path = "experiments/local") -> dict:
     if episodes < 1 or eval_episodes < 1:
         raise ValueError("episodes and eval_episodes must be positive")
+    torch.use_deterministic_algorithms(True)
     torch.manual_seed(seed)
     np.random.seed(seed)
     random.seed(seed)
@@ -62,7 +63,9 @@ def train(*, episodes: int = 100, eval_episodes: int = 20, width: int = 10,
                 "training_seeds": [seed, seed + episodes - 1], "evaluation_seeds": eval_seeds,
                 "config": asdict(config), "versions": {"python": platform.python_version(),
                   "numpy": np.__version__, "torch": torch.__version__, "gymnasium": gymnasium.__version__},
-                "gradient_updates": agent.updates}
+                "gradient_updates": agent.updates,
+                "determinism": {"algorithms": torch.are_deterministic_algorithms_enabled(),
+                                 "torch_threads": torch.get_num_threads()}}
     with (output_dir / "run.json").open("w", encoding="utf-8") as handle:
         json.dump(metadata, handle, indent=2)
     return {"output": str(output_dir), "gradient_updates": agent.updates,

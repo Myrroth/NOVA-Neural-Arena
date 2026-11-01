@@ -45,3 +45,13 @@ def test_short_training_generates_artifacts(tmp_path):
     with (output / "episodes.csv").open() as f:
         rows = list(csv.DictReader(f))
     assert len(rows) == 6
+
+def test_identical_seed_produces_identical_metrics(tmp_path):
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    args = {"episodes": 4, "eval_episodes": 3, "width": 6, "height": 6,
+            "max_steps": 15, "seed": 813}
+    train(out=first, **args)
+    train(out=second, **args)
+    for filename in ("episodes.csv", "evaluation.json", "run.json"):
+        assert (first / filename).read_bytes() == (second / filename).read_bytes()
