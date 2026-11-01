@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# NOVA Neural Arena outputs
+*.pt
+experiments/*
+!experiments/.gitkeep

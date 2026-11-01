@@ -1,0 +1,56 @@
+name: Manual short DQN train
+on:
+  workflow_dispatch:
+    inputs:
+      episodes:
+        description: 'Training episodes (1..300)'
+        required: true
+        default: '80'
+      eval_episodes:
+        description: 'Evaluation games (2..100)'
+        required: true
+        default: '20'
+
+permissions:
+  contents: read
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+      - name: Validate resource limits
+        shell: bash
+        env:
+          EPISODES: ${{ inputs.episodes }}
+          EVAL_EPISODES: ${{ inputs.eval_episodes }}
+        run: |
+          [[ "$EPISODES" =~ ^[0-9]+$ ]] && (( EPISODES >= 1 && EPISODES <= 300 )) || exit 1
+          [[ "$EVAL_EPISODES" =~ ^[0-9]+$ ]] && (( EVAL_EPISODES >= 2 && EVAL_EPISODES <= 100 )) || exit 1
+      - name: Install project
+        run: |
+          python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -c requirements-ci.txt -e '.[dev]'
+          python -m pip check
+      - name: Run tests
+        run: python -m pytest -q
+      - name: Run DQN and paired-seed benchmark
+        env:
+          EPISODES: ${{ inputs.episodes }}
+          EVAL_EPISODES: ${{ inputs.eval_episodes }}
+        run: |
+          python -m arena.training.train --episodes "$EPISODES" --eval-episodes "$EVAL_EPISODES" --seed 42 --max-steps 200 --out experiments/actions
+      - name: Upload checkpoint and metrics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: snake-dqn-${{ github.run_id }}
+          path: experiments/actions/
+          if-no-files-found: warn
+          retention-days: 30
