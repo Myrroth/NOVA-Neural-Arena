@@ -57,3 +57,9 @@ Workflow: `.github/workflows/neural-pilot-on-label.yml`.
 - **Campanha dos 50 ambientes NÃO executada; checkpoints oficiais NÃO modificados; nenhum novo treinamento.** Testes de integração com arquivos oficiais pendem da execução futura autorizada pelo Chat 1.
 - Artifact IDs: 13101471957, 13101072100, 13100988601; expiração por volta de **2026-12-01 21:15 UTC**. Preserve ZIPs oficiais antes disso.
 - **Estado:** código submetido para CI de infraestrutura; **aprovação científica e autorização de avaliação pendentes**. Nenhum merge na PR #1 ou nova PR, sem alteração da NOVA original.
+
+### Validação comprovada da infraestrutura da Fase 2 (2026-11-01)
+- [CI inicial #41353536523](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41353536523): **22 testes aprovados, 2 avisos Gymnasium não bloqueantes** (incluía ainda testes legados de treino curto da PR #1; não executou a campanha de Fase 2 nem treinou os checkpoints oficiais).
+- [CI com artefatos reais #41353674728](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41353674728): **22 testes aprovados**; baixou os 3 artifacts oficiais do piloto, conferiu `SHA256SUMS`, modelo esperado/proveniência e **carregou os 3 checkpoints sem executar episódios/inferência**. Seed 11/42/73 PASS nos logs.
+- [Teste do gatilho com `documentation` #41353590209](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41353590209): run **skipped**; nenhuma avaliação científica disparada. A etiqueta foi removida.
+- **Endurecimento posterior:** workflows da Fase 2 passaram a rodar exclusivamente `tests/test_phase2_frozen.py` e `tests/test_snake.py`, excluindo testes legados de microtreinamento; aguardando CI do último commit. A execução de 350 partidas nas 50 seeds comuns continua **NÃO AUTORIZADA**.
