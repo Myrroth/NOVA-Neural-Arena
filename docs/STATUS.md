@@ -11,14 +11,14 @@ Atualizado em: 2026-11-01
 - DQN PyTorch com replay, target network, epsilon-greedy, checkpoint model.pt.
 - Treino CLI e arquivos episodes.csv, evaluation.json, run.json, com versões, seeds e hiperparâmetros.
 - Baseline aleatória e avaliação pareada com seeds de treino/avaliação separadas.
-- Dez testes de ambiente, treinamento, checkpoint e benchmark.
+- Dez testes de ambiente, treinamento, checkpoint e benchmark, mais um teste de contrato com o checker oficial Gymnasium.
 - Workflows manuais em .github/workflows/ci.yml e train.yml; ainda não executados no GitHub.
 
 ## Validação executada localmente
-- 10 testes aprovados em Python com NumPy 2.3.5, PyTorch 2.10.0 CPU e pytest 9.0.2.
+- 10 testes aprovados, 1 teste do checker oficial ignorado por dependência ausente, em Python com NumPy 2.3.5, PyTorch 2.10.0 CPU e pytest 9.0.2.
 - **Limitação:** Gymnasium ausente no runtime de validação; utilizado stub local de compatibilidade (fora do repositório). Os testes **não** validam integração com Gymnasium oficial.
 - Treino demonstrativo com 100 episódios, seed 42, 10x10, até 200 passos, 30 avaliações nas seeds 100042..100071: 2.278 updates; pontuação média DQN greedy 18,30 vs aleatória 0,2333, mediana 19 vs 0. Desvio de pontuação 4,489 vs 0,568. Resultados locais provisórios; necessitam reprodução com dependências oficiais antes de conclusão.
-- Checkpoint gerado localmente; ainda não publicado como artifact de Actions.
+- Repetido o treinamento completo com mesma seed e parâmetros: `episodes.csv`, `evaluation.json` e `run.json` ficaram byte-a-byte idênticos. Checkpoint gerado localmente; ainda não publicado como artifact de Actions.
 
 ## Problemas e limites conhecidos
 - Actions ainda não disparados; status operacional CI pendente de confirmação. **Limitação do GitHub:** workflows `workflow_dispatch` precisam existir na branch padrão para disparo normal pela interface; como esta implementação está somente na branch da PR, não é possível tratá-los como operacionais antes da aprovação/integração do workflow. Evitar alterar `main` fora de PR.
