@@ -2,6 +2,9 @@
 
 Atualizado em: 2026-11-01
 
+- PR: https://github.com/Myrroth/NOVA-Neural-Arena/pull/1 (rascunho, sem merge).
+- Commit inicial: https://github.com/Myrroth/NOVA-Neural-Arena/commit/aaab24c46d3663ba2e4728c25f8ca4e2947a0fee
+
 ## Implementado na branch feat/snake-dqn-laboratory
 - Estrutura Python independente, sem tocar a IA NOVA.
 - Snake Gymnasium com seeds, render ANSI, tabuleiros configuráveis, observação parcial 11D e ações relativas.
@@ -18,7 +21,7 @@ Atualizado em: 2026-11-01
 - Checkpoint gerado localmente; ainda não publicado como artifact de Actions.
 
 ## Problemas e limites conhecidos
-- Actions ainda não disparados; status operacional CI pendente de confirmação.
+- Actions ainda não disparados; status operacional CI pendente de confirmação. **Limitação do GitHub:** workflows `workflow_dispatch` precisam existir na branch padrão para disparo normal pela interface; como esta implementação está somente na branch da PR, não é possível tratá-los como operacionais antes da aprovação/integração do workflow. Evitar alterar `main` fora de PR.
 - Teste com Gymnasium real e env_checker pendente.
 - Apenas Snake, observação parcial, sem transferência ou avaliação de generalização.
 - Checkpoint não inclui replay buffer ou RNG para retomada exata.
