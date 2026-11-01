@@ -46,3 +46,14 @@ Workflow: `.github/workflows/neural-pilot-on-label.yml`.
 - Dependências **diretas** pinadas; `pip-freeze.txt` registra transitivas efetivamente instaladas. O checkout da mesma versão não garante reprodutibilidade bit a bit entre máquinas.
 - Checkpoint de treinamento aprovado não salva replay/RNG para retomada exata. Desfechos `terminated`/`truncated` ausentes no arquivo de avaliação são uma melhoria futura, não alterar durante o piloto fixo.
 - Execução e avaliação científica reservadas ao Chat 3 e Chat 4. Sem campanhas extensas; sem merge; NOVA original intocada.
+
+
+## 2026-11-01 — Chat 2: preparação isolada Fase 2 (nova PR em rascunho)
+- Decisão do Chat 1: https://github.com/Myrroth/NOVA-Neural-Arena/pull/1#issuecomment-6564203362.
+- Piloto nº 001 concluído (run 41350959549): três jobs oficiais passaram; artefatos e seus hashes auditados no Relatório Científico nº 002.
+- Nova branch `feat/phase2-frozen-evaluation`, originada de `feat/snake-dqn-laboratory`; **Snake/DQN/treinador e resultados anteriores preservados**.
+- Infraestrutura proposta: `arena/evaluation/frozen_phase2.py` (verifica hashes e proveniência dos três checkpoints, avalia em modo congelado e registra causas explícitas dos desfechos); `tests/test_phase2_frozen.py` (somente checkpoints sintéticos, subset de 2 seeds em smoke tests); `phase2-tests.yml` (CI de testes) e `phase2-on-label.yml` (avaliação condicionada à nova etiqueta, NUNCA aplicada nesta etapa).
+- Protocolos e hashes documentados em `docs/PHASE2_PROTOCOL.md`.
+- **Campanha dos 50 ambientes NÃO executada; checkpoints oficiais NÃO modificados; nenhum novo treinamento.** Testes de integração com arquivos oficiais pendem da execução futura autorizada pelo Chat 1.
+- Artifact IDs: 13101471957, 13101072100, 13100988601; expiração por volta de **2026-12-01 21:15 UTC**. Preserve ZIPs oficiais antes disso.
+- **Estado:** código submetido para CI de infraestrutura; **aprovação científica e autorização de avaliação pendentes**. Nenhum merge na PR #1 ou nova PR, sem alteração da NOVA original.
