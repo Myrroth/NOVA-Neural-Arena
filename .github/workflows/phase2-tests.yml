@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   frozen-evaluation-tests:
@@ -28,3 +29,44 @@ jobs:
           python -m pip check
       - name: Run unit tests only, no official model evaluation
         run: python -m pytest -q
+      - name: Download original seed 11 (integrity-only; NO inference)
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-11-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase2/official/seed_11
+      - name: Download original seed 42 (integrity-only; NO inference)
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-42-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase2/official/seed_42
+      - name: Download original seed 73 (integrity-only; NO inference)
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-73-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase2/official/seed_73
+      - name: Verify original hashes and load weights; NO episodes
+        run: |
+          python - <<'PYCODE'
+          from pathlib import Path
+          from arena.evaluation.frozen_phase2 import (
+              verify_artifact_directory, load_verified_model, weights_fingerprint
+          )
+          base = Path("experiments/phase2/official")
+          for seed in (11, 42, 73):
+              folder = base / f"seed_{seed}"
+              verified = verify_artifact_directory(folder, seed=seed)
+              model = load_verified_model(folder, seed=seed, verified=verified)
+              assert model.training is False
+              assert all(not p.requires_grad and p.grad is None for p in model.parameters())
+              assert len(weights_fingerprint(model)) == 64
+              print("Official checkpoint integrity and frozen loading PASS:", seed)
+          PYCODE
