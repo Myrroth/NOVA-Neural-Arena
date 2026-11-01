@@ -25,10 +25,10 @@ Workflow: `.github/workflows/neural-pilot-on-label.yml`.
 
 ## Verificações e resultado de infraestrutura
 
-- **Confirmado anteriormente:** CI do código em `24bd38...` aprovado em GitHub Actions com Gymnasium e PyTorch oficiais; log e artifact de versões disponíveis.
+- **Confirmado anteriormente:** CI do código em `24bd38...` aprovado em GitHub Actions com Gymnasium e PyTorch oficiais; log e artifact de versões disponíveis. CI após adicionar workflow e docs https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41349905467 também **aprovada**.
 - **Configuração adicionada:** workflow separado foi commitado somente na branch da PR. Não foram feitos merges ou mudanças em `main`; nenhum treinamento foi iniciado pelo Chat 2.
-- **Gatilho por etiqueta:** a sintaxe `pull_request.labeled` é suportada pela documentação GitHub Actions; a verificação dinâmica por aplicação de etiqueta não autorizadora, se realizada, deve resultar em *job skipped*; não comprova instalação/treinamento.
-- **Estado do piloto:** **pronto para tentativa de disparo pelo Chat 3 após confirmação do gatilho**, ainda não considerar treinamento executado. A primeira execução completa é a validação real dos artifacts/matriz.
+- **Gatilho por etiqueta testado realmente:** etiqueta temporária `documentation` aplicada à PR #1 e depois removida. O GitHub criou https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41349938598 (`pull_request`), **conclusão `skipped`**: o job condicionado a `neural-pilot-approved` não executou passos nem treinamento. Isso valida o evento e o bloqueio para etiqueta não autorizadora, **não comprova a execução do caso positivo**.
+- **Estado do piloto:** **gatilho por etiqueta comprovado em teste negativo; infraestrutura liberada ao Chat 3 para executar o caso autorizado**. Nenhum treino foi disparado pelo Chat 2. A primeira execução positiva validará instalações/matriz/checkpoints/artifacts reais.
 - Observação: workflows executados via `pull_request` usam ref de merge por padrão; nosso step `checkout` sobrescreve o ref com SHA fixo para evitar executar o merge. `pull_request_target` foi deliberadamente rejeitado.
 
 ## Como o Chat 3 iniciará (após liberação)
@@ -41,7 +41,7 @@ Workflow: `.github/workflows/neural-pilot-on-label.yml`.
 
 ## Pendências e limites
 
-- Confirmar disparo de `pull_request.labeled` no contexto efetivo da PR; caso não apareça, evitar gatilhos inseguros e consultar o Chat 1 sobre alternativa de runner confiável que não altere `main`.
+- Confirmado disparo de `pull_request.labeled` com etiqueta neutra. **Ainda pendente:** execução positiva somente pelo Chat 3, com `neural-pilot-approved`, e confirmação de três artifacts completos. Se o caso positivo falhar, diagnosticar logs antes de repetir; se o gatilho não funcionar, consultar o Chat 1 sobre alternativa de runner confiável sem alterar `main`.
 - O antigo workflow `train.yml` utiliza `workflow_dispatch` e segue indisponível pela interface sem existir na branch padrão; o novo é opção alternativa opt-in.
 - Dependências **diretas** pinadas; `pip-freeze.txt` registra transitivas efetivamente instaladas. O checkout da mesma versão não garante reprodutibilidade bit a bit entre máquinas.
 - Checkpoint de treinamento aprovado não salva replay/RNG para retomada exata. Desfechos `terminated`/`truncated` ausentes no arquivo de avaliação são uma melhoria futura, não alterar durante o piloto fixo.
