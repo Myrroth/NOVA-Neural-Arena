@@ -30,7 +30,7 @@ python -m pip install -c requirements-ci.txt -e '.[dev]'
 python -m pytest -q
 ~~~
 
-A suíte inclui `env_checker` oficial em modo normal e ANSI, além de teste de repetição de métricas com seed fixa. Versões transitivas não estão completamente travadas; CI registra `pip freeze` para auditoria. Checkpoints não permitem retomada exata (replay/RNG não persistidos).
+O primeiro CI oficial passou em 2026-11-01 (13 testes, 2 avisos informativos relacionados a `env.spec` em instanciação direta): https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41330556392. A suíte inclui `env_checker` oficial em modo normal e ANSI, além de teste de repetição de métricas com seed fixa. Versões transitivas não estão completamente travadas; CI registra `pip freeze` para auditoria. Checkpoints não permitem retomada exata (replay/RNG não persistidos).
 
 ## GitHub Actions
 
