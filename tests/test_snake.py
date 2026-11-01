@@ -68,3 +68,8 @@ def test_render():
     frame = env.render()
     assert "H" in frame and "F" in frame
     assert len(frame.splitlines()) == 6
+
+
+def test_official_gymnasium_env_checker():
+    checker = pytest.importorskip("gymnasium.utils.env_checker")
+    checker.check_env(SnakeEnv(width=8, height=8, max_steps=40))
