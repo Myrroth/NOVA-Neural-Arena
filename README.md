@@ -43,3 +43,9 @@ Para validar a PR sem alterar `main`, o workflow de **testes** também roda em e
 - tests: testes; docs: fonte de verdade para decisões e estado.
 
 Limitações: observação parcial, só Snake, CPU, nenhuma evidência de transferência. Checkpoint salva pesos/otimizador/contadores, mas não replay buffer nem RNG para retomada exata.
+
+## Piloto controlado do Chat 3 (sem merge)
+
+O novo workflow [`neural-pilot-on-label.yml`](.github/workflows/neural-pilot-on-label.yml) utiliza exclusivamente a ação **adicionar** a etiqueta `neural-pilot-approved` à **PR #1**. Nenhum push ou atualização de código inicia os treinos. O workflow roda três jobs independentes (seeds 11, 42, 73), cada um com 80 episódios de treino, 20 avaliações, Snake 10×10 e 200 passos máximos, sempre a partir do checkout explícito do SHA `24bd38e9e78a14e894f32d7d1c5b5b6d6d724463`.
+
+Se a etiqueta não existir, crie-a em **Issues > Labels**; **aplicar a etiqueta à PR inicia treinamento real** e deve ser feito apenas pelo Chat 3 com a liberação do Planejamento. Após o run, baixe os três artifacts da aba Actions antes da expiração de 30 dias. Cada artifact contém modelo, métricas, versões e metadados de proveniência. Veja [`docs/STATUS.md`](docs/STATUS.md) para validação, pendências e alternativas. O workflow manual antigo `train.yml` continua sem alteração.
