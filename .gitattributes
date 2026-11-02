@@ -1,0 +1,2 @@
+# Audit receipts keep their authenticated bytes on Windows and Linux.
+/docs/evidence/multigame002/*.json -text
