@@ -1,5 +1,12 @@
 # Estado consolidado — NOVA Neural Arena
 
+**Registro histórico de 01/11/2026.** O estado vigente está no
+[fechamento de 02/11/2026](CLOSURE_STATUS.md): a avaliação única da Fase 5
+terminou com 32.200 episódios e 3.212.125 passos, sem treinamento, e a CI
+final aprovou 203 testes e 31 subtestes. Os bloqueios de preparação abaixo
+foram superados pelas decisões e evidências desse fechamento; não são uma
+ordem de repetir campanhas. Pong v2 e recuperação do ATUAL estão documentados.
+
 Atualizado em 01/11/2026, America/Sao_Paulo. Este documento consolida o estado atual; entradas antigas de `STATUS.md`, corpos das PRs e o roadmap inicial continuam como registros das decisões em seus respectivos momentos. A NOVA Neural Arena é independente da IA assistente NOVA original.
 
 ## Resultado histórico confirmado

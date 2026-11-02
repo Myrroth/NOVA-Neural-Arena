@@ -1,6 +1,43 @@
 # Verificação independente do fechamento NNA-FECHAMENTO-001
 
-Auditoria em 02/11/2026, sobre a base técnica `8468e0dad3a75ecfe06187d8dbbf7a523f468df0`. Esta auditoria não executou a campanha científica, não carregou checkpoints e não treinou modelos.
+Auditoria em 02/11/2026. O registro técnico inicial abaixo foi feito sobre a
+base `8468e0dad3a75ecfe06187d8dbbf7a523f468df0` e é complementado por esta
+verificação final. A análise independente não executou a campanha científica,
+não carregou checkpoints e não treinou modelos.
+
+## Evidência final executada
+
+A [CI 41434661636](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41434661636)
+aprovou **203 testes e 31 subtestes** em 5,12 s no commit
+`fd6f120dc83e99c890c1fff5257bcef7763962e5`, com dois avisos informativos do
+Gymnasium. Inclui Pong v2, cadência e recompensa alcançável desde reset,
+filtro de reserva, pacote/recuperação e invariância dos executáveis históricos.
+Os commits documentais posteriores não alteram esse código.
+
+O filtro da reserva passou de procura por qualquer menção textual a prefixo
+estrutural exato, com regressão executada também por jq. A fonte recertificada
+final foi `28ed5a339e7a14006f0d7fa556dc6bf23821fc10`; a
+[CI científica 41433739529](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41433739529)
+aprovou 188 testes e dois subtestes. O executor científico `39461168...` e o
+protocolo canônico permaneceram intactos.
+
+A [campanha única 41435760871](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41435760871)
+terminou com sucesso na tentativa 1. A conferência independente dos bytes do
+artifact 13135514208 aprovou **32.200 chaves exatas**, **3.212.125 passos**,
+cinco hashes internos, protocolo e identidades, limites e fingerprints frozen.
+ZIP: 320.201 bytes; SHA-256
+`6ed4ebd67c318d4267204dafb0db656be1688ad7866e9b2f5c2b91c9c31dedbe`.
+As seis médias primárias e 552/216 secundárias coincidem exatamente com a
+entrega do Chat 4; RNGs de bootstrap distintos e seus pequenos desvios Monte
+Carlo nos limites dos ICs são preservados com atribuição explícita.
+
+O [resultado final](CLOSURE_STATUS.md) registra quatro falhas localizadas sem
+primeira comida, as limitações da inferência, autoria operacional e os dois
+incidentes de pré-voo de zero episódios. A campanha já terminou: este registro
+não autoriza nova avaliação, treinamento ou merge. A confirmação do pacote no
+Drive ocorre depois da construção e fica no recibo externo da Issue #6.
+
+## Registro da revisão inicial
 
 ## Código histórico e executor
 

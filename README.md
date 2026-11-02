@@ -1,12 +1,23 @@
 # NOVA Neural Arena 🐍
 
-**Estado consolidado e ferramentas novas:** [LAB_STATUS](docs/LAB_STATUS.md),
+**Fechamento NNA-FECHAMENTO-001:** [resultado final](docs/CLOSURE_STATUS.md),
+[recuperação do pacote ATUAL](docs/CURRENT_PACKAGE.md),
+[verificação técnica](docs/FINAL_VERIFICATION.md) e [Pong v2](docs/PONG.md).
+A avaliação única da Fase 5 foi concluída: **32.200 episódios, 3.212.125 passos**,
+três modelos congelados, sem treinamento. Os seis contrastes agregados foram
+positivos; quatro combinações de modelo/estado de parede ficaram sem primeira
+comida. O relatório registra essas limitações. O ciclo termina sem outra
+campanha ou merge. TeraBox permanece pendente por decisão do usuário.
+
+**Documentação de preparação histórica:** [LAB_STATUS](docs/LAB_STATUS.md),
 [preservação das Fases 1–4](docs/PRESERVATION.md),
 [auditoria técnica](docs/TECHNICAL_AUDIT.md) e
 [proposta da Fase 5](docs/PHASE5_PROTOCOL.md).
-As campanhas das Fases 1–4 foram concluídas nos runs documentados; textos abaixo
-registram também preparações históricas. A Fase 5 permanece sem autorização e
-sem execução oficial. Esta branch está em revisão, sem merge em `main`.
+As campanhas das Fases 1–5 foram concluídas nos runs documentados. Os textos
+abaixo registram preparações anteriores; expressões como “bloqueada”, “pendente”
+e “ainda não executado” descrevem o estado na data de cada preparação e são
+superadas pelo resultado final acima. Esta branch está em revisão, sem merge
+em `main`; os comandos históricos não são uma ordem de executá-los novamente.
 
 Laboratório **independente da IA NOVA** para testar aprendizado por reforço, começando com Snake e, futuramente, transferência entre ambientes. Resultados de Snake não demonstram aprendizado geral.
 
