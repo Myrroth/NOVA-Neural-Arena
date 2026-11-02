@@ -32,3 +32,6 @@ Nova PR baseada na branch da PR #1. Avaliar somente os checkpoints oficiais e ve
 
 ## 2026-11-01 — Integridade oficial comprovada sem avaliação
 Na PR #2, CI https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41353674728 baixou os 3 artifacts originais, conferiu 7 hashes por seed, SHA fixo/proveniência e carregou QNetwork congelada sem episódios. O evento de etiqueta neutra (run 41353590209) foi ignorado. Por contenção do escopo sem treinamento, restringimos workflows da Fase 2 apenas aos testes do Snake e ao conjunto de testes sintéticos da Fase 2, excluindo testes legados do trainer. A campanha de 50 seeds exige autorização posterior do Chat 1.
+
+## 2026-11-01 — Fixar o commit imutável do avaliador (Chat 1 / PR #2)
+Decisão do Chat 1 issuecomment-6565513811: o commit de avaliação validado `f9e1b171a8c045f8bd7c874432114e4bc654665e` deve ser usado literalmente no checkout da campanha, em vez do SHA mutável do HEAD da PR. Verificação independente com `EXPECTED_HEAD` e `git rev-parse HEAD`; novo teste estático detecta regressões e confirma que só `pull_request.labeled` com `neural-phase2-evaluation-approved` poderá acionar a campanha. Manter integralmente proteção de integridade dos checkpoints, modelos congelados e ausência de treinamento. **Nenhuma autorização de execução de 350 episódios.**

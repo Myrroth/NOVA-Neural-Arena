@@ -30,14 +30,16 @@ jobs:
       - name: Checkout the reviewed evaluation code (NOT pilot source changes)
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          # Immutable evaluator source: reviewed and CI-validated in run 41353905275.
+          # Future PR pushes must never change the code used by this approved campaign.
+          ref: f9e1b171a8c045f8bd7c874432114e4bc654665e
           persist-credentials: false
           fetch-depth: 0
 
       - name: Audit evaluation code commit
         shell: bash
         env:
-          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+          EXPECTED_HEAD: f9e1b171a8c045f8bd7c874432114e4bc654665e
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"

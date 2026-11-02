@@ -28,7 +28,7 @@ jobs:
           python -m pip install -c requirements-ci.txt -e '.[dev]'
           python -m pip check
       - name: Run unit tests only, no official model evaluation
-        run: python -m pytest -q tests/test_phase2_frozen.py tests/test_snake.py
+        run: python -m pytest -q tests/test_phase2_frozen.py tests/test_phase2_workflow_pin.py tests/test_snake.py
       - name: Download original seed 11 (integrity-only; NO inference)
         uses: actions/download-artifact@v8
         with:
