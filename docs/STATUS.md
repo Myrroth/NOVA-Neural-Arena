@@ -81,3 +81,12 @@ Workflow: `.github/workflows/neural-pilot-on-label.yml`.
 - Testes sintéticos `tests/test_phase3_generalization.py` e CI isolada `phase3-tests.yml` com dependências oficiais e audit do download/checkpoints **sem episódios com modelos oficiais**.
 - Protocolo e limites em `docs/PHASE3_PROTOCOL.md`. A CI da PR verificará compatibilidade; depois de aprovada será congelado o commit do avaliador no workflow opt-in da Fase 3.
 - Checkpoints oficiais ID 13101471957/13101072100/13100988601 com retenção prevista até 2026-12-01 21:15 UTC. Preservar ZIPs originais fora da retenção temporária.
+
+
+### 2026-11-01 — Auditoria final de infraestrutura Fase 3 (sem campanha)
+- Commit do avaliador **congelado após CI**: `8892980eccfb623de30f3803a7550aa1fa31a9c6`, [run #41369858499](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41369858499), **21 testes aprovados**, 2 avisos do Gymnasium não bloqueantes. Hash/proveniência e carregamento congelado dos 3 checkpoints oficiais 11/42/73 conferidos sem partidas oficiais.
+- `.github/workflows/phase3-on-label.yml` usa checkout **literal** `ref: 8892980eccfb623de30f3803a7550aa1fa31a9c6` e `APPROVED_EVALUATOR_SHA: 8892980eccfb623de30f3803a7550aa1fa31a9c6` para `git rev-parse HEAD`, além de comparação dos blobs Snake/DQN/trainer contra o piloto. A etiqueta exclusiva `neural-phase3-generalization-approved` exige PR #3, branch e repositório corretos. Não há gatilhos `push` nem `pull_request_target`.
+- `tests/test_phase3_workflow_pin.py` protege o SHA, a guarda do checkout, etiqueta exata, limites e ausência de treinamento; incluído em `phase3-tests.yml`.
+- [CI após congelamento #41370024631](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41370024631): **24 testes aprovados, 2 avisos não bloqueantes**; os 3 arquivos oficiais baixados, SHA256/proveniência conferidos e pesos carregados congelados. Zero episódios de avaliação oficial.
+- [Gatilho negativo #41370045092](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41370045092): etiqueta neutra `documentation` → job da Fase 3 **skipped**, nenhum jogo; etiqueta removida.
+- **Pendência:** Chat 1 revisar ciência e infraestrutura, então autorizar (ou não) execução **única** por Chat 3. Nenhuma etiqueta autorizadora aplicada, nenhum merge ou alteração dos modelos originais.

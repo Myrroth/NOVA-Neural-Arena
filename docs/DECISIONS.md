@@ -39,3 +39,7 @@ Decisão do Chat 1 issuecomment-6565513811: o commit de avaliação validado `f9
 
 ## 2026-11-01 — Fase 3: OOD somente por dimensões, sem retreino
 Decisão do Chat 1 na PR #2 (issuecomment-6566397649): nova PR isolada baseada na Fase 2 para avaliar, **após autorização futura**, 3 redes treinadas oficiais, 3 redes não treinadas com as mesmas inicializações e 1 aleatória em 8×8/10×10/12×12, 50 seeds ambientais 300001..300050, 200 passos (1.050 episódios). Criar indicadores de primeira coleta e alimento por 100 passos na camada de avaliação, sem alterar Snake, recompensas, direção inicial, modelos ou as fases anteriores. Testes pequenos com checkpoints sintéticos. Workflow exclusivo `pull_request.labeled` e etiqueta nova `neural-phase3-generalization-approved`, com checkout fixado em SHA auditado após CI. Nenhuma campanha nesta preparação.
+
+
+## 2026-11-01 — Avaliador Fase 3 congelado após CI
+O commit `8892980eccfb623de30f3803a7550aa1fa31a9c6` passou pela CI da Fase 3 #41369858499 (21 testes aprovados) antes de ser fixado literalmente em `.github/workflows/phase3-on-label.yml`. `git rev-parse HEAD` verifica o commit, e a guarda do CI exige o mesmo valor literal em checkout e `APPROVED_EVALUATOR_SHA`. O workflow roda somente em `pull_request.labeled` da PR #3 com etiqueta `neural-phase3-generalization-approved`, sem execução por push. CI #41370024631 (24 testes) e teste negativo #41370045092 (skipped) aprovaram a infraestrutura. Continua vedado executar a campanha de 1.050 episódios sem nova autorização do Chat 1.
