@@ -1,4 +1,4 @@
-"""Finite candidate preregistration for NNA-MULTIJOGOS-002; never a runner permit.
+"""Finite preregistration fixed for approval; never a runner permit.
 
 The coordinating Chat 1 comment supersedes the earlier Chat 3/4 proposals.
 Importing this module does not construct an environment or run an experiment.
@@ -99,8 +99,15 @@ _CONFIG = {
     "primary_protocol": PRIMARY_PROTOCOL_URL,
     "pre_data_amendment": "https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6590543972",
     "historical_base": HISTORICAL_BASE,
-    "status": "CANDIDATE_NOT_FROZEN",
+    "status": "FROZEN_APPROVAL_REQUIRED",
     "execution_authorized": False,
+    "freeze_meaning": "fixed content for literal source/hash review; not technical acceptance or human consent",
+    "required_before_execution": [
+        "NEW explicit human approval of this exact finite campaign budget; old NNA001 approval is consumed.",
+        "Literal Chat1 scientific recertification of source A and this protocol hash, including final reviews and G1 cost applicability.",
+        "Owner attestation binding source A, workflow B, the new human approval reference and the Chat1 recertification URL.",
+        "Confirmed single remote reservation under global non-cancelling workflow concurrency; no previous reservation or retry.",
+    ],
     "scope": "five prepared local pixel simulators; no universal-game claim",
     "source_games": SOURCE_GAMES, "target_game": TARGET_GAME,
     "model_seeds": MODEL_SEEDS, "test_seeds": TEST_SEEDS,
@@ -193,11 +200,7 @@ _CONFIG = {
               "world_action_change": 0.01,
               "ablation_changed_games": 4, "ablation_improved_games": 2,
               "resume_transitions_and_updates": 25, "resume_tolerance": 1e-6},
-    "unresolved_before_freeze": [
-        "Chat2/3/4 independent final source review and Chat1 recertification are pending.",
-        "Final source/CI and offline causal reconstruction validation must be bound before approval.",
-        "G1 cost equivalence for moving the same prediction forward before env.step needs final Chat1 recertification; no new games or updates.",
-    ],
+    "unresolved_before_freeze": [],
 }
 
 
@@ -208,7 +211,7 @@ def protocol_config() -> dict:
 
 
 def protocol_sha256() -> str:
-    """Candidate content hash; hashing is not scientific execution approval."""
+    """Fixed content hash; hashing is not scientific execution approval."""
     return hashlib.sha256(canonical_json(protocol_config()).encode("utf-8")).hexdigest()
 
 

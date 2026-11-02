@@ -1,8 +1,12 @@
-# NNA-MULTIJOGOS-002 — protocolo finito candidato e análise offline
+# NNA-MULTIJOGOS-002 — protocolo finito fixado para revisão e análise offline
 
 Este documento implementa o [pré-registro coordenador do Chat 1, comentário
 6583974240](https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6583974240).
-É **candidato, não congelado e sem autorização de execução científica**.
+O conteúdo está **fixado para revisão por fonte/hash, sem autorização de
+execução científica** (`FROZEN_APPROVAL_REQUIRED`, `execution_authorized=false`).
+Fixar uma versão não declara aceite do Chat1 ou dos demais chats. As revisões
+finais, a recertificação científica literal e o consentimento humano novo
+continuam AUSENTES e obrigatórios antes da reserva ou do primeiro episódio.
 O hash canônico produzido por `arena.universal.protocol` identifica conteúdo;
 não concede permissão para treinar, avaliar, reservar ou repetir campanha.
 Nenhum treino, jogo ou avaliação é executado pelo módulo de análise.
@@ -25,8 +29,8 @@ As convenções de Qplan online, Pong assimétrico, AUC, comparação não trein
 retenção por réplica e world-holdout foram explicitamente aceitas ANTES dos
 dados na [emenda G1 do Chat 1](https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6590543972).
 O protocolo de implementação passa a `mg002-plano-v0.2-pre-data-clarifications`.
-O congelamento da fonte final ainda depende de CI e revisão independente;
-essas decisões não concedem autorização científica. Depois do primeiro
+O aceite da fonte final ainda depende de CI e revisão independente;
+fixar o conteúdo não concede autorização científica. Depois do primeiro
 episódio, não alterar limiar, matriz, recompensa, seed ou orçamento para
 buscar resultado positivo.
 
@@ -207,7 +211,7 @@ jogos nem permite preencher dados faltantes por estimativa.
 Telemetria de volta/estratos/oportunidades, baselines de treino, perdas,
 otimizador e sincronização target estão implementados e documentados no
 protocolo canônico. A emenda G1 aceita a derivação de custo com ressalvas,
-mantendo a medição original FAILED. Pendências de congelamento: revisão
+mantendo a medição original FAILED. Pendências de autorização: revisão
 independente final Chat2/3/4, CI/fonte literais e recertificação do Chat1,
 incluindo a equivalência de custo da única alteração de ordem na avaliação:
 a mesma chamada preditiva da ação escolhida agora ocorre antes de env.step,

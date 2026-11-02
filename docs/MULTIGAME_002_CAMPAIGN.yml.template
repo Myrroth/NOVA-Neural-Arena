@@ -1,7 +1,9 @@
 # PREPARATION ONLY. This file is outside .github/workflows and cannot run.
-# After final source A / protocol hash / CI / NEW human consent / Chat1
-# recertification, replace both sentinels with the approved literals and
-# publish this as a workflow-only commit B. Approval must bind BOTH A and B.
+# After fixing source A / protocol hash / CI, replace both sentinels and
+# publish as a workflow-only commit B FOR REVIEW. This publication grants
+# no consent: NEW human approval and Chat1 recertification remain mandatory.
+# No campaign label or owner approval record may be created before consent.
+# Approval must bind BOTH A and B.
 name: NNA MULTIJOGOS 002 single approved campaign
 
 on:
