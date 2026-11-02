@@ -100,3 +100,11 @@ Workflow: `.github/workflows/neural-pilot-on-label.yml`.
 - `expected_scenarios()` calcula 4.200 chaves sem executar; testes com modelo sintético verificam 12 condições, determinismo, paridade com o Snake padrão, integridade, primeira comida, eficiência, ausência de treino e pequenas simulações.
 - CI `phase4-tests.yml` instala Gymnasium/PyTorch oficiais, valida apenas testes sintéticos e confere 3 checkpoints oficiais sem episódios. Próxima etapa: primeira CI verde, então SHA imutável do avaliador em workflow opt-in exclusivo da Fase 4.
 - Detalhes em `docs/PHASE4_PROTOCOL.md`; nenhum merge e nenhuma mudança na NOVA original, modelos, treinadores ou PRs anteriores.
+
+
+### 2026-11-01 — Fase 4: avaliador congelado e infraestrutura oficialmente validada
+- Commit avaliado e congelado: `8b4b6696e980191349e803218af6e6d55d8ff7e9`. [CI #41372851622](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41372851622): **42 testes aprovados, 2 avisos Gymnasium informativos**, 3 checkpoints oficiais 11/42/73 íntegros e carregados congelados sem episódios.
+- Workflow `.github/workflows/phase4-on-label.yml` usa literal `ref: 8b4b6696e980191349e803218af6e6d55d8ff7e9` e `APPROVED_EVALUATOR_SHA: 8b4b6696e980191349e803218af6e6d55d8ff7e9`, checagem `git rev-parse HEAD` e comparação de Snake/DQN/treinador contra o piloto original. **Não segue o HEAD mutável da PR**, nem usa `push` ou `pull_request_target`.
+- [CI endurecida #41373055405](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41373055405): **45 testes aprovados, 2 avisos não bloqueantes**, incluindo `tests/test_phase4_workflow_pin.py` e auditoria dos 3 artifacts (sem jogar com eles).
+- [Teste negativo #41373064866](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41373064866): etiqueta `documentation` gerou `skipped`, removida após o teste. Etiqueta autorizadora `neural-phase4-startstate-approved` permanece **NÃO aplicada**.
+- Protocolo técnico em `docs/PHASE4_PROTOCOL.md`. Campanha de **4.200 episódios NÃO executada** e **NÃO autorizada**; aguarda revisão do Chat 1. Sem merge, novo treinamento ou modificação da NOVA original.
