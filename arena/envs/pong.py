@@ -23,7 +23,7 @@ class PongEnv(gym.Env):
     """
 
     metadata = {"render_modes": ["ansi"], "render_fps": 12}
-    environment_id = "pong-local-v1"
+    environment_id = "pong-local-v2"
     reward_version = "pong-points-v1"
 
     def __init__(self, width: int = 20, height: int = 12, *,
@@ -102,12 +102,15 @@ class PongEnv(gym.Env):
         elif action == 2:
             self.left_y = min(self.height - 2, self.left_y + 1)
 
-        # Deterministic opponent is part of the environment, not agent training.
+        # A fixed opponent reacts every second tick. In v1 it moved every tick,
+        # making a left-side point unreachable on the default board. This is
+        # environment physics, not a strategy supplied to a learning agent.
         opponent_target = self.ball[1] if self.velocity[0] > 0 else self.height // 2
-        if opponent_target < self.right_y:
-            self.right_y = max(1, self.right_y - 1)
-        elif opponent_target > self.right_y:
-            self.right_y = min(self.height - 2, self.right_y + 1)
+        if self.steps % 2 == 0:
+            if opponent_target < self.right_y:
+                self.right_y = max(1, self.right_y - 1)
+            elif opponent_target > self.right_y:
+                self.right_y = min(self.height - 2, self.right_y + 1)
 
         x, y = self.ball
         dx, dy = self.velocity

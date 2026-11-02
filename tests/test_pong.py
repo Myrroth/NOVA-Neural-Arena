@@ -111,6 +111,42 @@ def test_ball_bounces_off_top_wall():
         assert env.ball[1] == 1
 
 
+def test_opponent_reacts_on_alternate_ticks_without_random_draws():
+    with PongEnv() as env:
+        env.reset(seed=9)
+        env.ball = (env.width // 2, 1)
+        env.velocity = (1, 0)
+        env.right_y = env.height - 2
+        rng_before = env.np_random.bit_generator.state
+        original = env.right_y
+        env.step(0)  # first tick: reaction
+        assert env.right_y == original - 1
+        env.step(0)  # second tick: wait
+        assert env.right_y == original - 1
+        env.step(0)  # third tick: reaction
+        assert env.right_y == original - 2
+        assert env.np_random.bit_generator.state == rng_before
+
+
+@pytest.mark.parametrize("seed", [1, 9, 24, 500001])
+def test_positive_score_reachable_from_reset_with_only_legal_actions(seed):
+    """Explicit tracking fixture verifies reachability, never learned skill."""
+    with PongEnv(target_score=1, max_steps=500) as env:
+        observation, _ = env.reset(seed=seed)
+        final_reward = 0.0
+        while not env.finished:
+            # Read the public observation and move at the same bounded speed
+            # available to any policy. Never force ball/paddle/RNG state.
+            ball_y = round(float(observation[1]) * (env.height - 1))
+            paddle_y = round(float(observation[4]) * (env.height - 1))
+            action = 1 if ball_y < paddle_y else 2 if ball_y > paddle_y else 0
+            assert env.action_space.contains(action)
+            observation, final_reward, terminated, truncated, info = env.step(action)
+        assert final_reward == 1.0 and terminated and not truncated
+        assert info["winner"] == "left" and info["left_score"] == 1
+        assert info["right_score"] == 0 and 1 <= info["steps"] <= 500
+
+
 def test_truncation_is_not_game_victory():
     with PongEnv(max_steps=1) as env:
         env.reset(seed=1)
