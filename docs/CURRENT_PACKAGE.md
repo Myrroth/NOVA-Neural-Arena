@@ -8,12 +8,17 @@ ao upload, download de retorno, hashes e recuperação verificados.
 
 ## Conteúdo e identidade
 
-- `scientific/original-zips/`: os seis ZIPs oficiais das Fases 1–4 e o ZIP da
-  única campanha da Fase 5; checkpoints 11/42/73 continuam nos ZIPs originais.
-- `scientific/final-analysis/`: relatório final, tabelas, gráficos e scripts
-  entregues pelo Chat 4. Não confundir esses derivados com os arquivos originais.
+- `scientific/original-zips/`: os seis ZIPs oficiais das Fases 1–4. O sétimo ZIP
+  é incluído somente quando a única campanha da Fase 5 tiver dados completos e
+  auditados; checkpoints 11/42/73 continuam nos ZIPs históricos originais.
+- `scientific/final-analysis/`: relatório final e derivados entregues pelo
+  Chat 4. Quando não houve execução científica, o relatório documenta o
+  impedimento; não são fabricados resultados, gráficos de desempenho ou CSVs.
+- `scientific/phase5-unavailable/`: presente somente no fechamento por falha
+  pré-voo. Contém decisão, relatório do Chat 4 e documentos primários dos runs
+  falhos, todos com hashes; não contém um ZIP científico ou tabela de episódios.
 - `source/source-approved-*.tar`: fonte aprovada, incluindo Pong e executor da
-  Fase 5 no commit `8468e0dad3a75ecfe06187d8dbbf7a523f468df0`.
+  Fase 5 no commit recertificado `28ed5a339e7a14006f0d7fa556dc6bf23821fc10`.
 - `source/source-current-*.tar`: fonte e documentação do commit final indicado
   no inventário; `source/full-source-history.bundle` conserva todas as refs e
   o histórico Git presentes no clone local no momento da consolidação.
@@ -29,22 +34,24 @@ si mesmo. Compare-o com um registro independente do GitHub antes de recuperar.
 
 ## Construção controlada
 
-O comando deve ser executado apenas depois da campanha única e da entrega do
-relatório científico, com a fonte final já registrada em commit e sem alterações
-em arquivos rastreados. Saídas antigas nunca são substituídas pelo script.
+O comando deve ser executado após a entrega do relatório do Chat 4 e da decisão
+de fechamento: com dados completos da campanha única, ou com impedimento
+pré-voo documentado e zero episódios. A fonte final deve estar registrada em
+commit, sem alterações em arquivos rastreados. Saídas antigas nunca são
+substituídas pelo script.
 
 ```text
 python scripts/build_current_package.py --inputs experiments/closure/inputs/package-inputs.json --out experiments/closure/final
 ```
 
-O JSON de entrada tem esta estrutura (substitua os dados da campanha pelos
-identificadores e hashes efetivamente conferidos; não invente valores):
+O JSON de entrada tem esta estrutura para campanha completa (substitua os dados
+pelos identificadores e hashes efetivamente conferidos; não invente valores):
 
 ```json
 {
   "schema_version": 1,
   "mission": "NNA-FECHAMENTO-001",
-  "approved_source_commit": "8468e0dad3a75ecfe06187d8dbbf7a523f468df0",
+  "approved_source_commit": "28ed5a339e7a14006f0d7fa556dc6bf23821fc10",
   "final_source_commit": "SHA_COMPLETO_DO_HEAD_FINAL",
   "scientific_executor_commit": "39461168db30edb90a25385fb3a1eaca8dfdde33",
   "protocol_sha256": "ceb65ad7a9529d091611a7e0f60cc3b937abfc76d00cc8fd766b07557ed5160a",
@@ -65,17 +72,74 @@ identificadores e hashes efetivamente conferidos; não invente valores):
 ```
 
 O construtor verifica os seis digests históricos fixos, os manifests internos,
-identidade da Fase 5, manifesto canônico aprovado, 32.200 chaves únicas da matriz,
-limites e soma de passos, tentativa 1, ausência de treino e referências frozen.
-Ele não reavalia os modelos. Arquivos de análise/evidência são escolhidos
+e, quando existem resultados da Fase 5, identidade, manifesto canônico aprovado,
+32.200 chaves únicas da matriz, limites e soma de passos, tentativa 1, ausência
+de treino e referências frozen. Ele não reavalia os modelos.
+
+### Fechamento com falha pré-voo e nenhuma avaliação
+
+Mantenha os campos comuns do exemplo e substitua somente `phase5` por esta
+estrutura. Os valores numéricos e digests abaixo são placeholders que devem ser
+substituídos por evidência real. Inclua cada run falho e pelo menos um documento
+primário por run, além da decisão oficial e do relatório do Chat 4:
+
+```json
+{
+  "status": "not_executed_preflight_failure",
+  "episodes_executed": 0,
+  "reservation_created": false,
+  "reason": "Descrição concreta das falhas pré-voo e da ausência de dados científicos.",
+  "decision_url": "https://github.com/Myrroth/NOVA-Neural-Arena/issues/6#issuecomment-ID_REAL",
+  "failed_runs": [
+    {
+      "run_id": 0,
+      "run_attempt": 1,
+      "url": "https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/ID_REAL",
+      "conclusion": "failure",
+      "episodes_executed": 0,
+      "reservation_created": false,
+      "documents": [
+        {"path": "experiments/closure/inputs/evidence/run-original.json", "sha256": "SHA256_DO_DOCUMENTO"}
+      ]
+    }
+  ],
+  "decision_document": {
+    "path": "experiments/closure/inputs/evidence/closure-decision.json",
+    "sha256": "SHA256_DA_DECISAO"
+  },
+  "chat4_report": {
+    "path": "experiments/closure/inputs/chat4-analysis/REPORT.md",
+    "sha256": "SHA256_DO_RELATORIO"
+  }
+}
+```
+
+Esse modo exige zero episódios, nenhuma reserva, runs distintos em tentativa 1
+com conclusão de falha, URL oficial da decisão e documentos não vazios com
+digests conferidos. Recusa campos de artefato científico, marca `complete=false`
+e registra **`engineering_closed_science_unavailable`**, **seis** arquivos
+científicos originais e `scientific_evaluation_available=false` no inventário e
+no recibo. Isso encerra a engenharia com a limitação explícita; não declara que
+um experimento ocorreu ou que o objetivo científico foi satisfeito. O modo
+completo continua exigindo os dados reais e registra sete arquivos científicos.
+
+Nenhum desses modos autoriza repetir workflows ou avaliar modelos. A decisão de
+executar ou interromper a campanha é externa ao construtor. A pendência de
+TeraBox decidida pelo usuário deve constar em `limitations`, por exemplo:
+`"TeraBox permanece pendente por decisão explícita do usuário."` A promoção no
+Google Drive e a verificação de retorno são registradas fora do ZIP depois de
+acontecerem; o pacote não afirma ter validado seu próprio upload.
+
+Arquivos de análise/evidência são escolhidos
 explicitamente; caches, credenciais, URLs assinadas e pastas de sessão não
 devem ser incluídos. Não há coleta automática de todo o diretório do usuário.
 
 A construção cria um único ZIP, um recibo externo e uma recuperação local de
 verificação. Em falha pode restar uma saída parcial para inspeção; não a promova
-a ATUAL. O script exige campanha completa e não produz silenciosamente um
-“pacote completo” quando falta o relatório ou a execução. Um fechamento com
-impedimento deve ser registrado como tal, preservando as cópias anteriores.
+a ATUAL. O script exige relatório e evidências em ambos os estados; ausência de
+execução é registrada como ciência indisponível, sem inventar um ZIP científico
+ou `episodes.csv`. Cópias anteriores permanecem preservadas até a validação de
+recuperação e cobertura do pacote novo.
 
 ## Recuperação e reutilização
 

@@ -25,7 +25,7 @@ from arena.shared.integrity import read_verified_bytes, safe_relative_path, vali
 from arena.shared.preservation import OFFICIAL_ARCHIVES
 
 PACKAGE_NAME = "NOVA-Neural-Arena-ATUAL.zip"
-APPROVED_SOURCE = "8468e0dad3a75ecfe06187d8dbbf7a523f468df0"
+APPROVED_SOURCE = "28ed5a339e7a14006f0d7fa556dc6bf23821fc10"
 APPROVED_EXECUTOR = "39461168db30edb90a25385fb3a1eaca8dfdde33"
 APPROVED_PROTOCOL = "ceb65ad7a9529d091611a7e0f60cc3b937abfc76d00cc8fd766b07557ed5160a"
 MAX_FILE_BYTES = 128 * 1024 * 1024
@@ -33,7 +33,8 @@ MAX_PACKAGE_BYTES = 512 * 1024 * 1024
 _MANIFEST = re.compile(r"([0-9a-f]{64})  (.+)")
 _SIGNED = re.compile(r"https?://[^\s\"'<>]+[?&](?:sig|signature|access_token|token|X-Amz-[^=&#]+)=", re.I)
 _TOKEN = re.compile(r"\bgh[pousr]_[A-Za-z0-9]{20,}\b")
-_ALLOWED = {".json", ".csv", ".tsv", ".md", ".txt", ".py", ".png", ".svg", ".pdf", ".zip", ".ipynb"}
+_ALLOWED = {".json", ".csv", ".tsv", ".md", ".txt", ".log", ".py", ".png", ".svg", ".pdf", ".zip", ".ipynb"}
+_DECISION_URL = re.compile(r"https://github\.com/Myrroth/NOVA-Neural-Arena/(?:issues|pull)/[1-9]\d*#issuecomment-[1-9]\d*")
 
 
 def _sha(data: bytes) -> str:
@@ -54,7 +55,7 @@ def _read(path: Path) -> bytes:
 
 
 def _check_text(data: bytes, name: str) -> None:
-    if Path(name).suffix.lower() in {".json", ".csv", ".tsv", ".md", ".txt", ".py", ".svg", ".ipynb"}:
+    if Path(name).suffix.lower() in {".json", ".csv", ".tsv", ".md", ".txt", ".log", ".py", ".svg", ".ipynb"}:
         text = data.decode("utf-8-sig")
         if _SIGNED.search(text) or _TOKEN.search(text):
             raise ValueError(f"ephemeral URL or credential-like value in selected input: {name}")
@@ -113,6 +114,26 @@ def verify_package(path: Path, expected_sha256: str, *, extract_to: Path | None 
         for name, entry in catalog.items()
     ):
         raise ValueError("inventory content catalog differs from actual payload")
+    scientific_summary = {}
+    if "phase5" in inventory:
+        state, count = _phase5_state(inventory["phase5"])
+        observed = sum(name.startswith("scientific/original-zips/") and name.endswith(".zip") for name in files)
+        if (inventory.get("mission_state") != state or inventory.get("scientific_archives") != count
+                or inventory.get("scientific_evaluation_available") is not (count == 7) or observed != count):
+            raise ValueError("scientific availability/classification differs from package contents")
+        if count == 6:
+            phase5 = inventory["phase5"]
+            documents = [phase5.get("decision_document"), phase5.get("chat4_report")]
+            documents.extend(doc for run in phase5["failed_runs"] for doc in run["documents"])
+            for doc in documents:
+                if (not isinstance(doc, dict) or set(doc) != {"member", "sha256", "bytes"}
+                        or doc["member"] not in files or _sha(files[doc["member"]]) != doc["sha256"]
+                        or len(files[doc["member"]]) != doc["bytes"]):
+                    raise ValueError("missing or inconsistent authenticated preflight evidence")
+            if any(Path(name).name.lower() == "episodes.csv" for name in files):
+                raise ValueError("unavailable science cannot be presented with an episode CSV")
+        scientific_summary = {"mission_state": state, "scientific_archives": count,
+                              "scientific_evaluation_available": count == 7}
     if extract_to is not None:
         extract_to.mkdir(parents=True, exist_ok=False)
         for name, content in files.items():
@@ -124,7 +145,8 @@ def verify_package(path: Path, expected_sha256: str, *, extract_to: Path | None 
             if _sha(safe_relative_path(extract_to, name).read_bytes()) != digest:
                 raise ValueError("local recovery differs from package")
     return {"bytes": len(data), "sha256": _sha(data), "members_verified": len(hashes),
-            "mission": inventory["mission"], "local_recovery_verified": extract_to is not None}
+            "mission": inventory["mission"], "local_recovery_verified": extract_to is not None,
+            **scientific_summary}
 
 
 def _git(repo: Path, *args: str) -> str:
@@ -149,8 +171,122 @@ def _gather(directory: Path, prefix: str, payload: dict[str, bytes]) -> None:
         payload[name] = content
 
 
+def _phase5_state(phase5: dict) -> tuple[str, int]:
+    """Keep unavailable science distinct from a complete scientific campaign."""
+    if not isinstance(phase5, dict):
+        raise ValueError("phase5 must be a structured record")
+    if phase5.get("status") == "completed":
+        episodes = phase5.get("episodes_executed", 32200)
+        if type(episodes) is not int or episodes != 32200 or phase5.get("complete", True) is not True:
+            raise ValueError("completed Phase 5 cannot describe zero or partial results")
+        return "engineering_and_science_closed", 7
+    if phase5.get("status") != "not_executed_preflight_failure":
+        raise ValueError("unsupported Phase 5 closure status")
+    if (type(phase5.get("episodes_executed")) is not int or phase5["episodes_executed"] != 0
+            or phase5.get("reservation_created") is not False or phase5.get("complete", False) is not False
+            or any(key in phase5 for key in ("archive_path", "artifact_id", "sha256", "run_id", "run_attempt"))):
+        raise ValueError("unexecuted Phase 5 must state zero episodes, no reservation and no scientific archive")
+    if not isinstance(phase5.get("decision_url"), str) or not _DECISION_URL.fullmatch(phase5["decision_url"]):
+        raise ValueError("preflight closure requires an official decision_url")
+    if not isinstance(phase5.get("reason"), str) or not phase5["reason"].strip():
+        raise ValueError("preflight closure requires a concrete reason")
+    runs = phase5.get("failed_runs")
+    if not isinstance(runs, list) or not 1 <= len(runs) <= 10:
+        raise ValueError("preflight closure requires 1..10 documented failed runs")
+    seen = set()
+    for run in runs:
+        if (not isinstance(run, dict) or type(run.get("run_id")) is not int or run["run_id"] <= 0
+                or run["run_id"] in seen or type(run.get("run_attempt")) is not int or run["run_attempt"] != 1
+                or run.get("conclusion") != "failure"
+                or type(run.get("episodes_executed")) is not int or run["episodes_executed"] != 0
+                or run.get("reservation_created") is not False
+                or not isinstance(run.get("documents"), list) or not 1 <= len(run["documents"]) <= 16):
+            raise ValueError("incompatible or undocumented preflight run facts")
+        if run.get("url") != f"https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/{run['run_id']}":
+            raise ValueError("preflight run URL differs from its run ID")
+        seen.add(run["run_id"])
+    return "engineering_closed_science_unavailable", 6
+
+
+def _add_primary_document(document: dict, member: str, payload: dict[str, bytes], *, report: bool = False) -> dict:
+    if not isinstance(document, dict) or set(document) != {"path", "sha256"}:
+        raise ValueError("primary evidence requires exactly path and sha256")
+    source = Path(document["path"])
+    allowed = {".md", ".txt", ".pdf"} if report else {".json", ".md", ".txt", ".log"}
+    if source.suffix.lower() not in allowed:
+        raise ValueError("unsupported primary evidence or Chat 4 report format")
+    member += source.suffix.lower()
+    safe_relative_path(Path.cwd() / "__package_path_validation__", member)
+    data = read_verified_bytes(source, expected_sha256=document["sha256"], max_bytes=MAX_FILE_BYTES)
+    if not data:
+        raise ValueError("primary evidence/report must not be empty")
+    _check_text(data, member)
+    payload[member] = data
+    return {"member": member, "sha256": _sha(data), "bytes": len(data)}
+
+
+def _add_unexecuted_phase5(phase5: dict, payload: dict[str, bytes]) -> dict:
+    state, count = _phase5_state(phase5)
+    if count != 6:
+        raise ValueError("expected the explicit preflight-failure closure status")
+    record = {"status": phase5["status"], "episodes_executed": 0, "reservation_created": False,
+              "complete": False, "reason": phase5["reason"], "decision_url": phase5["decision_url"],
+              "failed_runs": []}
+    for run in phase5["failed_runs"]:
+        normalized = {key: run[key] for key in ("run_id", "run_attempt", "url", "conclusion",
+                                               "episodes_executed", "reservation_created")}
+        normalized["documents"] = [
+            _add_primary_document(doc, f"scientific/phase5-unavailable/run-{run['run_id']}/primary-{index:02d}", payload)
+            for index, doc in enumerate(run["documents"], 1)]
+        record["failed_runs"].append(normalized)
+    record["decision_document"] = _add_primary_document(
+        phase5.get("decision_document"), "scientific/phase5-unavailable/closure-decision", payload)
+    record["chat4_report"] = _add_primary_document(
+        phase5.get("chat4_report"), "scientific/phase5-unavailable/chat4-report", payload, report=True)
+    payload["scientific/phase5-unavailable/STATUS.json"] = _json({
+        "mission_state": state, "scientific_archives": count, "phase5": record,
+        "scientific_evaluation_available": False,
+        "note": "No Phase 5 scientific archive or episode CSV exists in this closure mode.",
+    })
+    return record
+
+
+def _add_completed_phase5(phase5: dict, payload: dict[str, bytes]) -> dict:
+    _, count = _phase5_state(phase5)
+    if count != 7 or phase5.get("run_attempt") != 1:
+        raise ValueError("completed Phase 5 requires its unique original attempt 1")
+    data = read_verified_bytes(Path(phase5["archive_path"]), expected_sha256=phase5["sha256"], max_bytes=MAX_FILE_BYTES)
+    files = _zip_files(data)
+    _verify_inner_manifest(files, exact=True)
+    protocol = json.loads(files["protocol.json"])
+    status = json.loads(files["status.json"])
+    execution = json.loads(files["execution.json"])
+    rows = list(csv.DictReader(StringIO(files["episodes.csv"].decode("utf-8-sig"))))
+    keys = {(r["scenario_id"], r["environment_seed"], r["policy_id"]) for r in rows}
+    expected = {(s["id"], str(seed), p) for s in protocol["scenarios"]
+                for seed in range(500001, 500051) for p in protocol["policies"]}
+    protocol_content = {k: v for k, v in protocol.items() if k != "approved_protocol_sha256"}
+    protocol_digest = _sha(json.dumps(protocol_content, sort_keys=True, separators=(",", ":")).encode("utf-8"))
+    steps = [int(row["steps"]) for row in rows]
+    if (not status.get("complete") or len(rows) != 32200 or len(keys) != 32200 or keys != expected
+            or status.get("episodes_written") != 32200 or not status.get("weights_frozen_checked_at_end")
+            or status.get("steps_used", 6440001) > 6440000
+            or sum(steps) != status.get("steps_used") or any(not 1 <= n <= 200 for n in steps)
+            or protocol_digest != APPROVED_PROTOCOL
+            or protocol.get("approved_protocol_sha256") != APPROVED_PROTOCOL
+            or execution.get("evaluator_sha") != APPROVED_EXECUTOR
+            or str(execution.get("github_run_id")) != str(phase5["run_id"])
+            or str(execution.get("github_run_attempt")) != "1" or not execution.get("no_training")):
+        raise ValueError("Phase 5 identity/matrix/frozen result is not the approved complete campaign")
+    if execution.get("frozen_weights_before") != status.get("frozen_weights_reference"):
+        raise ValueError("Phase 5 frozen-weight references disagree")
+    payload[f"scientific/original-zips/phase5-run-{phase5['run_id']}-attempt-1.zip"] = data
+    return {**{k: v for k, v in phase5.items() if k != "archive_path"},
+            "complete": True, "episodes_executed": 32200}
+
+
 def build_package(inputs_path: Path, out: Path, *, repo: Path = REPO_ROOT) -> dict:
-    """Build only after final scientific data/report and a committed source exist."""
+    """Package completed science or a documented preflight impediment honestly."""
     cfg = json.loads(_read(inputs_path))
     if cfg.get("schema_version") != 1 or cfg.get("mission") != "NNA-FECHAMENTO-001":
         raise ValueError("wrong package input schema/mission")
@@ -183,38 +319,13 @@ def build_package(inputs_path: Path, out: Path, *, repo: Path = REPO_ROOT) -> di
         old_records.append({"artifact_id": artifact["id"], "archive": name,
                             "sha256": expected, "bytes": len(data), "inner_hashes": len(hashes)})
 
-    phase5 = cfg["phase5"]
-    if phase5.get("status") != "completed" or phase5.get("run_attempt") != 1:
-        raise ValueError("final ATUAL requires completed unique Phase 5, attempt 1")
-    data = read_verified_bytes(Path(phase5["archive_path"]), expected_sha256=phase5["sha256"], max_bytes=MAX_FILE_BYTES)
-    f5_files = _zip_files(data)
-    _verify_inner_manifest(f5_files, exact=True)
-    protocol = json.loads(f5_files["protocol.json"])
-    status = json.loads(f5_files["status.json"])
-    execution = json.loads(f5_files["execution.json"])
-    rows = list(csv.DictReader(StringIO(f5_files["episodes.csv"].decode("utf-8-sig"))))
-    keys = {(r["scenario_id"], r["environment_seed"], r["policy_id"]) for r in rows}
-    expected = {(s["id"], str(seed), p) for s in protocol["scenarios"]
-                for seed in range(500001, 500051) for p in protocol["policies"]}
-    protocol_content = {k: v for k, v in protocol.items() if k != "approved_protocol_sha256"}
-    protocol_digest = _sha(json.dumps(protocol_content, sort_keys=True, separators=(",", ":")).encode("utf-8"))
-    steps = [int(row["steps"]) for row in rows]
-    if (not status.get("complete") or len(rows) != 32200 or len(keys) != 32200 or keys != expected
-            or status.get("episodes_written") != 32200 or not status.get("weights_frozen_checked_at_end")
-            or status.get("steps_used", 6440001) > 6440000
-            or sum(steps) != status.get("steps_used") or any(not 1 <= n <= 200 for n in steps)
-            or protocol_digest != APPROVED_PROTOCOL
-            or protocol.get("approved_protocol_sha256") != APPROVED_PROTOCOL
-            or execution.get("evaluator_sha") != APPROVED_EXECUTOR
-            or str(execution.get("github_run_id")) != str(phase5["run_id"])
-            or str(execution.get("github_run_attempt")) != "1" or not execution.get("no_training")):
-        raise ValueError("Phase 5 identity/matrix/frozen result is not the approved complete campaign")
-    if execution.get("frozen_weights_before") != status.get("frozen_weights_reference"):
-        raise ValueError("Phase 5 frozen-weight references disagree")
-    phase5_name = f"phase5-run-{phase5['run_id']}-attempt-1.zip"
-    payload["scientific/original-zips/" + phase5_name] = data
+    mission_state, archive_count = _phase5_state(cfg["phase5"])
+    phase5 = (_add_completed_phase5(cfg["phase5"], payload) if archive_count == 7
+              else _add_unexecuted_phase5(cfg["phase5"], payload))
     _gather(Path(cfg["analysis_directory"]), "scientific/final-analysis", payload)
     _gather(Path(cfg["evidence_directory"]), "evidence", payload)
+    if archive_count == 6 and any(Path(name).name.lower() == "episodes.csv" for name in payload):
+        raise ValueError("unavailable Phase 5 cannot include a loose episode CSV")
 
     out.mkdir(parents=True, exist_ok=False)
     staging = out / "staging"
@@ -237,13 +348,16 @@ def build_package(inputs_path: Path, out: Path, *, repo: Path = REPO_ROOT) -> di
         "created_utc": datetime.now(timezone.utc).isoformat(), "approved_source_commit": APPROVED_SOURCE,
         "final_source_commit": head, "scientific_executor_commit": APPROVED_EXECUTOR,
         "approved_protocol_sha256": APPROVED_PROTOCOL, "historical_archives": old_records,
-        "phase5": {k: v for k, v in phase5.items() if k != "archive_path"},
+        "mission_state": mission_state, "scientific_archives": archive_count,
+        "scientific_evaluation_available": archive_count == 7, "phase5": phase5,
         "limitations": cfg.get("limitations", []), "no_models_modified": True,
         "packaging_executed_episodes": 0,
         "cloud_verification": "See the external upload/readback receipt; this archive cannot attest its own upload.",
         "payload": {name: {"bytes": len(value), "sha256": _sha(value)} for name, value in sorted(payload.items())},
     }
     payload["INVENTORY.json"] = _json(inventory)
+    for name, content in payload.items():
+        _check_text(content, name)
     if sum(map(len, payload.values())) > MAX_PACKAGE_BYTES:
         raise ValueError("selected package payload exceeds size limit")
     payload["SHA256SUMS"] = "".join(f"{_sha(value)}  {name}\n" for name, value in sorted(payload.items())).encode("utf-8")
@@ -257,7 +371,8 @@ def build_package(inputs_path: Path, out: Path, *, repo: Path = REPO_ROOT) -> di
     digest = _sha(package.read_bytes())
     receipt = verify_package(package, digest, extract_to=out / "recovery-verification")
     receipt.update({"package": str(package.resolve()), "source_commit": head,
-                    "remote_roundtrip_verified": False, "scientific_archives": 7})
+                    "remote_roundtrip_verified": False, "scientific_archives": archive_count,
+                    "mission_state": mission_state, "scientific_evaluation_available": archive_count == 7})
     (out / (PACKAGE_NAME + ".sha256")).write_text(digest + "  " + PACKAGE_NAME + "\n", encoding="ascii")
     (out / "package-receipt.json").write_bytes(_json(receipt))
     return receipt
