@@ -1,0 +1,72 @@
+name: NNA-FECHAMENTO-001 Phase 5 executor checks (NO CAMPAIGN)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [feat/nna-fechamento-001-pong]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nna-phase5-tests-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  closure-validation:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.base.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - name: Checkout current PR for synthetic validation
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Prevent any modification of seven historic executable files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code 24bd38e9e78a14e894f32d7d1c5b5b6d6d724463 HEAD -- arena/envs/snake.py arena/agents/dqn.py arena/training/train.py arena/evaluation/benchmark.py
+          git diff --exit-code f9e1b171a8c045f8bd7c874432114e4bc654665e HEAD -- arena/evaluation/frozen_phase2.py
+          git diff --exit-code 8892980eccfb623de30f3803a7550aa1fa31a9c6 HEAD -- arena/evaluation/phase3_generalization.py
+          git diff --exit-code 8b4b6696e980191349e803218af6e6d55d8ff7e9 HEAD -- arena/evaluation/phase4_startstates.py
+      - name: Python 3.11
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+      - name: Install pinned CPU dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -c requirements-ci.txt -e '.[dev]'
+          python -m pip install -c requirements-reporting.txt '.[reporting]'
+          python -m pip check
+          python -m compileall -q arena tests
+      - name: Run all small tests, NEVER the official campaign
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q
+          python -m arena.evaluation.phase5_campaign --validate-only > "$RUNNER_TEMP/phase5-protocol.json"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads((Path(os.environ['RUNNER_TEMP'])/'phase5-protocol.json').read_text())
+          assert data['status'] == 'PRE_REGISTERED_FOR_CHAT1_FINAL_APPROVAL'
+          assert data['total_episodes'] == 32200
+          assert data['max_total_steps'] == 6440000
+          assert data['no_training'] is True
+          print('FINAL_PROTOCOL_SHA256=' + data['approved_protocol_sha256'])
+          print('Phase 5 factorial validated, NO official episodes or training')
+          PY
