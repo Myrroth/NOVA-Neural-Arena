@@ -7,6 +7,7 @@ that replay. No checkpoint or experimental game-learning result is produced.
 from __future__ import annotations
 
 import argparse
+import copy
 from dataclasses import asdict, dataclass
 import hashlib
 import json
@@ -14,6 +15,7 @@ import math
 import os
 from pathlib import Path
 import platform
+import re
 import statistics
 import subprocess
 import sys
@@ -37,6 +39,37 @@ RSS_LIMIT_BYTES = 3 * 1024**3
 # one-transition episode, masks, Python containers/scalars and episode metadata.
 # It is an engineering estimate, not an allocator-level mathematical guarantee.
 REPLAY_BYTES_PER_TRANSITION_ALLOWANCE = 16 * 1024
+
+# This is a narrowly authenticated correction of ONE completed technical run,
+# not a generic means to promote partial/failed benchmarks into measurements.
+RECOVERABLE_ORIGINAL_RECEIPT_SHA256 = "aa7ee8964afa6f412eec308c6dba6a8763b82cdcfe72cc3fb74828c956ecc97d"
+RECOVERABLE_SOURCE_COMMIT = "bd447baa601dd4ef5dfe18e9932ac75e3dc313da"
+RECOVERABLE_PROTOCOL_SHA256 = "96927386422c7cdb3949ec2aa908deefd5230c2394e570bafda81a3627da3053"
+RECOVERABLE_RSS_FAILURE = {"type": "ValueError", "message": "actual current/peak RSS counters are required"}
+RECOVERABLE_SOURCE_FILES_SHA256 = {
+    "arena/universal/__init__.py": "6a3aace66604527ffc7667a8ec34cab8852981f16acfaf05db1c60f00fe7958d",
+    "arena/universal/analysis.py": "ee42992ac9523d044631d26e627cab4c8adb75131e61c697cdd613d8e7d79993",
+    "arena/universal/campaign.py": "5ed8a243b0295d9484a222b13fe24ff2f9b64c111d8a35e9f37d4dc89b2c4ac9",
+    "arena/universal/engineering.py": "c5041586d0a1f536847234409f9e17494c9410794a9124f41633d922389347f7",
+    "arena/universal/envs.py": "e83f727f24b9814fe4fcb3578a82fc923b52fb24dfcaa4818535de8ed09064a9",
+    "arena/universal/evaluation.py": "55c71e7527af23b60cd27bad156cd89ef10bed9bfd28b7d90d0329ff6721d466",
+    "arena/universal/network.py": "52cd61f21c6fec0c20e81bff9ab7a15c123ee82889c80d2fc404496a8b734a45",
+    "arena/universal/persistence.py": "c1df0f665bad6af667f94a8164e4dac5a650ecbd35b511c35845a4b43887c75d",
+    "arena/universal/protocol.py": "6a012d2f09e57b4b1d512cd9518babd554ed59563b005bb10421382f85fd17ab",
+    "arena/universal/replay.py": "afe5b4e00cacd15d5084069273e6cda604c86c72b5a3165eced78c50af990151",
+    "arena/universal/trainer.py": "0d312531ac051027970d2bf4d8dd3c001c53f0f9c38dcd92d1c811c38ad44d89",
+    "pyproject.toml": "eab5ebfffeb43ba91584d2bebdf89d737c427030bea58603df120734a87991b4",
+    "requirements-ci.txt": "5ba4047bbe77232fbe0c6d59eef6ffc4b50d6aae1a0c71a1be6ce95096f51d8a",
+}
+RECOVERABLE_LEARNER_CONFIG = {
+    "batch_size": 16, "burn_in": 4, "capacity_per_game": 10000, "episode_steps": 400,
+    "epsilon_end": .05, "gamma": .98, "hidden_size": 64, "latent_size": 64,
+    "learning_rate": .0003, "max_training_steps": 1080000, "planning_fraction": .2,
+    "q_interval": 16, "replay_capacity": 40000, "target_tau": .01, "threads": 2,
+    "unroll": 8, "warmup_steps": 128, "world_interval": 32,
+}
+RECOVERABLE_PERFORMANCE_PATHS = tuple(
+    f"arena/universal/{name}.py" for name in ("network", "replay", "trainer", "envs", "evaluation"))
 
 
 @dataclass(frozen=True)
@@ -109,6 +142,38 @@ def timing_summary(values) -> dict:
     return {"samples": len(values), "p50_seconds": statistics.median(ordered),
             "p95_seconds": percentile(.95), "maximum_seconds": ordered[-1],
             "percentile_interpolation": "linear"}
+
+
+def summarize_memory(records) -> dict:
+    """Retain raw RSS counters and use their conservative global maximum.
+
+    Linux statm resident is an approximate counter; it and getrusage are also
+    sampled separately. Therefore RSS <= reported high-water is not a valid
+    cross-provider per-record invariant. Positive actual values are required,
+    and neither a lower raw counter nor an inconvenient observation is dropped.
+    """
+    if not isinstance(records, (list, tuple)) or not records:
+        raise ValueError("actual positive current/peak RSS counters are required")
+    for record in records:
+        if (type(record) is not dict or type(record.get("rss_bytes")) is not int
+                or record["rss_bytes"] <= 0 or type(record.get("peak_rss_bytes")) is not int
+                or record["peak_rss_bytes"] <= 0
+                or not isinstance(record.get("source"), str) or not record["source"]):
+            raise ValueError("actual positive current/peak RSS counters are required")
+    current = max(record["rss_bytes"] for record in records)
+    reported = max(record["peak_rss_bytes"] for record in records)
+    return {"baseline": copy.deepcopy(records[0]), "observations": copy.deepcopy(list(records)),
+            "observed_current_rss_maximum": current,
+            "actual_process_peak_rss_bytes": reported,
+            "reported_process_peak_rss_maximum": reported,
+            "conservative_peak_rss_bytes": max(current, reported),
+            "peak_used_for_projection": "max of ALL reported high-water and observed current RSS values",
+            "raw_counters_modified": False,
+            "cross_provider_inversions": [
+                {"record_index": index, "rss_above_reported_peak_bytes": record["rss_bytes"] - record["peak_rss_bytes"]}
+                for index, record in enumerate(records) if record["rss_bytes"] > record["peak_rss_bytes"]],
+            "counter_caveat": "Linux statm resident is approximate and providers are not sampled atomically",
+            "counter_documentation": "https://man7.org/linux/man-pages/man5/proc_pid_statm.5.html"}
 
 
 def project_campaign(timings: dict, *, observed_peak_rss_bytes: int,
@@ -210,6 +275,179 @@ def plan_preflight(output, config=None, *, source_provider=source_provenance):
     root.mkdir(parents=True, exist_ok=False)
     _write_receipt(root, receipt)
     return receipt
+
+
+def _validate_recoverable_receipt(receipt):
+    """Fail closed on any incomplete fixture, different failure or source identity."""
+    def require(condition, message):
+        if not condition:
+            raise ValueError(message)
+
+    require(type(receipt) is dict and receipt.get("schema_version") == 1,
+            "invalid original engineering receipt schema")
+    require(receipt.get("kind") == "ENGINEERING_PREFLIGHT_NOT_SCIENTIFIC_RESULT"
+            and receipt.get("status") == "FAILED" and receipt.get("failure") == RECOVERABLE_RSS_FAILURE,
+            "only the specific completed RSS cross-counter validation failure is recoverable")
+    require(receipt.get("actual_measurements") is True
+            and receipt.get("no_scientific_checkpoints") is True
+            and type(receipt.get("scientific_environment_training_steps")) is int
+            and receipt["scientific_environment_training_steps"] == 0,
+            "original must contain actual technical measurements and zero scientific training")
+    require(receipt.get("config") == {"mechanical_steps": 475, "synthetic_updates": 100, "seed": 810200}
+            and receipt.get("technical_seed") == 810200 and receipt.get("synthetic_update_limit") == 100,
+            "original bounded fixture configuration differs")
+    require(receipt.get("mechanical_budget") == {
+        "global_limit": 1000, "previous_random_smoke": 500, "previous_evaluator_unit": 25,
+        "requested_here": 475, "maximum_new_steps_here": 475}, "original mechanical budget differs")
+    require(receipt.get("mechanical_attempts") == 475 and receipt.get("synthetic_update_attempts") == 100
+            and receipt.get("mechanical_steps_by_game") == {game: 95 for game in GAMES},
+            "original fixture is not complete across all five games")
+    source = receipt.get("source", {})
+    require(source.get("source_commit") == RECOVERABLE_SOURCE_COMMIT
+            and source.get("protocol_sha256") == RECOVERABLE_PROTOCOL_SHA256
+            and source.get("protocol_version") == "mg002-plano-v0.1-implementation-2"
+            and source.get("protocol_status") == "CANDIDATE_NOT_FROZEN"
+            and source.get("relevant_sources_clean") is True
+            and source.get("dirty_source_records") == []
+            and source.get("scientific_execution_authorized_by_this_module") is False,
+            "original source commit/protocol/cleanliness identity differs")
+    require(source.get("source_files_sha256") == RECOVERABLE_SOURCE_FILES_SHA256,
+            "original neural/environment/trainer/source file hashes differ")
+    architecture = source.get("architecture_config", {})
+    expected_architecture = {"observation": [32, 32, 3], "actions": 10, "gru_units": 64,
+                             "batch_size": 16, "burn_in": 4, "unroll": 8, "gamma": .98,
+                             "per_game_heads": False, "world_weight": .2, "replay_capacity": 40000}
+    require(all(architecture.get(key) == value for key, value in expected_architecture.items()),
+            "original neural architecture contract differs")
+    state = receipt.get("fixture_state", {})
+    require(state.get("learner_config") == RECOVERABLE_LEARNER_CONFIG
+            and state.get("cpu_threads") == 2 and state.get("torch_version") == "2.10.0+cpu"
+            and state.get("numpy_version") == "2.3.5", "original learner/runtime configuration differs")
+    require(state.get("global_environment_training_steps") == 0
+            and state.get("training_curve_records") == 0 and state.get("trainer_stage") == "unconfigured"
+            and state.get("synthetic_replay_only") is True and state.get("mechanical_steps") == 475
+            and state.get("q_updates") == state.get("world_updates") == 50
+            and state.get("replay_transitions") == 512
+            and state.get("replay_game_counts") == {f"synthetic-noise-{i}": 128 for i in range(4)},
+            "original synthetic-only fixture counters are incomplete or inconsistent")
+    require(state.get("mechanical_policy") == "uniform random legal inputs; computed network outputs are not selected"
+            and state.get("mechanical_first_environment_seeds") == {
+                game: 810200 + 1000 * index for index, game in enumerate(GAMES)},
+            "original random mechanical policy/seed namespace differs")
+    before = receipt.get("untrained_fingerprint_before_mechanics")
+    after_mechanics = receipt.get("untrained_fingerprint_after_mechanics")
+    after_updates = receipt.get("fixture_fingerprint_after_synthetic_updates")
+    require(all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
+                for value in (before, after_mechanics, after_updates))
+            and before == after_mechanics and after_updates != before,
+            "original unchanged-mechanics/changed-synthetic neural fingerprint contract failed")
+    samples = receipt.get("partial_timing_samples", {})
+    require(set(samples) == {"step", "q", "world"}, "original raw timing operations are incomplete")
+    summaries = {}
+    for operation, count in (("step", 475), ("q", 50), ("world", 50)):
+        require(type(samples[operation]) is dict and set(samples[operation]) == {"wall", "process_cpu"},
+                "original timing clocks are incomplete")
+        summaries[operation] = {}
+        for clock in ("wall", "process_cpu"):
+            values = samples[operation][clock]
+            require(type(values) is list and len(values) == count
+                    and all(type(value) in (int, float) and math.isfinite(value) and value > 0 for value in values),
+                    "original actual timing sample counts/values are incomplete")
+            summaries[operation][clock] = timing_summary(values)
+    require(receipt.get("timings") == summaries,
+            "recorded timing summaries differ from complete original raw samples")
+    records = receipt.get("partial_memory_records", [])
+    require(type(records) is list and len(records) == 4
+            and all(record.get("source") ==
+                    "Linux /proc/self/statm and getrusage(RUSAGE_SELF), KiB converted to bytes"
+                    for record in records if type(record) is dict),
+            "original Linux memory provenance is incomplete")
+    memory = summarize_memory(records)
+    require(bool(memory["cross_provider_inversions"]),
+            "original data do not exhibit the specifically recoverable counter inversion")
+    require((MAX_TRAINING_STEPS, MAX_EVALUATION_STEPS, MAX_Q_UPDATES, MAX_WORLD_UPDATES,
+             MAX_MINUTES, MARGIN, RSS_LIMIT_BYTES, REPLAY_BYTES_PER_TRANSITION_ALLOWANCE) ==
+            (1080000, 694000, 67500, 33750, 300, 1.2, 3 * 1024**3, 16 * 1024),
+            "offline correction cannot silently change the measured projection contract")
+    return summaries, memory, state
+
+
+def recover_completed_preflight(original_receipt, output, *, expected_original_sha256,
+                                source_provider=source_provenance):
+    """Derive a correction from ONE authenticated completed fixture, with no rerun.
+
+    This never creates a PASS measurement. The original remains FAILED and is
+    not edited; Chat 1 must explicitly decide whether the derived calculation
+    satisfies its engineering gate before scientific execution can be frozen.
+    """
+    if (expected_original_sha256 != RECOVERABLE_ORIGINAL_RECEIPT_SHA256
+            or re.fullmatch(r"[0-9a-f]{64}", expected_original_sha256 or "") is None):
+        raise ValueError("only the pinned original receipt SHA-256 may be recovered")
+    original = Path(original_receipt)
+    if original.is_symlink() or not original.is_file() or original.stat().st_size > 1024 * 1024:
+        raise ValueError("original receipt must be a bounded regular file")
+    data = original.read_bytes()
+    if hashlib.sha256(data).hexdigest() != expected_original_sha256:
+        raise ValueError("original receipt SHA-256 does not match the authenticated measurement")
+    receipt = json.loads(data)
+    summaries, memory, state = _validate_recoverable_receipt(receipt)
+    derivation_source = source_provider()
+    current_hashes = derivation_source.get("source_files_sha256", {})
+    if any(current_hashes.get(path) != RECOVERABLE_SOURCE_FILES_SHA256[path]
+           for path in RECOVERABLE_PERFORMANCE_PATHS):
+        raise ValueError("current performance-critical neural/environment sources differ from the measured source")
+    projection = project_campaign(
+        summaries, observed_peak_rss_bytes=memory["conservative_peak_rss_bytes"],
+        synthetic_replay_transitions=state["replay_transitions"],
+        replay_capacity=state["learner_config"]["replay_capacity"])
+    correction = {
+        "schema_version": 1,
+        "kind": "ENGINEERING_OFFLINE_CORRECTION_NOT_NEW_MEASUREMENT",
+        "status": "DERIVED_FROM_COMPLETE_MEASUREMENTS",
+        "actual_measurements": False,
+        "uses_authenticated_original_actual_measurements": True,
+        "new_measurements": False, "new_mechanical_steps": 0, "new_synthetic_updates": 0,
+        "scientific_environment_training_steps": 0, "no_scientific_checkpoints": True,
+        "original_receipt": {"path": str(original.resolve()), "sha256": expected_original_sha256,
+                             "status": receipt["status"], "failure": copy.deepcopy(receipt["failure"]),
+                             "modified": False},
+        "original_artifact_origin": {
+            "run_id": 41500156977, "job_id": 125465721718,
+            "coordinator_verified_archive_sha256": "72dd6cddf504d2192532dfea50138e22f7779032d23ca456179f1c5e093809a0",
+            "coordinator_verified_archive_bytes": 12550,
+            "archive_revalidated_by_this_offline_function": False,
+            "receipt_bytes_independently_revalidated": True},
+        "source": copy.deepcopy(receipt["source"]),
+        "derivation_source": derivation_source,
+        "performance_critical_sources_unchanged": {
+            path: current_hashes[path] for path in RECOVERABLE_PERFORMANCE_PATHS},
+        "config": copy.deepcopy(receipt["config"]),
+        "mechanical_budget": copy.deepcopy(receipt["mechanical_budget"]),
+        "mechanical_steps_by_game": copy.deepcopy(receipt["mechanical_steps_by_game"]),
+        "mechanical_attempts_already_spent": receipt["mechanical_attempts"],
+        "synthetic_update_attempts_already_spent": receipt["synthetic_update_attempts"],
+        "fixture_state": copy.deepcopy(state),
+        "untrained_fingerprint_before_mechanics": receipt["untrained_fingerprint_before_mechanics"],
+        "untrained_fingerprint_after_mechanics": receipt["untrained_fingerprint_after_mechanics"],
+        "fixture_fingerprint_after_synthetic_updates": receipt["fixture_fingerprint_after_synthetic_updates"],
+        "original_raw_timing_samples": copy.deepcopy(receipt["partial_timing_samples"]),
+        "timings": summaries, "memory": memory, "projection": projection,
+        "projected_limits_decision": "WITHIN_LIMITS" if projection["within_projected_limits"] else "EXCEEDS_LIMITS",
+        "original_relabelled_as_pass": False,
+        "gate_acceptance": "PENDING_EXPLICIT_CHAT1_DECISION_BEFORE_FREEZE",
+        "scientific_execution_authorized_by_this_correction": False,
+        "resume_25_receipt": receipt["resume_25_receipt"],
+        "hardware_metadata_not_present_in_original": "hardware" not in receipt,
+        "timing_scope": "recorded Linux GitHub job only; not proof of equivalence to another machine/job",
+        "correction_method": "validate positive raw counters, preserve every record, project using max(all observed RSS, all reported peaks)",
+        "failure_cause": "per-record RSS <= high-water was incorrectly assumed across Linux statm/getrusage providers",
+        "method_documentation": ["https://man7.org/linux/man-pages/man5/proc_pid_statm.5.html",
+                                 "https://man7.org/linux/man-pages/man2/getrusage.2.html"],
+    }
+    root = Path(output)
+    root.mkdir(parents=True, exist_ok=False)
+    _write_receipt(root, correction)
+    return correction
 
 
 class _RealBackend:
@@ -371,15 +609,9 @@ def run_preflight(output, config=None, *, backend_factory=None,
         receipt["timings"] = summaries = {
             name: {clock: timing_summary(values) for clock, values in clocks.items()}
             for name, clocks in samples.items()}
-        if any(type(record["rss_bytes"]) is not int or record["rss_bytes"] <= 0 or
-               type(record["peak_rss_bytes"]) is not int or record["peak_rss_bytes"] < record["rss_bytes"]
-               for record in memory_records):
-            raise ValueError("actual current/peak RSS counters are required")
-        receipt["memory"] = {"baseline": memory_records[0], "observations": memory_records,
-                             "observed_current_rss_maximum": max(r["rss_bytes"] for r in memory_records),
-                             "actual_process_peak_rss_bytes": max(r["peak_rss_bytes"] for r in memory_records)}
+        receipt["memory"] = summarize_memory(memory_records)
         receipt["projection"] = projection = project_campaign(
-            summaries, observed_peak_rss_bytes=receipt["memory"]["actual_process_peak_rss_bytes"],
+            summaries, observed_peak_rss_bytes=receipt["memory"]["conservative_peak_rss_bytes"],
             synthetic_replay_transitions=state["replay_transitions"],
             replay_capacity=state["learner_config"]["replay_capacity"])
         if source_provider() != source:
@@ -403,10 +635,28 @@ def run_preflight(output, config=None, *, backend_factory=None,
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True, help="NEW technical receipt directory")
-    parser.add_argument("--run", action="store_true", help="explicitly measure the bounded technical fixture")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--run", action="store_true", help="explicitly measure the bounded technical fixture")
+    mode.add_argument("--recover-from", type=Path,
+                      help="OFFLINE correction of the single authenticated completed RSS-validation failure")
+    parser.add_argument("--expected-original-sha256", help="required independently authenticated original receipt digest")
     parser.add_argument("--steps", type=int, default=REMAINING_MECHANICAL_STEPS)
     parser.add_argument("--synthetic-updates", type=int, default=SYNTHETIC_UPDATE_LIMIT)
     args = parser.parse_args()
+    if args.recover_from:
+        if not args.expected_original_sha256:
+            parser.error("offline recovery requires --expected-original-sha256")
+        if args.steps != REMAINING_MECHANICAL_STEPS or args.synthetic_updates != SYNTHETIC_UPDATE_LIMIT:
+            parser.error("offline recovery cannot change the original measured fixture workload")
+        receipt = recover_completed_preflight(args.recover_from, args.output,
+                                              expected_original_sha256=args.expected_original_sha256)
+        print(json.dumps({"status": receipt["status"], "output": str(args.output),
+                          "new_measurements": False, "new_mechanical_steps": 0,
+                          "new_synthetic_updates": 0, "gate_acceptance": receipt["gate_acceptance"],
+                          "projected_limits_decision": receipt["projected_limits_decision"]}, sort_keys=True))
+        return
+    if args.expected_original_sha256:
+        parser.error("--expected-original-sha256 is only valid with --recover-from")
     config = EngineeringConfig(args.steps, args.synthetic_updates)
     receipt = run_preflight(args.output, config) if args.run else plan_preflight(args.output, config)
     print(json.dumps({"status": receipt["status"], "output": str(args.output),

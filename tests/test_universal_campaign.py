@@ -187,6 +187,24 @@ def test_budget_stops_on_wall_clock_memory_and_update_limits():
         c.Budget(clock=lambda: 0., rss_reader=lambda: 1).account(q_updates=p.MAX_Q_UPDATES+1)
 
 
+def test_process_cpu_budget_accumulates_independently_from_wall_time():
+    wall, cpu = [100.], [200.]
+    budget = c.Budget(prior_elapsed_seconds=12., prior_cpu_seconds=34.,
+                      clock=lambda: wall[0], cpu_clock=lambda: cpu[0], rss_reader=lambda: 1)
+    wall[0] += 5.
+    cpu[0] += 10.
+    report = budget.report()
+    assert report["elapsed_seconds"] == 17.
+    assert report["cpu_elapsed_seconds"] == 44.
+    next_process = c.Budget(prior_elapsed_seconds=report["elapsed_seconds"],
+                            prior_cpu_seconds=report["cpu_elapsed_seconds"],
+                            clock=lambda: wall[0], cpu_clock=lambda: cpu[0], rss_reader=lambda: 1)
+    cpu[0] += 285*60-44
+    with pytest.raises(c.CampaignStopped, match="process CPU"):
+        next_process.check()
+    assert next_process.elapsed() == 17.
+
+
 def test_real_path_cannot_accept_test_plan_or_override_git_state(tmp_path, setup):
     permit, source, plan = setup
     with pytest.raises(c.CampaignStopped, match="cannot override"):

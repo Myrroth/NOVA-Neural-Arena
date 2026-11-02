@@ -25,7 +25,7 @@ universal de jogos desconhecidos a partir de simuladores preparados.
 
 `arena.universal.envs` contém cinco simuladores locais novos: VisualSnake,
 VisualPong, AgarLike, FlappyBird e Racing. São outra linhagem de ambiente,
-com IDs `visual-<jogo>-v1`, sem modificar os ambientes históricos. Observações
+com IDs versionados `visual-<jogo>-v2` (Pong v1), sem modificar os ambientes históricos. Observações
 são imagens RGB uint8 de 32×32 pixels. Não são fornecidas features de perigo,
 distâncias a objetivos, trajetórias ideais ou ações recomendadas ao agente.
 
@@ -78,7 +78,8 @@ Essa é uma propriedade nova; não é atribuída aos checkpoints históricos.
 - No Windows da ferramenta, renomear arquivos CSV no diretório temporário
   virtualizado retornou acesso negado; os 16 testes da orquestração passaram
   usando diretório temporário novo no workspace. O runner científico alvo é
-  Linux/GitHub Actions; sua CI ainda deve validar o conjunto completo atual.
+  Linux/GitHub Actions. A CI do código 0538898 passou os 326 testes e 31
+  subtestes; a CI da correção mais recente deve ser verificada separadamente.
 
 O alvo do modelo de mundo é a próxima memória ONLINE com gradiente interrompido,
 igual à representação usada na avaliação e no planejamento. A rede target/EMA
@@ -91,6 +92,19 @@ O pré-voo técnico é separado: etiqueta `nna-mg002-preflight` na PR13 roda som
 475 passos mecânicos aleatórios e 100 updates sobre ruído sintético, sem
 aprender com observações dos jogos, para medir CPU/RAM. A etiqueta não autoriza
 campanha científica e não é a etiqueta histórica de nenhuma fase.
+
+Essa medição já foi executada uma vez. Os 475 passos e 100 updates foram
+concluídos, mas o job falhou na validação dos contadores RSS. A falha original
+e a derivação offline estão [preservadas](evidence/multigame002/README.md),
+sem repetir jogos ou updates e sem converter a falha em PASS. Chat 1 deve
+decidir o aceite da estimativa antes de congelar o protocolo.
+
+O guard de reserva exige evento exato, fonte e workflow distintos fixados,
+aprovação nova com orçamento completo, repositório público e ausência de
+qualquer reserva anterior. A validação offline retorna uma permissão sem ID
+de reserva, inutilizável para treino até confirmação da reserva remota.
+O reprodutor visual lê somente frames finais já autenticados; não cria
+partidas e não precisa carregar pesos para exibir a gravação.
 
 Os dados dos testes são fixtures; não entram na avaliação oficial. O protocolo
 e a execução científica nova dependem de código/CI/SHA fixos e liberação

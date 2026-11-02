@@ -125,22 +125,31 @@ class Budget:
     q_updates: int = 0
     world_updates: int = 0
     prior_elapsed_seconds: float = 0.
+    prior_cpu_seconds: float = 0.
     max_steps: int = p.MAX_TOTAL_STEPS
     clock: object = field(default=time.monotonic, repr=False)
+    cpu_clock: object = field(default=time.process_time, repr=False)
     rss_reader: object = field(default=_rss_bytes, repr=False)
     started: float = field(init=False)
+    cpu_started: float = field(init=False)
     peak_rss_bytes: int = 0
 
     def __post_init__(self):
         self.started = self.clock()
+        self.cpu_started = self.cpu_clock()
 
     def elapsed(self):
         return self.prior_elapsed_seconds+self.clock()-self.started
+
+    def cpu_elapsed(self):
+        return self.prior_cpu_seconds+self.cpu_clock()-self.cpu_started
 
     def check(self):
         self.peak_rss_bytes = max(self.peak_rss_bytes, int(self.rss_reader()))
         if self.elapsed() >= 285*60:
             raise CampaignStopped("285-minute internal STOP; preserve finalization margin")
+        if self.cpu_elapsed() >= 285*60:
+            raise CampaignStopped("285-minute process CPU STOP; preserve finalization margin")
         if self.peak_rss_bytes > 3*1024**3:
             raise CampaignStopped("3 GiB process memory limit exceeded")
         if (self.total_steps > self.max_steps or self.training_steps > p.MAX_TRAINING_STEPS or
@@ -161,7 +170,8 @@ class Budget:
 
     def report(self):
         return {key: getattr(self, key) for key in ("total_steps", "training_steps", "evaluation_steps",
-                "q_updates", "world_updates", "peak_rss_bytes")} | {"elapsed_seconds": self.elapsed()}
+                "q_updates", "world_updates", "peak_rss_bytes")} | {
+                    "elapsed_seconds": self.elapsed(), "cpu_elapsed_seconds": self.cpu_elapsed()}
 
 
 @dataclass(frozen=True)
@@ -454,6 +464,7 @@ def evaluate_final_once(directory, permit, *, _backend=None, _plan=None, _source
     budget = Budget(total_steps=prior["total_steps"], training_steps=prior["training_steps"],
                     q_updates=prior["q_updates"], world_updates=prior["world_updates"],
                     prior_elapsed_seconds=prior["elapsed_seconds"], max_steps=plan.max_total_steps,
+                    prior_cpu_seconds=prior["cpu_elapsed_seconds"],
                     clock=_clock, rss_reader=_rss_reader)
     journals = {name: _Journal(output, name) for name in ("episodes", "action_pairs", "model_predictions")}
     failure, completed = None, 0
