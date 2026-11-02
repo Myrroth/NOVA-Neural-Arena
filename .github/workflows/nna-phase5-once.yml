@@ -131,7 +131,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$GITHUB_RUN_ATTEMPT" = 1
-          present="$(gh api "repos/$GITHUB_REPOSITORY/issues/6/comments?per_page=100" --paginate --jq '.[] | select((.body // "") | contains("NNA-FECHAMENTO-001:PHASE5-RESERVED")) | .id')"
+          present="$(gh api "repos/$GITHUB_REPOSITORY/issues/6/comments?per_page=100" --paginate --jq '.[] | select((.body // "") | startswith("NNA-FECHAMENTO-001:PHASE5-RESERVED | immutable run ")) | .id')"
           if [ -n "$present" ]; then
             echo "Duplicate Phase 5 campaign refused (reservation exists)."
             exit 1
