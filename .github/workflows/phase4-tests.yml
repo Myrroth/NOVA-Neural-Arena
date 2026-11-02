@@ -36,7 +36,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m pytest -q tests/test_phase4_startstates.py tests/test_snake.py
+          python -m pytest -q tests/test_phase4_startstates.py tests/test_phase4_workflow_pin.py tests/test_snake.py
 
       - name: Download official seed 11 for integrity audit, NO game
         uses: actions/download-artifact@v8
