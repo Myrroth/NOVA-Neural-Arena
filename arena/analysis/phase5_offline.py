@@ -49,8 +49,10 @@ def _json(path: Path) -> dict:
     return obj
 
 
-def check_source(root: Path) -> tuple[dict, dict, dict, dict]:
+def check_source(root: Path, *, expected_csv_sha256: str) -> tuple[dict, dict, dict, dict]:
     """Verify all official files using recorded hashes and known provenance."""
+    if (len(expected_csv_sha256) != 64 or any(c not in "0123456789abcdef" for c in expected_csv_sha256)):
+        raise ValueError("expected independent episodes.csv SHA256 required")
     if not root.is_dir():
         raise ValueError("input must be an extracted official result directory")
     checks = (root / "SHA256SUMS").read_text(encoding="utf-8").splitlines()
@@ -68,6 +70,8 @@ def check_source(root: Path) -> tuple[dict, dict, dict, dict]:
         digests[name] = parts[0]
     if set(digests) != set(OFFICIAL_INPUTS):
         raise ValueError("missing official result file")
+    if digests["episodes.csv"] != expected_csv_sha256:
+        raise ValueError("independent episodes.csv SHA-256 does not match")
     protocol = _json(root / "protocol.json")
     execution = _json(root / "execution.json")
     status = _json(root / "status.json")
@@ -103,7 +107,6 @@ def read_matrix(root: Path, protocol: dict) -> tuple[dict, dict]:
     if len(scenarios) != 92:
         raise ValueError("scenario identifiers not unique")
     rows = {}
-    score_values = {}
     with (root / "episodes.csv").open(encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
         if (reader.fieldnames is None or
@@ -158,7 +161,6 @@ def read_matrix(root: Path, protocol: dict) -> tuple[dict, dict]:
             rows[key] = {"score": score, "steps": steps, "censored": censored,
                          "repeated": repeated, "collision": r["terminal_reason"] == "collision",
                          "truncated": truncated}
-            score_values[key] = score
     expected = {(s, seed, policy) for s in scenarios for seed in SEEDS for policy in POLICIES}
     if len(rows) != EPISODES or set(rows) != expected:
         raise ValueError("official matrix incomplete or contains unexpected episodes")
@@ -263,8 +265,8 @@ def scenario_descriptives(rows: dict, scenarios: dict) -> tuple[list[dict], list
     return results, difficult, diag
 
 
-def report(source: Path, output: Path) -> dict:
-    protocol, execution, status, hashes = check_source(source)
+def report(source: Path, output: Path, *, expected_csv_sha256: str) -> dict:
+    protocol, execution, status, hashes = check_source(source, expected_csv_sha256=expected_csv_sha256)
     rows, scenarios = read_matrix(source, protocol)
     estimates = primary_contrasts(rows, scenarios)
     scenario_pairs, center_pairs, diagnostics = scenario_descriptives(rows, scenarios)
@@ -272,6 +274,7 @@ def report(source: Path, output: Path) -> dict:
         "label": "NNA-FECHAMENTO-001 OFFLINE, FULL MATRIX ONLY",
         "scope": "descriptive inference conditional on 3 fixed checkpoints; no general transfer claim",
         "source_sha256": hashes,
+        "independent_csv_sha256": expected_csv_sha256,
         "protocol_sha256": APPROVED_PROTOCOL_SHA,
         "evaluator_sha": APPROVED_EVALUATOR_SHA,
         "run_id": execution["github_run_id"],
@@ -316,8 +319,10 @@ def main() -> None:
                         help="EXISTING official Phase 5 extracted artifact directory")
     parser.add_argument("--out", type=Path, required=True,
                         help="NEW directory for OFFLINE reports only")
+    parser.add_argument("--expected-csv-sha256", required=True,
+                        help="Independent SHA256 of official episodes.csv, authenticated outside source")
     args = parser.parse_args()
-    result = report(args.source, args.out)
+    result = report(args.source, args.out, expected_csv_sha256=args.expected_csv_sha256)
     print(json.dumps({"offline_analysis": True, "unique_episodes": result["unique_episodes"],
                       "run_id": result["run_id"],
                       "output": str(args.out)}, sort_keys=True))
