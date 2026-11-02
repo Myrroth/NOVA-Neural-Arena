@@ -33,12 +33,16 @@ Y_GRID, X_GRID = np.mgrid[0:32, 0:32]
 class VisualConfig:
     max_steps: int = 240
     difficulty: float = 1.0
+    scenario: str = "standard"
 
     def __post_init__(self):
         if type(self.max_steps) is not int or not 1 <= self.max_steps <= 2000:
             raise ValueError("max_steps must be 1..2000")
-        if not math.isfinite(self.difficulty) or not .25 <= self.difficulty <= 2:
+        if (isinstance(self.difficulty, bool) or not isinstance(self.difficulty, (int, float))
+                or not math.isfinite(self.difficulty) or not .25 <= self.difficulty <= 2):
             raise ValueError("difficulty must be .25..2")
+        if self.scenario not in ("standard", "threat", "prey"):
+            raise ValueError("unknown versioned scenario")
 
 
 def canvas():
@@ -55,7 +59,11 @@ def rect(frame, x0, y0, x1, y1, color):
 
 
 def circle(frame, x, y, radius, color):
-    frame[(X_GRID - x) ** 2 + (Y_GRID - y) ** 2 <= radius ** 2] = color
+    pixels = (X_GRID - x) ** 2 + (Y_GRID - y) ** 2 <= radius ** 2
+    frame[pixels] = color
+    # A sub-pixel collectible must not disappear between sample centres.
+    if not pixels.any() and radius > 0 and 0 <= x < 32 and 0 <= y < 32:
+        frame[min(31, int(round(y))), min(31, int(round(x)))] = color
 
 
 def _json_value(value):
@@ -74,9 +82,13 @@ class PixelGame(gym.Env):
     metadata = {"render_modes": ["rgb_array"], "render_fps": 20}
     game = "abstract"
     available_actions = (0,)
+    revision = 1
+    state_fields = frozenset()
 
-    def __init__(self, *, max_steps=240, difficulty=1.0, render_mode=None):
-        self.config = VisualConfig(max_steps=max_steps, difficulty=difficulty)
+    def __init__(self, *, max_steps=240, difficulty=1.0, scenario="standard", render_mode=None):
+        self.config = VisualConfig(max_steps=max_steps, difficulty=difficulty, scenario=scenario)
+        if self.game != "agar" and scenario != "standard":
+            raise ValueError("threat/prey scenarios are specific to Agar-like")
         if render_mode not in (None, "rgb_array"):
             raise ValueError("only rgb_array rendering is supported")
         self.render_mode = render_mode
@@ -88,7 +100,7 @@ class PixelGame(gym.Env):
 
     @property
     def identity(self):
-        return f"visual-{self.game}-v1"
+        return f"visual-{self.game}-v{self.revision}"
 
     def action_mask(self):
         # Constant input availability, never a mask of safe/preferred actions.
@@ -98,7 +110,7 @@ class PixelGame(gym.Env):
 
     def _info(self, **extra):
         return {"environment_id": self.identity, "steps": self.steps,
-                "action_mask": self.action_mask(), **extra}
+                "action_mask": self.action_mask(), "scenario": self.config.scenario, **extra}
 
     def reset(self, *, seed=None, options=None):
         super().reset(seed=seed)
@@ -131,12 +143,18 @@ class PixelGame(gym.Env):
                 "rng": _json_value(self.np_random.bit_generator.state)}
 
     def restore(self, snapshot):
-        if (snapshot.get("schema_version") != 1 or
+        if (not isinstance(snapshot, dict) or
+                set(snapshot) != {"schema_version", "environment_id", "config", "steps",
+                                  "finished", "state", "rng"} or
+                type(snapshot.get("schema_version")) is not int or snapshot.get("schema_version") != 1 or
                 snapshot.get("environment_id") != self.identity or
                 snapshot.get("config") != asdict(self.config)):
             raise ValueError("snapshot environment/schema/config mismatch")
         if type(snapshot["steps"]) is not int or not 0 <= snapshot["steps"] <= self.config.max_steps:
             raise ValueError("invalid snapshot step counter")
+        if type(snapshot.get("finished")) is not bool or (snapshot["steps"] == self.config.max_steps
+                                                         and not snapshot["finished"]):
+            raise ValueError("invalid snapshot completion state")
         old = (self.steps, self.finished, copy.deepcopy(self.state),
                copy.deepcopy(self.np_random.bit_generator.state))
         try:
@@ -164,23 +182,34 @@ class PixelGame(gym.Env):
             return isinstance(value, (str, bool)) or value is None
         if not isinstance(self.state, dict) or not finite(self.state):
             raise ValueError("invalid physical snapshot state")
+        if self.state_fields and set(self.state) != self.state_fields:
+            raise ValueError("incomplete or unexpected physical snapshot schema")
         self.render()  # validates required physical fields without an episode.
+        self.metrics()
 
 
 class VisualSnake(PixelGame):
     """A new image-observation lineage, not the historical 11-feature Snake."""
     game = "snake"
     available_actions = (0, 1, 2, 3, 4)
+    revision = 2
+    state_fields = frozenset({"size", "body", "direction", "food", "foods", "collision",
+                              "initial_head", "initial_direction", "spawn_context"})
 
     def _reset_state(self):
         n = 8
         direction = int(self.np_random.integers(4))
         vectors = ((0, -1), (0, 1), (-1, 0), (1, 0))
         dx, dy = vectors[direction]
-        head = (n // 2, n // 2)
+        heads = [(x, y) for y in range(n) for x in range(n)
+                 if all(0 <= x-i*dx < n and 0 <= y-i*dy < n for i in range(3))]
+        head = heads[int(self.np_random.integers(len(heads)))]
+        axes = int(head[0] in (0, n-1)) + int(head[1] in (0, n-1))
         self.state = {"size": n, "body": [[head[0]-i*dx, head[1]-i*dy]
                       for i in range(3)], "direction": direction+1,
-                      "food": None, "foods": 0, "collision": ""}
+                      "food": None, "foods": 0, "collision": "",
+                      "initial_head": list(head), "initial_direction": direction+1,
+                      "spawn_context": ("interior", "wall", "corner")[axes]}
         self._food()
 
     def _food(self):
@@ -214,7 +243,11 @@ class VisualSnake(PixelGame):
     def metrics(self):
         return {"score": self.state["foods"], "foods": self.state["foods"],
                 "wall_collision": int(self.state["collision"] == "wall"),
-                "body_collision": int(self.state["collision"] == "body")}
+                "body_collision": int(self.state["collision"] == "body"),
+                "initial_head_x": self.state["initial_head"][0],
+                "initial_head_y": self.state["initial_head"][1],
+                "initial_direction": self.state["initial_direction"],
+                "spawn_context": self.state["spawn_context"]}
 
     def render(self):
         s, f = self.state, canvas()
@@ -233,6 +266,7 @@ class VisualSnake(PixelGame):
 class VisualPong(PixelGame):
     game = "pong"
     available_actions = (0, 1, 2)
+    state_fields = frozenset({"left", "right", "ball", "velocity", "points", "conceded", "hits", "incoming"})
 
     def _serve(self):
         s = self.state
@@ -298,12 +332,38 @@ class VisualPong(PixelGame):
 class FlappyBird(PixelGame):
     game = "flappy"
     available_actions = (0, 9)
+    revision = 2
+    bird_x, bird_radius = 7., 1.2
+    state_fields = frozenset({"y", "vy", "pipes", "passed", "collision", "flaps",
+                              "gap_scored_by_stratum", "gap_encounters_by_stratum"})
+
+    @staticmethod
+    def _gap_stratum(gap):
+        return "narrow" if gap < 10 else "wide"
+
+    def _new_pipe(self, x, previous_center=None):
+        gap = float(self.np_random.uniform(8.5, 12.5))
+        lower, upper = gap/2+2, 30-gap/2
+        if previous_center is not None:
+            lower, upper = max(lower, previous_center-6), min(upper, previous_center+6)
+        return [float(x), float(self.np_random.uniform(lower, upper)), False, gap, False]
+
+    def _hits_pipe(self, pipe):
+        x, center, _, gap, _ = pipe
+        y, radius = self.state["y"], self.bird_radius
+        # Circle/rectangle contact, with the same radius used by rendering.
+        nearest_x = float(np.clip(self.bird_x, x-2, x+2))
+        return any((self.bird_x-nearest_x)**2 + (y-float(np.clip(y, low, high)))**2 <= radius**2
+                   for low, high in ((0., center-gap/2), (center+gap/2, 32.)))
 
     def _reset_state(self):
         self.state = {"y": float(self.np_random.uniform(12, 20)), "vy": 0.,
-                      "pipes": [], "passed": 0, "collision": False, "flaps": 0}
+                      "pipes": [], "passed": 0, "collision": False, "flaps": 0,
+                      "gap_scored_by_stratum": {"narrow": 0, "wide": 0},
+                      "gap_encounters_by_stratum": {"narrow": 0, "wide": 0}}
         for x in (24., 42., 60.):
-            self.state["pipes"].append([x, float(self.np_random.uniform(9, 23)), False])
+            previous = self.state["pipes"][-1][1] if self.state["pipes"] else None
+            self.state["pipes"].append(self._new_pipe(x, previous))
 
     def _advance(self, action):
         s = self.state
@@ -313,54 +373,96 @@ class FlappyBird(PixelGame):
         s["vy"] = min(1.8, s["vy"]+.15)
         s["y"] += s["vy"]
         speed = .55*self.config.difficulty
-        gap = 10.
         reward = .005
         for pipe in s["pipes"]:
             pipe[0] -= speed
-            if not pipe[2] and pipe[0]+2 < 7:
+            stratum = self._gap_stratum(pipe[3])
+            if not pipe[4] and pipe[0]-2 <= self.bird_x+self.bird_radius:
+                pipe[4] = True
+                s["gap_encounters_by_stratum"][stratum] += 1
+            if not pipe[2] and pipe[0]+2 < self.bird_x-self.bird_radius:
                 pipe[2] = True
                 s["passed"] += 1
+                s["gap_scored_by_stratum"][stratum] += 1
                 reward += 1.
-            if pipe[0]-2 <= 8.2 and pipe[0]+2 >= 5.8 and abs(s["y"]-pipe[1]) > gap/2-1.2:
+            if self._hits_pipe(pipe):
                 s["collision"] = True
         if s["pipes"][0][0] < -3:
             s["pipes"].pop(0)
-            s["pipes"].append([s["pipes"][-1][0]+18,
-                                  float(self.np_random.uniform(9, 23)), False])
-        s["collision"] |= not 1.2 <= s["y"] <= 30.8
+            s["pipes"].append(self._new_pipe(s["pipes"][-1][0]+18, s["pipes"][-1][1]))
+        s["collision"] |= not self.bird_radius <= s["y"] <= 32-self.bird_radius
         return (-1. if s["collision"] else reward), s["collision"], "collision" if s["collision"] else ""
 
     def metrics(self):
         s = self.state
+        upcoming = next((p for p in s["pipes"] if not p[2]), s["pipes"][-1])
         return {"score": s["passed"], "pipes_passed": s["passed"],
-                "collision": int(s["collision"]), "flaps": s["flaps"]}
+                "collision": int(s["collision"]), "flaps": s["flaps"],
+                "gap_height": upcoming[3], "gap_stratum": self._gap_stratum(upcoming[3]),
+                "gap_scored_by_stratum": copy.deepcopy(s["gap_scored_by_stratum"]),
+                "gap_encounters_by_stratum": copy.deepcopy(s["gap_encounters_by_stratum"]),
+                "narrow_pipes_passed": s["gap_scored_by_stratum"]["narrow"],
+                "wide_pipes_passed": s["gap_scored_by_stratum"]["wide"]}
 
     def render(self):
         s, f = self.state, canvas()
-        for x, y, _ in s["pipes"]:
-            rect(f, x-2, 0, x+2, y-5, WALL)
-            rect(f, x-2, y+5, x+2, 32, WALL)
-        circle(f, 7, s["y"], 1.4, PLAYER)
+        for x, y, _, gap, _ in s["pipes"]:
+            rect(f, x-2, 0, x+2, y-gap/2, WALL)
+            rect(f, x-2, y+gap/2, x+2, 32, WALL)
+        circle(f, self.bird_x, s["y"], self.bird_radius, PLAYER)
         return f
 
 
 class AgarLike(PixelGame):
     game = "agar"
     available_actions = tuple(range(9))
+    revision = 2
+    state_fields = frozenset({"player", "foods", "prey_eaten", "eaten", "large_near_steps",
+                              "large_distance_change", "small_near_steps", "small_distance_change",
+                              "pellets", "bots", "threat_active", "large_encounters", "escape_events"})
+
+    def _spawn_bot(self, mass, distance, occupied):
+        origin = np.asarray(self.state["player"][:2])
+        radius = self._radius(mass)
+        for _ in range(32):
+            angle = float(self.np_random.uniform(0, 2*math.pi))
+            pos = np.clip(origin + distance*np.array((math.cos(angle), math.sin(angle))), radius, 32-radius)
+            if all(math.dist(pos, other[:2]) > radius+self._radius(other[2])+.6 for other in occupied):
+                return [float(pos[0]), float(pos[1]), float(mass),
+                        float(self.np_random.uniform(0, 2*math.pi))]
+        # Finite geometric fallback, not an action or strategy for the player.
+        for x, y in ((radius, radius), (32-radius, radius), (radius, 32-radius), (32-radius, 32-radius)):
+            if all(math.dist((x, y), other[:2]) > radius+self._radius(other[2])+.6 for other in occupied):
+                return [float(x), float(y), float(mass), 0.]
+        raise RuntimeError("no valid non-overlapping cell spawn")
+
+    def _spawn_pellet(self):
+        player = self.state["player"]
+        for _ in range(32):
+            pos = self.np_random.uniform(1, 31, 2)
+            if math.dist(pos, player[:2]) > self._radius(player[2])+.65:
+                return pos.tolist()
+        # Normal play has ample free area; bounded fallback also handles tests.
+        corners = ((1., 1.), (1., 31.), (31., 1.), (31., 31.))
+        return list(max(corners, key=lambda cell: math.dist(cell, player[:2])))
 
     def _reset_state(self):
-        self.state = {"player": [16., 16., 10.], "foods": 0, "prey_eaten": 0,
+        player = [*map(float, self.np_random.uniform(11, 21, 2)),
+                  float(self.np_random.uniform(9, 12))]
+        self.state = {"player": player, "foods": 0, "prey_eaten": 0,
                       "eaten": False, "large_near_steps": 0,
                       "large_distance_change": 0., "small_near_steps": 0,
                       "small_distance_change": 0.,
-                      "pellets": self.np_random.uniform(2, 30, (18, 2)).tolist(),
-                      "bots": []}
-        for mass in (4., 5., 25.):
-            # Larger bot is initially separated, but always reaches the field.
-            angle = float(self.np_random.uniform(0, 2*math.pi))
-            x, y = 16+13*math.cos(angle), 16+13*math.sin(angle)
-            self.state["bots"].append([x, y, mass,
-                                      float(self.np_random.uniform(0, 2*math.pi))])
+                      "pellets": [], "bots": [], "threat_active": [False]*3,
+                      "large_encounters": 0, "escape_events": 0}
+        self.state["pellets"] = [self._spawn_pellet() for _ in range(18)]
+        masses = [float(self.np_random.uniform(3.5, 6.5)) for _ in range(2)]
+        masses.append(float(self.np_random.uniform(24, 32)))
+        distances = {"standard": (8., 11., 13.), "threat": (10., 12., 6.),
+                     "prey": (4., 8., 13.)}[self.config.scenario]
+        for mass, distance in zip(masses, distances):
+            self.state["bots"].append(self._spawn_bot(mass, distance,
+                [self.state["player"], *self.state["bots"]]))
 
     @staticmethod
     def _radius(mass):
@@ -369,9 +471,11 @@ class AgarLike(PixelGame):
     def _advance(self, action):
         s = self.state
         p = s["player"]
+        initial_mass = p[2]
         old = np.array(p[:2])
         speed = .95/math.sqrt(p[2]/10)
-        new = np.clip(old + DIRECTIONS[action]*speed, 1, 31)
+        radius = self._radius(p[2])
+        new = np.clip(old + DIRECTIONS[action]*speed, radius, 32-radius)
         p[0], p[1] = float(new[0]), float(new[1])
         reward = -.001
         for i, food in enumerate(s["pellets"]):
@@ -379,16 +483,21 @@ class AgarLike(PixelGame):
                 s["foods"] += 1
                 p[2] += .3
                 reward += .15
-                s["pellets"][i] = self.np_random.uniform(1, 31, 2).tolist()
-        for bot in s["bots"]:
+                s["pellets"][i] = self._spawn_pellet()
+        for index, bot in enumerate(s["bots"]):
             before = math.dist(old, bot[:2])
             after = math.dist(new, bot[:2])
             larger = bot[2] > p[2]*1.2
             smaller = p[2] > bot[2]*1.2
-            if before < 9 and larger:
+            initially_larger = bot[2] > initial_mass*1.2
+            if before < 9 and initially_larger:
                 s["large_near_steps"] += 1
+                if not s["threat_active"][index]:
+                    s["large_encounters"] += 1
+                    s["threat_active"][index] = True
+                # This is player-only radial displacement, not causal escape.
                 s["large_distance_change"] += after-before
-            if before < 9 and smaller:
+            if before < 9 and initial_mass > bot[2]*1.2:
                 s["small_near_steps"] += 1
                 s["small_distance_change"] += after-before
             # Environmental opponents: pursuit by larger cells, seeded wandering
@@ -400,9 +509,15 @@ class AgarLike(PixelGame):
             else:
                 bot[3] += float(self.np_random.normal(0, .18))
                 velocity = np.array((math.cos(bot[3]), math.sin(bot[3])))*.45
-            pos = np.clip(np.array(bot[:2])+velocity, 1, 31)
+            radius = self._radius(bot[2])
+            pos = np.clip(np.array(bot[:2])+velocity, radius, 32-radius)
             bot[0], bot[1] = float(pos[0]), float(pos[1])
             distance = math.dist(new, bot[:2])
+            if s["threat_active"][index] and initially_larger and larger and distance >= 10:
+                s["escape_events"] += 1
+                s["threat_active"][index] = False
+            elif not initially_larger or not larger:
+                s["threat_active"][index] = False
             if larger and distance < self._radius(bot[2]):
                 s["eaten"] = True
                 return -1., True, "eaten_by_larger"
@@ -410,8 +525,10 @@ class AgarLike(PixelGame):
                 s["prey_eaten"] += 1
                 p[2] += bot[2]*.6
                 reward += 1.
-                bot[0], bot[1] = map(float, self.np_random.uniform(1, 31, 2))
-                bot[2] = float(self.np_random.uniform(3, 6))
+                mass = float(self.np_random.uniform(3.5, 6.5))
+                replacement = self._spawn_bot(mass, 12., [p, *[b for b in s["bots"] if b is not bot]])
+                bot[:] = replacement
+                s["threat_active"][index] = False
         return reward, False, ""
 
     def metrics(self):
@@ -419,6 +536,7 @@ class AgarLike(PixelGame):
         return {"score": s["foods"]*.15+s["prey_eaten"], "foods": s["foods"],
                 "prey_eaten": s["prey_eaten"], "eaten": int(s["eaten"]),
                 "mass": s["player"][2], "large_near_steps": s["large_near_steps"],
+                "large_encounters": s["large_encounters"], "escape_events": s["escape_events"],
                 "large_distance_change": s["large_distance_change"],
                 "small_near_steps": s["small_near_steps"],
                 "small_distance_change": s["small_distance_change"]}
@@ -434,8 +552,19 @@ class AgarLike(PixelGame):
 
 
 class Racing(PixelGame):
+    """A finite one-period road, with course progress along its centre line."""
     game = "racing"
     available_actions = tuple(range(9))
+    revision = 2
+    road_half_width = 5.
+    car_half_width = .75
+    car_half_length = .75
+    state_fields = frozenset({"position", "speed", "phase", "amplitude", "wavelength",
+                              "x", "collision", "brakes", "accelerations", "turns",
+                              "effective_brakes", "braking_speed_reduction", "distance",
+                              "curved_steps", "curved_distance", "curved_speed_sum",
+                              "straight_steps", "straight_speed_sum", "course_span",
+                              "track_length", "arc_positions", "arc_distances", "lap_completed"})
 
     def _center(self, position):
         s = self.state
@@ -444,16 +573,51 @@ class Racing(PixelGame):
     def _reset_state(self):
         self.state = {"position": 0., "speed": .25,
                       "phase": float(self.np_random.uniform(0, 2*math.pi)),
-                      "amplitude": float(self.np_random.uniform(4, 7)),
-                      "wavelength": float(self.np_random.uniform(12, 22))/self.config.difficulty,
+                      # Each full period exceeds the road's half-width, so a
+                      # stationary lateral position cannot complete the course.
+                      "amplitude": float(self.np_random.uniform(5.5, 7.5)),
+                      "wavelength": float(self.np_random.uniform(12, 21))/self.config.difficulty,
                       "x": 16., "collision": False, "brakes": 0,
                       "accelerations": 0, "turns": 0,
-                      "curved_steps": 0, "curved_distance": 0.}
+                      "effective_brakes": 0, "braking_speed_reduction": 0., "distance": 0.,
+                      "curved_steps": 0, "curved_distance": 0., "curved_speed_sum": 0.,
+                      "straight_steps": 0, "straight_speed_sum": 0., "lap_completed": False}
+        s = self.state
+        s["course_span"] = 2*math.pi*s["wavelength"]
+        # Fixed quadrature, independent of agent actions and evaluation results.
+        # The persisted table also makes progress exactly reproducible on resume.
+        positions = np.linspace(0., s["course_span"], 257)
+        slope = s["amplitude"]/s["wavelength"]*np.cos(positions/s["wavelength"]+s["phase"])
+        factors = np.sqrt(1+slope*slope)
+        lengths = (factors[1:]+factors[:-1])*.5*np.diff(positions)
+        s["arc_positions"] = positions.tolist()
+        s["arc_distances"] = np.r_[0., np.cumsum(lengths)].tolist()
+        s["track_length"] = s["arc_distances"][-1]
         self.state["x"] = self._center(0)
+
+    def _progress_distance(self):
+        s = self.state
+        return float(np.interp(s["position"], s["arc_positions"], s["arc_distances"]))
+
+    def _curvature_fraction(self, position):
+        s = self.state
+        angle = position/s["wavelength"]+s["phase"]
+        slope = s["amplitude"]/s["wavelength"]*math.cos(angle)
+        return abs(math.sin(angle))/(1+slope*slope)**1.5
+
+    def _off_track(self):
+        s = self.state
+        # All four physical corners must fit inside the visible road interior.
+        return any(abs(x-self._center(position)) > self.road_half_width
+                   for x in (s["x"]-self.car_half_width, s["x"]+self.car_half_width)
+                   for position in (s["position"]-self.car_half_length,
+                                    s["position"]+self.car_half_length))
 
     def _advance(self, action):
         s = self.state
         dx, dy = DIRECTIONS[action]
+        old_speed, old_x, old_position = s["speed"], s["x"], s["position"]
+        old_progress = self._progress_distance()
         if dy < 0:
             s["speed"] += .07
             s["accelerations"] += 1
@@ -463,27 +627,48 @@ class Racing(PixelGame):
         else:
             s["speed"] -= .004
         s["speed"] = float(np.clip(s["speed"], 0, 1.7))
+        if dy > 0 and s["speed"] < old_speed:
+            s["effective_brakes"] += 1
+            s["braking_speed_reduction"] += old_speed-s["speed"]
         # Limited tyre grip makes turning at high speed harder. Slowing down
-        # is useful on bends; a permanent full-throttle controller is not enough.
-        s["x"] += float(dx)*.85/(1+s["speed"]**2)
-        s["turns"] += int(dx != 0)
-        s["position"] += s["speed"]
-        curvature = abs(math.sin(s["position"]/s["wavelength"]+s["phase"]))
+        # changes steering authority. A stopped car cannot slide sideways.
+        s["x"] += float(dx)*.85/(1+s["speed"]**2)*min(s["speed"]/.35, 1.)
+        s["turns"] += int(s["x"] != old_x)
+        s["position"] = min(s["course_span"], old_position+s["speed"])
+        driven = math.hypot(s["position"]-old_position, s["x"]-old_x)
+        s["distance"] += driven
+        curvature = self._curvature_fraction(s["position"])
         if curvature > .6:
             s["curved_steps"] += 1
-            s["curved_distance"] += s["speed"]
-        s["collision"] = abs(s["x"]-self._center(s["position"])) > 4.8
+            s["curved_distance"] += driven
+            s["curved_speed_sum"] += s["speed"]
+        elif curvature < .2:
+            s["straight_steps"] += 1
+            s["straight_speed_sum"] += s["speed"]
+        s["collision"] = self._off_track()
         if s["collision"]:
             return -1., True, "off_track"
-        return .035*s["speed"]-.003, False, ""
+        s["lap_completed"] = s["position"] >= s["course_span"]
+        if s["lap_completed"]:
+            return 1., True, "lap_completed"
+        return .035*(self._progress_distance()-old_progress)-.003, False, ""
 
     def metrics(self):
         s = self.state
-        return {"score": s["position"], "distance": s["position"],
+        progress = self._progress_distance()
+        return {"score": progress, "distance": s["distance"],
                 "speed": s["speed"], "collision": int(s["collision"]),
+                "track_length": s["track_length"], "progress_distance": progress,
+                "progress_normalized": progress/s["track_length"],
+                "lap_completed": int(s["lap_completed"]),
                 "accelerations": s["accelerations"], "brakes": s["brakes"],
+                "effective_brakes": s["effective_brakes"],
+                "braking_speed_reduction": s["braking_speed_reduction"],
                 "turns": s["turns"], "curved_steps": s["curved_steps"],
-                "curved_distance": s["curved_distance"]}
+                "curved_distance": s["curved_distance"],
+                "curved_speed_sum": s["curved_speed_sum"],
+                "straight_steps": s["straight_steps"],
+                "straight_speed_sum": s["straight_speed_sum"]}
 
     def render(self):
         s, f = self.state, canvas()
@@ -492,7 +677,12 @@ class Racing(PixelGame):
             rect(f, center-6, y, center+6, y+1, (55, 60, 65))
             rect(f, center-6, y, center-5, y+1, WALL)
             rect(f, center+5, y, center+6, y+1, WALL)
-        rect(f, s["x"]-1, 25, s["x"]+1, 28, PLAYER)
+        finish_y = 26-(s["course_span"]-s["position"])/1.5
+        if 3 <= finish_y < 32:
+            center = self._center(s["course_span"])
+            rect(f, center-5, finish_y, center+5, finish_y+.6, FOOD)
+        rect(f, s["x"]-self.car_half_width, 26-self.car_half_length/1.5,
+             s["x"]+self.car_half_width, 26+self.car_half_length/1.5, PLAYER)
         # A visible speedometer is part of the game display, not an optimal action.
         rect(f, 1, 0, 1+29*s["speed"]/1.7, 2, FOOD)
         return f

@@ -45,7 +45,7 @@ retorno de bola, ponto e ponto sofrido no Pong; alimento/consumo/morte no Agar;
 passagem/sobrevivência/colisão no Flappy; progresso/custo temporal/saída da pista
 na corrida. Metas e métricas brutas permanecem distintas das recompensas.
 
-## Arquitetura em implementação
+## Arquitetura implementada, aprendizagem ainda não medida
 
 Uma CNN pequena sobre pixels, memória GRU, um único head de valores para as
 dez ações e Double DQN recorrente. Sem identificador ou head por jogo.
@@ -60,14 +60,37 @@ ações/recompensas anteriores e memória recorrente. Retomar deve reproduzir
 ações/amostras/atualizações no mesmo código e ambiente de dependências.
 Essa é uma propriedade nova; não é atribuída aos checkpoints históricos.
 
-## Estado verificado inicial
+## Estado verificado da engenharia
 
 - Cinco simuladores implementados com pixels, física, métricas e snapshots.
-- 21 testes locais aprovados: contrato oficial Gymnasium, sementes, resultados
-  físicos, alimentação por tamanho, colisão, salto, throttle/freio e retomada.
+- Simuladores refinados: Snake/Agar/Flappy/corrida visual-v2 e Pong visual-v1,
+  contextos variados, corrida com comprimento/volta física, Flappy com dois
+  estratos de vãos e Agar com oportunidades de coleta/predação reais.
+- 99 testes novos locais aprovados no primeiro conjunto integrado: ambientes,
+  rede/replay, persistência/25 transições e updates reproduzidos, análise e
+  avaliação. Testes adicionais de orquestração/limites usam backends falsos.
 - 500 transições aleatórias de smoke técnico concluídas; nenhum treinamento,
   nenhuma conclusão de competência e nenhum dado científico de aprendizagem.
-- Agente visual/treinador/memória e avaliação ainda em implementação.
+- Agente visual/treinador/memória, avaliação e runner finito implementados;
+  ainda não há modelo científico treinado ou demonstração de competência.
+- A CLI científica recusa protocolo candidato, árvore suja, fonte/hash
+  diferentes ou ausência de consentimento humano novo/reserva/aprovação.
+- No Windows da ferramenta, renomear arquivos CSV no diretório temporário
+  virtualizado retornou acesso negado; os 16 testes da orquestração passaram
+  usando diretório temporário novo no workspace. O runner científico alvo é
+  Linux/GitHub Actions; sua CI ainda deve validar o conjunto completo atual.
+
+O alvo do modelo de mundo é a próxima memória ONLINE com gradiente interrompido,
+igual à representação usada na avaliação e no planejamento. A rede target/EMA
+fica reservada ao bootstrap Double DQN. O lookahead aplica probabilidade de
+continuação à previsão futura, com o mesmo coeficiente global de 20% em todos
+os jogos. Essas definições e hiperparâmetros estão no candidato canônico e
+precisam de recertificação antes do primeiro episódio científico.
+
+O pré-voo técnico é separado: etiqueta `nna-mg002-preflight` na PR13 roda somente
+475 passos mecânicos aleatórios e 100 updates sobre ruído sintético, sem
+aprender com observações dos jogos, para medir CPU/RAM. A etiqueta não autoriza
+campanha científica e não é a etiqueta histórica de nenhuma fase.
 
 Os dados dos testes são fixtures; não entram na avaliação oficial. O protocolo
 e a execução científica nova dependem de código/CI/SHA fixos e liberação
