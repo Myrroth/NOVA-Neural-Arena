@@ -1,0 +1,49 @@
+name: NNA-FECHAMENTO-001 Pong contract (no training)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [feat/lab-preservation-phase5]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nna-pong-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pong-contract:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.base.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout new branch without credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Official Python 3.11
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.11'
+      - name: Install only packages required for game contract
+        run: |
+          set -euo pipefail
+          python -m pip install 'gymnasium==1.4.0' 'numpy==2.3.5' 'pytest==9.0.2'
+          python -m pip check
+          python -m compileall -q arena/envs/pong.py arena/shared/multigame.py tests/test_pong.py tests/test_multigame.py
+      - name: Exercise deterministic Pong, game identity and disk audit
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_pong.py tests/test_multigame.py
+          python -m arena.shared.multigame --output "$RUNNER_TEMP/pong-demo" --seed 123 --max-steps 20
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from arena.shared.multigame import verify_demo
+          r = verify_demo(Path(os.environ['RUNNER_TEMP'])/'pong-demo')
+          assert r['no_training'] and r['environment']['environment_id'] == 'pong-local-v1'
+          print('Pong demo verified, no training/no official model loaded')
+          PY
