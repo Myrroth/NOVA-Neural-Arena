@@ -65,6 +65,29 @@ def baseline():
                        "reward_mean": .1, "terminal_rate": .25}}
 
 
+def test_selected_action_prediction_is_frozen_before_fixture_transition(network, monkeypatch):
+    predicted = []
+    fixture_steps = [0]
+    original = network.model
+
+    def record(hidden, actions):
+        if len(actions) == 1:
+            predicted.append(fixture_steps[0])
+        return original(hidden, actions)
+
+    class OrderedFixture(ToyPixels):
+        def step(self, action):
+            assert predicted == list(range(self.steps+1))
+            result = super().step(action)
+            fixture_steps[0] = self.steps
+            return result
+
+    monkeypatch.setattr(network, "model", record)
+    evaluate(network, 1103, "after_adaptation", "shared", "snake", 810101,
+             max_steps=4, training_baselines=baseline(), env_factory=OrderedFixture)
+    assert predicted == [0, 1, 2, 3]
+
+
 def test_real_after_shared_inference_records_every_counterfactual_without_mutation(network, monkeypatch):
     network.train()
     before = {name: value.clone() for name, value in network.state_dict().items()}

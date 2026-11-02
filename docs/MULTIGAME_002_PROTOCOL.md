@@ -21,10 +21,14 @@ e [Chat 4](https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6
 possuem budgets, seeds e folds diferentes; não se somam ao plano do Chat 1.
 Não são autorização alternativa nem cinco folds executáveis.
 
-Os detalhes analíticos abaixo que não eram literais no comentário original
-são convenções candidatas explícitas e precisam de recertificação antes do
-primeiro episódio científico. Depois disso, não alterar limiar, matriz,
-recompensa, seed ou orçamento para buscar resultado positivo.
+As convenções de Qplan online, Pong assimétrico, AUC, comparação não treinada,
+retenção por réplica e world-holdout foram explicitamente aceitas ANTES dos
+dados na [emenda G1 do Chat 1](https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6590543972).
+O protocolo de implementação passa a `mg002-plano-v0.2-pre-data-clarifications`.
+O congelamento da fonte final ainda depende de CI e revisão independente;
+essas decisões não concedem autorização científica. Depois do primeiro
+episódio, não alterar limiar, matriz, recompensa, seed ou orçamento para
+buscar resultado positivo.
 
 ## Matriz e limites
 
@@ -191,9 +195,27 @@ Os testes deste módulo usam números inventados, explicitamente fixtures.
 Verificam matriz, aritmética, pareamento, denominadores, ausência de prova e
 hashes; não comprovam aprendizagem, transferência ou competência real.
 
-Pendências explícitas antes do congelamento: telemetria de volta/estratos,
-oportunidades e timing auditáveis; proveniência dos baselines de mundo;
-schema/receipts reais; convenções de AUC, comparação não treinada e retenção;
-otimizador/perdas/target sync; identidades/hash de código/configs, CI e
-viabilidade medida. Uma revisão candidata nunca transforma essas pendências
-em provas. Nenhuma campanha é iniciada ou autorizada por estes arquivos.
+Telemetria de volta/estratos/oportunidades, baselines de treino, perdas,
+otimizador e sincronização target estão implementados e documentados no
+protocolo canônico. A emenda G1 aceita a derivação de custo com ressalvas,
+mantendo a medição original FAILED. Pendências de congelamento: revisão
+independente final Chat2/3/4, CI/fonte literais e recertificação do Chat1,
+incluindo a equivalência de custo da única alteração de ordem na avaliação:
+a mesma chamada preditiva da ação escolhida agora ocorre antes de env.step,
+com os mesmos argumentos/operadores e sem chamadas adicionais.
+
+`arena.universal.causal_trace` reconstrói somente os cinco episódios já
+gravados, autenticando os quadros e checkpoint. Usa RGB atual e história
+passada para registrar todas as dez previsões (incluindo hidden10×64),
+Qdirect/Qplan/Qfinal/máscara/ação e compara os valores originais a1e-6.
+Não recebe próximo RGB como entrada de decisão, não chama simulador e não
+treina. Os testes desse exportador usam gravações inventadas identificadas
+como fixtures. Eles não substituem a reconstrução dos futuros dados reais.
+
+O template [da campanha única](MULTIGAME_002_CAMPAIGN.yml.template) está fora
+da pasta de workflows e contém sentinelas inválidas até o congelamento.
+Sua futura publicação exige A=fonte científica fixa, B=workflow que fixa A,
+aprovação nova ligando ambos, hash canônico, CI e recertificação literal.
+O gate lê todas as páginas da Issue12 sob uma trava global e faz somente um
+POST de reserva depois dos aceites. Resposta ambígua não permite repetir.
+Nenhuma campanha é iniciada ou autorizada por estes arquivos.

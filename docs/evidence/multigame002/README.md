@@ -40,5 +40,13 @@ O workflow original fez checkout do merge virtual
 `0538898f419b4618708071d143de4cf4ee6f509f`. Os hashes individuais estão nos
 receipts. O workflow de engenharia agora fixa explicitamente o HEAD da PR.
 
+O [Chat1 aceitou G1 com ressalvas](https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6590543972),
+sem reclassificar o job original ou a derivação em PASS. A fonte seguinte
+moveu a mesma chamada preditiva da avaliação para antes de env.step: mesmos
+argumentos, operadores e número de chamadas; nenhum jogo/update repetido.
+Essa diferença textual em evaluation.py precisa da recertificação final de
+equivalência de custo, preservando a medição e derivação originais intocadas.
+Os outros quatro módulos de desempenho continuam idênticos aos medidos.
+
 Nenhum destes documentos concede autorização científica. Fonte, protocolo,
 revisões e consentimento humano novo continuam requisitos separados.

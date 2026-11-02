@@ -201,6 +201,11 @@ def evaluate(network, model_seed: int, stage: str, policy: str, game: str,
                             "q_mixed": _vector(mixed, current_mask),
                             "action_mask": json.dumps(current_mask[0].tolist(), separators=(",", ":"))})
 
+                action_tensor = torch.tensor([action], dtype=torch.long)
+                if network is not None and record_world_predictions:
+                    # Freeze action-conditioned predictions BEFORE advancing the
+                    # simulator. Ground truth is observed only for later errors.
+                    predicted_hidden, predicted_reward, done_logit = network.model(current_hidden, action_tensor)
                 next_observation, reward, terminated, truncated, next_info = env.step(action)
                 if not math.isfinite(float(reward)) or type(terminated) is not bool or type(truncated) is not bool:
                     raise ValueError("nonfinite reward or invalid termination flags")
@@ -208,10 +213,8 @@ def evaluate(network, model_seed: int, stage: str, policy: str, game: str,
                 if not torch.equal(next_mask, mechanical_mask):
                     raise ValueError("action mask changed with state; mechanical availability must be constant")
                 clipped_reward = float(np.clip(reward, -1., 1.))
-                action_tensor = torch.tensor([action], dtype=torch.long)
                 reward_tensor = torch.tensor([clipped_reward], dtype=torch.float32)
                 if network is not None and record_world_predictions:
-                    predicted_hidden, predicted_reward, done_logit = network.model(current_hidden, action_tensor)
                     _, target_next_hidden, _ = network.step(_pixels(next_observation), action_tensor,
                                                            reward_tensor, current_hidden)
                     terminal_probability = float(torch.sigmoid(done_logit)[0].item())

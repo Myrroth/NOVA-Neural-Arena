@@ -35,15 +35,18 @@ def fixture_rows():
     return rows
 
 
-def test_candidate_hash_matrix_and_exact_budget_without_execution():
+def test_versioned_hash_matrix_and_exact_budget_never_authorize_execution():
     matrix = p.evaluation_matrix()
     assert len(matrix) == len(set(matrix)) == 1735
     assert len(matrix)*p.MAX_EPISODE_STEPS == 694_000
     assert p.MAX_TRAINING_STEPS == 3*(4+1+1)*60_000
     config = p.protocol_config()
     assert config["execution_authorized"] is False
-    assert config["status"] == "CANDIDATE_NOT_FROZEN"
-    assert len(config["unresolved_before_freeze"]) > 0
+    assert config["status"] in ("CANDIDATE_NOT_FROZEN", "FROZEN_APPROVAL_REQUIRED")
+    if config["status"] == "CANDIDATE_NOT_FROZEN":
+        assert len(config["unresolved_before_freeze"]) > 0
+    else:
+        assert config["unresolved_before_freeze"] == []
     assert p.protocol_sha256() == hashlib.sha256(p.canonical_json(config).encode()).hexdigest()
     config["architecture"]["gru_units"] = 999
     assert p.protocol_config()["architecture"]["gru_units"] == 64

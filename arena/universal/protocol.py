@@ -11,7 +11,7 @@ import hashlib
 import json
 
 MISSION = "NNA-MULTIJOGOS-002"
-VERSION = "mg002-plano-v0.1-implementation-2"
+VERSION = "mg002-plano-v0.2-pre-data-clarifications"
 PRIMARY_PROTOCOL_URL = (
     "https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6583974240"
 )
@@ -97,6 +97,7 @@ def canonical_json(value) -> str:
 _CONFIG = {
     "mission": MISSION, "version": VERSION,
     "primary_protocol": PRIMARY_PROTOCOL_URL,
+    "pre_data_amendment": "https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6590543972",
     "historical_base": HISTORICAL_BASE,
     "status": "CANDIDATE_NOT_FROZEN",
     "execution_authorized": False,
@@ -113,7 +114,8 @@ _CONFIG = {
                      "adaptation_target_replay_fraction": 0.80,
                      "reward_clipping": [-1, 1],
                      "world_target": "detached ONLINE recurrent hidden after observing actual next RGB; same coordinates in control and held-out audit",
-                     "world_lookahead": "predicted_reward + gamma*(1-sigmoid(done_logit))*max_masked_Q(predicted_next_hidden)"},
+                     "world_lookahead": "predicted_reward_ONLINE + gamma*(1-sigmoid(done_logit_ONLINE))*max_masked_Q_ONLINE(predicted_next_hidden_ONLINE)",
+                     "target_network_usage": "DoubleDQN TD bootstrap only; never planning"},
     "training": {"source_steps_per_game_per_model": STEPS_PER_GAME,
                  "adaptation_steps_per_model": STEPS_PER_GAME,
                  "scratch_steps_per_model": STEPS_PER_GAME,
@@ -145,6 +147,15 @@ _CONFIG = {
                               "agar": "visual-agar-v2", "flappy": "visual-flappy-v2",
                               "racing": "visual-racing-v2"},
     "environment_config": {"max_steps": 400, "difficulty": 1., "scenario": "standard"},
+    "pong_scope": {"learner_paddle_speed": 1.1, "npc_paddle_speed": .65,
+                   "npc_move_every_steps": 2,
+                   "claim": "only this frozen asymmetric local opponent; no general Pong mastery"},
+    "causal_trace": {"source": "five fixed already-recorded final demonstration episodes",
+                     "method": "offline current-RGB recurrent reconstruction, no new rollout or future observation",
+                     "all_action_predictions": 10, "next_hidden_shape": [10, 64],
+                     "max_absolute_reconstruction_error": 1e-6,
+                     "weights": "same after_adaptation model2207 fingerprint as recording",
+                     "selected_prediction_timing": "computed before env.step; next RGB/reward only for error target"},
     "limits": {"evaluation_episode_steps": MAX_EPISODE_STEPS,
                "evaluation_steps": MAX_EVALUATION_STEPS,
                "total_steps": MAX_TOTAL_STEPS, "q_updates": MAX_Q_UPDATES,
@@ -183,13 +194,9 @@ _CONFIG = {
               "ablation_changed_games": 4, "ablation_improved_games": 2,
               "resume_transitions_and_updates": 25, "resume_tolerance": 1e-6},
     "unresolved_before_freeze": [
-        "Racing track length, normalized lap progress and completion telemetry are required; distance alone is insufficient.",
-        "Scenario strata (Snake spawns, Flappy gaps) and Agar opportunity coverage require explicit telemetry.",
-        "Paired same-state action counters are required for pixels/GRU/world attribution; episode scores cannot substitute.",
-        "World-model uses already budgeted shared-after final transitions, disjoint from training; training baselines/support and provenance must be frozen.",
-        "Training-curve normalized progress/AUC convention and equal-update evidence must be frozen.",
-        "Final optimizer, loss coefficients, target synchronization, source hashes and CPU feasibility must be bound before approval.",
-        "Chat1 must recertify the final metric definitions and untrained comparison rule before any scientific episode.",
+        "Chat2/3/4 independent final source review and Chat1 recertification are pending.",
+        "Final source/CI and offline causal reconstruction validation must be bound before approval.",
+        "G1 cost equivalence for moving the same prediction forward before env.step needs final Chat1 recertification; no new games or updates.",
     ],
 }
 
