@@ -1,0 +1,3 @@
+# Optional plotting environment, independent of historical training dependencies.
+-r requirements-ci.txt
+matplotlib==3.10.7

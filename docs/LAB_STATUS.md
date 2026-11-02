@@ -34,6 +34,7 @@ O [Relatório Científico nº 005](https://github.com/Myrroth/NOVA-Neural-Arena/
 | `arena.shared.checkpoints` | Carregamento de bytes verificados em CPU, `weights_only=True`, configuração/tensores validados e rede congelada; não cria otimizador nem executa partida. |
 | `arena.shared.preservation` | Recuperação dos seis pacotes oficiais com verificação externa/interna, sem sobrescrita. |
 | `arena.evaluation.phase5_hardstates` | Cenários geométricos de bordas/cantos, comida controlada, métricas e comparação pareada; CLI somente para validação do desenho. |
+| `arena.evaluation.reporting` | Relatórios JSON/Markdown e gráficos PNG/SVG opcionais, a partir de CSVs existentes verificados, sem partidas ou modelos. |
 | `.github/workflows/lab-infrastructure.yml` | CI da PR baseada na Fase 4: preservação do código histórico, dependências oficiais e testes pequenos/sintéticos. |
 
 O CI novo não baixa artefatos temporários do Actions; assim sua manutenção não depende da retenção científica. A auditoria dos modelos oficiais deve usar as cópias preservadas e seus digests. Os módulos antigos do Snake, DQN, treinador, benchmark e avaliadores congelados continuam protegidos por comparação Git contra os SHAs históricos.
@@ -58,6 +59,10 @@ Nesta preparação, o ambiente local não conseguiu obter as dependências por f
 **Evidência executada:** a [CI inicial 41377237661](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41377237661), sobre a infraestrutura `6faec4b5a2524a801e71c7f72f8e4859a2eb5d2b`, aprovou **140 testes em 3,77 s**, `pip check`, compilação, comparação dos sete executáveis históricos e enumeração da Fase 5. Os dois avisos são informativos do Gymnasium sobre modos de renderização sem `spec`. Ambiente: Python 3.11.17, torch 2.10.0+cpu, NumPy 2.3.5, Gymnasium 1.4.0 e pytest 9.0.2. As evidências de commits posteriores e da auditoria opcional de carregamento estão na [PR #5](https://github.com/Myrroth/NOVA-Neural-Arena/pull/5).
 
 O workflow separado `lab-checkpoint-audit.yml` é uma auditoria técnica opcional da PR #5, acionada somente pela etiqueta `lab-checkpoint-load-audit`. Ele fixa literalmente o carregador já aprovado na CI inicial, baixa os três artefatos originais, verifica e carrega pesos congelados sem inferência, partidas ou otimizador. Não inicia campanha. Sua dependência dos artefatos temporários não afeta a CI sintética; após a expiração, use as cópias duráveis e o mesmo carregador. As Actions dos dois workflows novos são fixadas por SHA completo, preservando os workflows históricos intactos.
+
+A [segunda CI 41377667604](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41377667604) aprovou **142 testes em 2,34 s**, com os mesmos dois avisos informativos. A [auditoria de carregamento 41377668039](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41377668039), tentativa 1, também teve sucesso: três modelos oficiais verificados/carregados, parâmetros congelados e RNG preservado, **zero partidas e zero treinamento**. Seus resultados foram preservados em [history/checkpoint-load-audit.json](history/checkpoint-load-audit.json). A etiqueta técnica foi removida após a execução única.
+
+O [gerador de relatórios](REPORTING.md) foi aplicado à cópia preservada da Fase 4, ancorada no hash oficial do CSV: **4.200 linhas e 84 grupos**. Os derivados novos em `experiments/reports/phase4-descriptive-v2/` são uma reanálise descritiva, separada dos resultados oficiais intactos. A CI também testa a exportação de gráficos com Matplotlib 3.10.7 e conserva uma prévia baseada exclusivamente em quatro linhas sintéticas de teste; ela não representa desempenho científico.
 
 ## Fase 5: preparação autorizada, campanha bloqueada
 

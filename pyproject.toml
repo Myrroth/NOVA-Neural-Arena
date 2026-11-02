@@ -16,6 +16,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10"]
+reporting = ["matplotlib>=3.10,<4"]
 
 [tool.setuptools.packages.find]
 include = ["arena*"]
