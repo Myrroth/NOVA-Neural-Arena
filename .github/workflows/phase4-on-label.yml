@@ -1,0 +1,228 @@
+name: Phase 4 frozen Snake start-state robustness (new approval required)
+
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/phase3-ood-board-sizes]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: phase4-startstate-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  frozen-startstate-evaluation:
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'neural-phase4-startstate-approved' &&
+      github.event.pull_request.number == 4 &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.base.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'feat/phase4-startstate-robustness' &&
+      github.event.pull_request.base.ref == 'feat/phase3-ood-board-sizes'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      APPROVED_EVALUATOR_SHA: 8b4b6696e980191349e803218af6e6d55d8ff7e9
+      ORIGINAL_PILOT_SHA: 24bd38e9e78a14e894f32d7d1c5b5b6d6d724463
+      OUTPUT: experiments/phase4/output
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+
+    steps:
+      - name: Checkout immutable CI-validated Phase 4 evaluator
+        uses: actions/checkout@v7
+        with:
+          # Never follow the mutable PR head.
+          ref: 8b4b6696e980191349e803218af6e6d55d8ff7e9
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify the exact evaluator and original Snake/DQN/trainer SHAs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$APPROVED_EVALUATOR_SHA"
+          for path in arena/envs/snake.py arena/agents/dqn.py arena/training/train.py; do
+            original="$(git show "$ORIGINAL_PILOT_SHA:$path" | sha256sum | cut -d' ' -f1)"
+            current="$(sha256sum "$path" | cut -d' ' -f1)"
+            test "$original" = "$current"
+          done
+          mkdir -p "$OUTPUT"
+          printf '%s\n' "$APPROVED_EVALUATOR_SHA" > "$OUTPUT/evaluation-code-commit.txt"
+          printf '%s\n' "$ORIGINAL_PILOT_SHA" > "$OUTPUT/original-training-commit.txt"
+
+      - name: Install official Python 3.11
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Pinned official CPU libraries and small tests only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -c requirements-ci.txt -e '.[dev]'
+          python -m pip check
+          python -m pytest -q tests/test_phase4_startstates.py tests/test_snake.py
+          python -m pip freeze > "$OUTPUT/pip-freeze.txt"
+
+      - name: Fetch immutable seed 11 checkpoint from original pilot
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-11-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase4/official/seed_11
+
+      - name: Fetch immutable seed 42 checkpoint from original pilot
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-42-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase4/official/seed_42
+
+      - name: Fetch immutable seed 73 checkpoint from original pilot
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-73-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase4/official/seed_73
+
+      - name: Check official model hashes, metadata and frozen mode BEFORE any game
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          from pathlib import Path
+          from arena.evaluation.frozen_phase2 import (
+              TRAIN_SEEDS, verify_artifact_directory, load_verified_model,
+              weights_fingerprint,
+          )
+          source = Path("experiments/phase4/official")
+          for seed in TRAIN_SEEDS:
+              folder = source / f"seed_{seed}"
+              verified = verify_artifact_directory(folder, seed=seed)
+              net = load_verified_model(folder, seed=seed, verified=verified)
+              assert not net.training
+              assert all(not p.requires_grad and p.grad is None for p in net.parameters())
+              assert len(weights_fingerprint(net)) == 64
+              print(f"Frozen official checkpoint {seed}: SHA-256 and provenance PASS")
+          PYCODE
+
+      - name: Run ONLY authorized 4200 frozen start-state evaluation episodes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m arena.evaluation.phase4_startstates \
+            --artifacts experiments/phase4/official \
+            --out "$OUTPUT" \
+            --authorized
+
+      - name: Validate exact factorial, metrics, frozen mode and output checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          import csv
+          import json
+          import os
+          from collections import Counter
+          from pathlib import Path
+          from arena.envs.snake import DIRECTIONS
+          from arena.evaluation.phase4_startstates import (
+              expected_scenarios, POLICY_IDS, START_STATES, DIRECTION_NAMES,
+          )
+          folder = Path(os.environ["OUTPUT"])
+          with (folder / "episodes.csv").open(encoding="utf-8", newline="") as f:
+              rows = list(csv.DictReader(f))
+          actual = [
+              (int(r["head_x"]), int(r["head_y"]), r["initial_direction"],
+               int(r["environment_seed"]), r["policy_id"])
+              for r in rows
+          ]
+          assert len(rows) == 4200
+          assert len(set(actual)) == 4200
+          assert set(actual) == expected_scenarios()
+          assert Counter((int(r["head_x"]), int(r["head_y"]), r["initial_direction"])
+                         for r in rows) == {
+              (h[0], h[1], d): 350 for h, d in START_STATES
+          }
+          for r in rows:
+              steps, score = int(r["steps"]), int(r["score"])
+              assert 1 <= steps <= 200
+              assert int(r["max_steps"]) == 200
+              assert int(r["board_width"]) == int(r["board_height"]) == 10
+              assert r["terminal_reason"] in ("collision", "step_limit", "board_filled")
+              assert abs(float(r["food_per_100_steps"]) -
+                         100.0 * score / steps) <= 0.0000011
+              first = r["first_food_step"]
+              assert first == "" or (score > 0 and 1 <= int(first) <= steps)
+              assert (score == 0) == (first == "")
+              dx, dy = DIRECTIONS[DIRECTION_NAMES.index(r["initial_direction"])]
+              head_x, head_y = int(r["head_x"]), int(r["head_y"])
+              body = {(head_x - n * dx, head_y - n * dy) for n in range(3)}
+              food = (int(r["initial_food_x"]), int(r["initial_food_y"]))
+              assert 0 <= food[0] < 10 and 0 <= food[1] < 10
+              assert food not in body
+          initial_food_by_condition = {}
+          for r in rows:
+              key = (r["head_x"], r["head_y"], r["initial_direction"],
+                     r["environment_seed"])
+              value = (r["initial_food_x"], r["initial_food_y"])
+              assert key not in initial_food_by_condition or initial_food_by_condition[key] == value
+              initial_food_by_condition[key] = value
+          config = json.loads((folder / "config.json").read_text(encoding="utf-8"))
+          assert config["total_episodes"] == 4200
+          assert config["frozen_weights_verified"] and config["no_training"]
+          assert config["policy_ids"] == list(POLICY_IDS)
+          assert config["environmental_seeds"] == list(range(400001, 400051))
+          assert (folder / "evaluation-code-commit.txt").read_text().strip() == os.environ["APPROVED_EVALUATOR_SHA"]
+          assert (folder / "original-training-commit.txt").read_text().strip() == os.environ["ORIGINAL_PILOT_SHA"]
+          print("Phase 4 protocol verified: 4,200 distinct evaluations, zero training")
+          PYCODE
+          python - <<'PYCODE'
+          import json
+          import os
+          from pathlib import Path
+          output = Path(os.environ["OUTPUT"])
+          metadata = {
+              "workflow": "phase4-on-label.yml",
+              "approval_label": "neural-phase4-startstate-approved",
+              "pull_request": 4,
+              "run_id": os.environ["GITHUB_RUN_ID"],
+              "run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "repository": os.environ["GITHUB_REPOSITORY"],
+              "evaluator_sha": os.environ["APPROVED_EVALUATOR_SHA"],
+              "original_training_sha": os.environ["ORIGINAL_PILOT_SHA"],
+          }
+          (output / "execution.json").write_text(
+              json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          PYCODE
+          (
+            cd "$OUTPUT"
+            sha256sum evaluation-code-commit.txt original-training-commit.txt \
+              pip-freeze.txt execution.json >> SHA256SUMS
+            sha256sum -c SHA256SUMS
+          )
+
+      - name: Preserve scientific outputs even after a partial failure
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: phase4-startstate-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: experiments/phase4/output/
+          if-no-files-found: warn
+          retention-days: 30

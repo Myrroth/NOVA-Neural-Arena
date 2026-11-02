@@ -43,3 +43,11 @@ Decisão do Chat 1 na PR #2 (issuecomment-6566397649): nova PR isolada baseada n
 
 ## 2026-11-01 — Avaliador Fase 3 congelado após CI
 O commit `8892980eccfb623de30f3803a7550aa1fa31a9c6` passou pela CI da Fase 3 #41369858499 (21 testes aprovados) antes de ser fixado literalmente em `.github/workflows/phase3-on-label.yml`. `git rev-parse HEAD` verifica o commit, e a guarda do CI exige o mesmo valor literal em checkout e `APPROVED_EVALUATOR_SHA`. O workflow roda somente em `pull_request.labeled` da PR #3 com etiqueta `neural-phase3-generalization-approved`, sem execução por push. CI #41370024631 (24 testes) e teste negativo #41370045092 (skipped) aprovaram a infraestrutura. Continua vedado executar a campanha de 1.050 episódios sem nova autorização do Chat 1.
+
+
+## 2026-11-01 — Fase 4: somente variação isolada de estado inicial
+Diretriz Chat 1 na PR #3 (issuecomment-6566860199): testar, **após autorização futura específica**, 7 políticas existentes em Snake 10×10 sob 12 condições (3 cabeças × 4 direções), seeds ambientais 400001–400050, 200 passos por partida, total de 4.200 avaliações congeladas. Sem modificar Snake, DQN ou checkpoints; adaptar reset só em classe isolada e sortear alimento depois do corpo. Manter baseline original (5,5,east), registrar comida inicial para controlar diferenças físicas sob mesma seed, comparar estados separadamente com endpoint primário score. Workflow com etiqueta exclusiva `neural-phase4-startstate-approved`, checkout SHA imutável depois da primeira CI. Nenhuma campanha ou treinamento nesta fase.
+
+
+## 2026-11-01 — Congelamento da Fase 4 e gate exclusivo
+Após [CI #41372851622](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41372851622) (42 testes), congelar `arena/evaluation/phase4_startstates.py` no commit literal `8b4b6696e980191349e803218af6e6d55d8ff7e9` em `.github/workflows/phase4-on-label.yml`. Comparar `git rev-parse HEAD`, além de Snake, DQN e treinador contra commit do piloto. Restrição de etiqueta `neural-phase4-startstate-approved` na PR #4, novo gatilho apenas `pull_request.labeled`; nenhum push dispara campanha. Testes de pin e autorização incluídos; CI #41373055405 (45 testes) sucesso, evento com etiqueta neutra #41373064866 skipped. A execução completa de 4.200 episódios depende de aprovação futura do Chat 1.

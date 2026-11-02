@@ -65,3 +65,11 @@ A [documentação da Fase 3](docs/PHASE3_PROTOCOL.md) descreve o avaliador conge
 
 
 **Validação da Fase 3:** avaliador congelado no commit `8892980eccfb623de30f3803a7550aa1fa31a9c6` ([CI original](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41369858499)); workflow de etiqueta usa checkout literal e compara `git rev-parse HEAD`. [CI reforçada](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41370024631) com 24 testes aprovados e os três checkpoints oficiais verificados **sem campanha**; [teste de etiqueta neutra](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41370045092) ignorado. O workflow real `phase3-on-label.yml` precisa de etiqueta autorizadora exclusiva **neural-phase3-generalization-approved** na PR #3 após decisão do Chat 1.
+
+
+## Fase 4 — robustez da posição/orientação inicial (proposta técnica)
+
+Consulte [docs/PHASE4_PROTOCOL.md](docs/PHASE4_PROTOCOL.md). A nova implementação `arena/evaluation/phase4_startstates.py` testa a variação isolada de cabeça (5,5)/(3,3)/(6,6) e orientação leste/sul/oeste/norte no Snake original 10×10. Protocolo futuro, sujeito a autorização: 7 políticas congeladas × 12 condições × 50 seeds ambientais 400001..400050 = **4.200 partidas de avaliação**, nenhuma realizada durante o desenvolvimento. A CI utiliza modelos sintéticos em testes minúsculos e audita os três checkpoints oficiais sem partidas. Nenhum treino/merge/autorização de etiqueta foi realizado.
+
+
+**Validação da Fase 4:** avaliador congelado em `8b4b6696e980191349e803218af6e6d55d8ff7e9` ([CI inicial, 42 testes](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41372851622)), workflow opt-in com etiqueta `neural-phase4-startstate-approved` na PR #4. [CI pós-workflow, 45 testes](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41373055405) e [teste negativo da etiqueta](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41373064866) concluídos, sem campanha. Aprovação científica do Chat 1 pendente.
