@@ -1,0 +1,42 @@
+{
+  "models": [
+    {
+      "artifact_id": 13101471957,
+      "frozen": true,
+      "model_sha256": "ff132bc23aaf5b56d00679a07961d23c2de30bafa7bbaa4e99ff966b61a49130",
+      "rng_preserved": true,
+      "seed": 11,
+      "weights_fingerprint": "836c81fcbc50ec3fa80f4c810af111d85bc6540ed95803b92bbc44ea406a273f"
+    },
+    {
+      "artifact_id": 13101072100,
+      "frozen": true,
+      "model_sha256": "0623256abf3b068f212bacaa5c46f8bbcc6aabf2aeaa0f7ef5ecdc0ec8120cbe",
+      "rng_preserved": true,
+      "seed": 42,
+      "weights_fingerprint": "3c24e5d7a0b38dc32885f54de4855b30dc4420a32e974183b6376f4481171ea5"
+    },
+    {
+      "artifact_id": 13100988601,
+      "frozen": true,
+      "model_sha256": "2899df84afe4512ca127bf3367490a5bc42c88f3ad7868daf8195ed419ecb8fe",
+      "rng_preserved": true,
+      "seed": 73,
+      "weights_fingerprint": "40bcbcdb525c8fd3248efd3e47fd59b9c9dc8e46d58cfdd7580618f442b2e8f6"
+    }
+  ],
+  "official_episodes_executed": 0,
+  "source_commit": "6faec4b5a2524a801e71c7f72f8e4859a2eb5d2b",
+  "training_executed": false,
+  "versions": {
+    "gymnasium": "1.4.0",
+    "numpy": "2.3.5",
+    "python": "3.11.17",
+    "torch": "2.10.0+cpu"
+  },
+  "run_id": 41377668039,
+  "run_attempt": 1,
+  "run_url": "https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41377668039",
+  "trigger": "lab-checkpoint-load-audit",
+  "label_removed_after_success": true
+}

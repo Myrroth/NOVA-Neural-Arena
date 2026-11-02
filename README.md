@@ -1,5 +1,13 @@
 # NOVA Neural Arena 🐍
 
+**Estado consolidado e ferramentas novas:** [LAB_STATUS](docs/LAB_STATUS.md),
+[preservação das Fases 1–4](docs/PRESERVATION.md),
+[auditoria técnica](docs/TECHNICAL_AUDIT.md) e
+[proposta da Fase 5](docs/PHASE5_PROTOCOL.md).
+As campanhas das Fases 1–4 foram concluídas nos runs documentados; textos abaixo
+registram também preparações históricas. A Fase 5 permanece sem autorização e
+sem execução oficial. Esta branch está em revisão, sem merge em `main`.
+
 Laboratório **independente da IA NOVA** para testar aprendizado por reforço, começando com Snake e, futuramente, transferência entre ambientes. Resultados de Snake não demonstram aprendizado geral.
 
 ## Primeira experiência
