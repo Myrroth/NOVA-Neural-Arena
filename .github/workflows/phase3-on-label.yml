@@ -1,0 +1,189 @@
+name: Phase 3 frozen Snake cross-size evaluation (requires new label approval)
+
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/phase2-frozen-evaluation]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: phase3-generalization-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  frozen-cross-size-evaluation:
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'neural-phase3-generalization-approved' &&
+      github.event.pull_request.number == 3 &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.base.repo.full_name == github.repository &&
+      github.event.pull_request.base.ref == 'feat/phase2-frozen-evaluation' &&
+      github.event.pull_request.head.ref == 'feat/phase3-ood-board-sizes'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      APPROVED_EVALUATOR_SHA: 8892980eccfb623de30f3803a7550aa1fa31a9c6
+      ORIGINAL_PILOT_SHA: 24bd38e9e78a14e894f32d7d1c5b5b6d6d724463
+      OUTPUT: experiments/phase3/output
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+
+    steps:
+      - name: Checkout immutable CI-validated Phase 3 evaluator (NOT changing PR HEAD)
+        uses: actions/checkout@v7
+        with:
+          ref: 8892980eccfb623de30f3803a7550aa1fa31a9c6
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify SHA and immutable Snake/DQN before any inference
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$APPROVED_EVALUATOR_SHA"
+          for path in arena/envs/snake.py arena/agents/dqn.py arena/training/train.py; do
+            test "$(git show "$ORIGINAL_PILOT_SHA:$path" | sha256sum | cut -d' ' -f1)" = "$(sha256sum "$path" | cut -d' ' -f1)"
+          done
+          mkdir -p "$OUTPUT"
+          printf '%s\n' "$APPROVED_EVALUATOR_SHA" > "$OUTPUT/evaluation-code-commit.txt"
+          printf '%s\n' "$ORIGINAL_PILOT_SHA" > "$OUTPUT/original-training-commit.txt"
+
+      - name: Configure Python 3.11
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install official pinned CPU dependencies and audit unit tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -c requirements-ci.txt -e '.[dev]'
+          python -m pip check
+          python -m pytest -q tests/test_phase3_generalization.py tests/test_snake.py
+          python -m pip freeze > "$OUTPUT/pip-freeze.txt"
+
+      - name: Download the exact original official seed 11 checkpoint
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-11-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase3/official/seed_11
+      - name: Download the exact original official seed 42 checkpoint
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-42-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase3/official/seed_42
+      - name: Download the exact original official seed 73 checkpoint
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-73-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase3/official/seed_73
+
+      - name: Verify SHA-256, pilot run, source and frozen model weights; NO game
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          from pathlib import Path
+          from arena.evaluation.frozen_phase2 import (
+              TRAIN_SEEDS, verify_artifact_directory, load_verified_model, weights_fingerprint
+          )
+          root = Path("experiments/phase3/official")
+          for seed in TRAIN_SEEDS:
+              source = root / f"seed_{seed}"
+              verified = verify_artifact_directory(source, seed=seed)
+              net = load_verified_model(source, seed=seed, verified=verified)
+              assert not net.training
+              assert all(not p.requires_grad and p.grad is None for p in net.parameters())
+              assert len(weights_fingerprint(net)) == 64
+              print(f"Official frozen checkpoint seed {seed}: verified, no episode")
+          PYCODE
+
+      - name: Evaluate frozen policies in 8x8, 10x10, 12x12 (explicit new approval only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m arena.evaluation.phase3_generalization \
+            --artifacts experiments/phase3/official \
+            --out "$OUTPUT" \
+            --authorized
+
+      - name: Audit exactly 1050 evaluation rows and record checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          from collections import Counter
+          import csv
+          import json
+          import os
+          from pathlib import Path
+          from arena.evaluation.phase3_generalization import expected_scenarios, POLICY_IDS
+          root = Path(os.environ["OUTPUT"])
+          with (root / "episodes.csv").open(encoding="utf-8", newline="") as f:
+              rows = list(csv.DictReader(f))
+          actual = [(int(r["board_width"]), int(r["environment_seed"]), r["policy_id"])
+                    for r in rows]
+          assert len(rows) == 1050
+          assert len(actual) == len(set(actual))
+          assert set(actual) == expected_scenarios()
+          assert Counter(int(r["board_width"]) for r in rows) == {8: 350, 10: 350, 12: 350}
+          for r in rows:
+              assert int(r["board_width"]) == int(r["board_height"])
+              assert int(r["max_steps"]) == 200
+              assert 1 <= int(r["steps"]) <= 200
+              assert r["terminal_reason"] in ("collision", "step_limit", "board_filled")
+          meta = json.loads((root / "config.json").read_text())
+          assert meta["total_episodes"] == 1050
+          assert meta["frozen_weights_verified"] and meta["no_training"]
+          assert meta["policy_ids"] == list(POLICY_IDS)
+          assert (root / "evaluation-code-commit.txt").read_text().strip() == os.environ["APPROVED_EVALUATOR_SHA"]
+          print("Complete frozen matrix PASS; 1,050 evaluation episodes and zero training")
+          PYCODE
+          python - <<'PYCODE'
+          import json
+          import os
+          from pathlib import Path
+          root = Path(os.environ["OUTPUT"])
+          meta = {
+              "run_id": os.environ["GITHUB_RUN_ID"],
+              "run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "repository": os.environ["GITHUB_REPOSITORY"],
+              "workflow": "phase3-on-label.yml",
+              "approval_label": "neural-phase3-generalization-approved",
+              "approval_pull_request": 3,
+              "approved_evaluator_sha": os.environ["APPROVED_EVALUATOR_SHA"],
+              "training_commit": os.environ["ORIGINAL_PILOT_SHA"],
+          }
+          (root / "execution.json").write_text(json.dumps(meta, indent=2, sort_keys=True) + "\n")
+          PYCODE
+          (
+            cd "$OUTPUT"
+            sha256sum evaluation-code-commit.txt original-training-commit.txt pip-freeze.txt execution.json >> SHA256SUMS
+            sha256sum -c SHA256SUMS
+          )
+
+      - name: Upload scientific output with bounded retention
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: phase3-cross-size-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: experiments/phase3/output/
+          if-no-files-found: warn
+          retention-days: 30
