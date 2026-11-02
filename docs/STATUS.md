@@ -90,3 +90,13 @@ Workflow: `.github/workflows/neural-pilot-on-label.yml`.
 - [CI após congelamento #41370024631](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41370024631): **24 testes aprovados, 2 avisos não bloqueantes**; os 3 arquivos oficiais baixados, SHA256/proveniência conferidos e pesos carregados congelados. Zero episódios de avaliação oficial.
 - [Gatilho negativo #41370045092](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41370045092): etiqueta neutra `documentation` → job da Fase 3 **skipped**, nenhum jogo; etiqueta removida.
 - **Pendência:** Chat 1 revisar ciência e infraestrutura, então autorizar (ou não) execução **única** por Chat 3. Nenhuma etiqueta autorizadora aplicada, nenhum merge ou alteração dos modelos originais.
+
+
+## 2026-11-01 — Chat 2: preparação isolada da Fase 4 (robustez de estado inicial)
+- Decisão do Chat 1: https://github.com/Myrroth/NOVA-Neural-Arena/pull/3#issuecomment-6566860199. Fase 3 encerrada; **somente implementação da Fase 4 autorizada, nenhuma avaliação oficial**.
+- Nova branch `feat/phase4-startstate-robustness`, derivada da PR #3; preparar PR #4 em rascunho.
+- Ambiente adaptado `StartStateSnakeEnv`, em `arena/evaluation/phase4_startstates.py`, cria corpo de 3 segmentos atrás da cabeça para 3 posições e 4 direções, sem tocar `arena/envs/snake.py`. Comida sorteada **depois** de posicionar corpo, sem sobreposição, e posição real registrada.
+- Quadro 10×10; seeds inéditas 400001..400050; sete políticas congeladas 11/42/73 e controles; limite 200 passos; matriz de 4.200 episódios é **apenas plano não executado**.
+- `expected_scenarios()` calcula 4.200 chaves sem executar; testes com modelo sintético verificam 12 condições, determinismo, paridade com o Snake padrão, integridade, primeira comida, eficiência, ausência de treino e pequenas simulações.
+- CI `phase4-tests.yml` instala Gymnasium/PyTorch oficiais, valida apenas testes sintéticos e confere 3 checkpoints oficiais sem episódios. Próxima etapa: primeira CI verde, então SHA imutável do avaliador em workflow opt-in exclusivo da Fase 4.
+- Detalhes em `docs/PHASE4_PROTOCOL.md`; nenhum merge e nenhuma mudança na NOVA original, modelos, treinadores ou PRs anteriores.
