@@ -44,6 +44,6 @@ jobs:
           from pathlib import Path
           from arena.shared.multigame import verify_demo
           r = verify_demo(Path(os.environ['RUNNER_TEMP'])/'pong-demo')
-          assert r['no_training'] and r['environment']['environment_id'] == 'pong-local-v1'
+          assert r['no_training'] and r['environment']['environment_id'] == 'pong-local-v2'
           print('Pong demo verified, no training/no official model loaded')
           PY

@@ -14,7 +14,7 @@ def test_pong_and_snake_get_distinct_versioned_contracts():
     with PongEnv(max_steps=30) as pong, SnakeEnv(max_steps=30) as snake:
         p = describe_environment(pong)
         s = describe_environment(snake)
-        assert p.environment_id == "pong-local-v1" and p.observation_shape == (8,)
+        assert p.environment_id == "pong-local-v2" and p.observation_shape == (8,)
         assert s.environment_id == "snake-v1" and s.observation_shape == (11,)
         assert p.reward_version != s.reward_version
         assert p.action_count == s.action_count == 3
@@ -24,6 +24,9 @@ def test_checkpoint_contract_fails_closed_for_cross_game_or_reward_change():
     with PongEnv() as pong, SnakeEnv() as snake:
         p, s = describe_environment(pong), describe_environment(snake)
         check_checkpoint_contract(asdict(p), p)
+        old_pong = {**asdict(p), "environment_id": "pong-local-v1"}
+        with pytest.raises(ValueError, match="environment_id"):
+            check_checkpoint_contract(old_pong, p)
         with pytest.raises(ValueError, match="environment_id"):
             check_checkpoint_contract(asdict(s), p)
         wrong = asdict(p)

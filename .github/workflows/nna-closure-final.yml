@@ -1,0 +1,53 @@
+name: NNA closure final verification (NO scientific campaign)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [feat/nna-fechamento-001-phase5]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nna-closure-final-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: |
+            requirements-ci.txt
+            requirements-reporting.txt
+      - name: Verify preserved scientific executables
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code 24bd38e9e78a14e894f32d7d1c5b5b6d6d724463 HEAD -- arena/envs/snake.py arena/agents/dqn.py arena/training/train.py arena/evaluation/benchmark.py
+          git diff --exit-code f9e1b171a8c045f8bd7c874432114e4bc654665e HEAD -- arena/evaluation/frozen_phase2.py
+          git diff --exit-code 8892980eccfb623de30f3803a7550aa1fa31a9c6 HEAD -- arena/evaluation/phase3_generalization.py
+          git diff --exit-code 8b4b6696e980191349e803218af6e6d55d8ff7e9 HEAD -- arena/evaluation/phase4_startstates.py
+          git diff --exit-code 39461168db30edb90a25385fb3a1eaca8dfdde33 HEAD -- arena/evaluation/phase5_campaign.py arena/evaluation/phase5_hardstates.py arena/shared/checkpoints.py
+      - name: Install declared CPU dependencies
+        run: |
+          python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -c requirements-ci.txt -e '.[dev]'
+          python -m pip install -c requirements-reporting.txt '.[reporting]'
+          python -m pip check
+      - name: Run bounded unit checks and compile packaging
+        run: |
+          python -m compileall -q arena tests scripts
+          python -m pytest -q
