@@ -1,0 +1,132 @@
+{
+  "41350959549": {
+    "artifacts": [
+      {
+        "id": 13101471957,
+        "name": "snake-pilot-seed-11-run-41350959549-attempt-1",
+        "size_in_bytes": 79401,
+        "url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13101471957",
+        "archive_download_url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13101471957/zip",
+        "expired": false,
+        "created_at": "2026-11-01T21:15:00Z",
+        "expires_at": "2026-12-01T21:15:00Z",
+        "updated_at": "2026-11-01T21:15:00Z",
+        "digest": "sha256:f8e3ea85e2e7a01a2522ab24d7e96fa024d0232dec71f0f3171af25441ec1a74",
+        "workflow_run": {
+          "id": 41350959549,
+          "repository_id": 1442003120,
+          "head_repository_id": 1442003120,
+          "head_branch": "feat/snake-dqn-laboratory",
+          "head_sha": "f49adc6fc45596c81169691aecb1e0937e201ea2"
+        }
+      },
+      {
+        "id": 13101072100,
+        "name": "snake-pilot-seed-42-run-41350959549-attempt-1",
+        "size_in_bytes": 77408,
+        "url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13101072100",
+        "archive_download_url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13101072100/zip",
+        "expired": false,
+        "created_at": "2026-11-01T21:15:02Z",
+        "expires_at": "2026-12-01T21:15:02Z",
+        "updated_at": "2026-11-01T21:15:02Z",
+        "digest": "sha256:3bc28cc078a38323539090284c80976f53351cd894a10882a2d7138e52359642",
+        "workflow_run": {
+          "id": 41350959549,
+          "repository_id": 1442003120,
+          "head_repository_id": 1442003120,
+          "head_branch": "feat/snake-dqn-laboratory",
+          "head_sha": "f49adc6fc45596c81169691aecb1e0937e201ea2"
+        }
+      },
+      {
+        "id": 13100988601,
+        "name": "snake-pilot-seed-73-run-41350959549-attempt-1",
+        "size_in_bytes": 80840,
+        "url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13100988601",
+        "archive_download_url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13100988601/zip",
+        "expired": false,
+        "created_at": "2026-11-01T21:15:00Z",
+        "expires_at": "2026-12-01T21:14:59Z",
+        "updated_at": "2026-11-01T21:15:00Z",
+        "digest": "sha256:0c2dcde1586a3be8e3c55b3ff67c67d4f56dca53012b96b0d690db517ad54b48",
+        "workflow_run": {
+          "id": 41350959549,
+          "repository_id": 1442003120,
+          "head_repository_id": 1442003120,
+          "head_branch": "feat/snake-dqn-laboratory",
+          "head_sha": "f49adc6fc45596c81169691aecb1e0937e201ea2"
+        }
+      }
+    ]
+  },
+  "41367188257": {
+    "artifacts": [
+      {
+        "id": 13106764292,
+        "name": "phase2-frozen-evaluation-run-41367188257-attempt-1",
+        "size_in_bytes": 5864,
+        "url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13106764292",
+        "archive_download_url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13106764292/zip",
+        "expired": false,
+        "created_at": "2026-11-02T00:27:36Z",
+        "expires_at": "2026-12-02T00:27:36Z",
+        "updated_at": "2026-11-02T00:27:36Z",
+        "digest": "sha256:cb74f81d59c3eeb37111998fa977346af381e3013c3116c6065e4e1569eed4cf",
+        "workflow_run": {
+          "id": 41367188257,
+          "repository_id": 1442003120,
+          "head_repository_id": 1442003120,
+          "head_branch": "feat/phase2-frozen-evaluation",
+          "head_sha": "891d26b60e82fb8ae49eac17465064d58f3f0554"
+        }
+      }
+    ]
+  },
+  "41370622154": {
+    "artifacts": [
+      {
+        "id": 13108893868,
+        "name": "phase3-cross-size-run-41370622154-attempt-1",
+        "size_in_bytes": 15513,
+        "url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13108893868",
+        "archive_download_url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13108893868/zip",
+        "expired": false,
+        "created_at": "2026-11-02T01:06:39Z",
+        "expires_at": "2026-12-02T01:06:38Z",
+        "updated_at": "2026-11-02T01:06:39Z",
+        "digest": "sha256:75c12daa2f5b0a126eed3d0ca8b72c9938d22f937e6911f27a5b5b5dcc83c2c4",
+        "workflow_run": {
+          "id": 41370622154,
+          "repository_id": 1442003120,
+          "head_repository_id": 1442003120,
+          "head_branch": "feat/phase3-ood-board-sizes",
+          "head_sha": "b37322add54d2751e16fc7db9177d1c7ef41817d"
+        }
+      }
+    ]
+  },
+  "41373651632": {
+    "artifacts": [
+      {
+        "id": 13110740130,
+        "name": "phase4-startstate-run-41373651632-attempt-1",
+        "size_in_bytes": 51492,
+        "url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13110740130",
+        "archive_download_url": "https://api.github.com/repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13110740130/zip",
+        "expired": false,
+        "created_at": "2026-11-02T01:40:59Z",
+        "expires_at": "2026-12-02T01:40:58Z",
+        "updated_at": "2026-11-02T01:40:59Z",
+        "digest": "sha256:dc4bb9640b5e54ce3dcc53ea7b766c880097810ca37ec4e0532549dd75dc9289",
+        "workflow_run": {
+          "id": 41373651632,
+          "repository_id": 1442003120,
+          "head_repository_id": 1442003120,
+          "head_branch": "feat/phase4-startstate-robustness",
+          "head_sha": "af4bd307c6b6a75980a1b66c007cfd6a1d9a5d59"
+        }
+      }
+    ]
+  }
+}

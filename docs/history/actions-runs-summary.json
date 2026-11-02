@@ -1,0 +1,62 @@
+[
+  {
+    "id": 41350959549,
+    "name": "Approved Snake pilot (PR label)",
+    "head_branch": "feat/snake-dqn-laboratory",
+    "head_sha": "f49adc6fc45596c81169691aecb1e0937e201ea2",
+    "path": ".github/workflows/neural-pilot-on-label.yml",
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41350959549",
+    "created_at": "2026-11-01T21:14:13Z",
+    "updated_at": "2026-11-01T21:15:05Z",
+    "run_attempt": 1,
+    "run_started_at": "2026-11-01T21:14:13Z"
+  },
+  {
+    "id": 41367188257,
+    "name": "Phase 2 frozen Snake evaluation (new approval required)",
+    "head_branch": "feat/phase2-frozen-evaluation",
+    "head_sha": "891d26b60e82fb8ae49eac17465064d58f3f0554",
+    "path": ".github/workflows/phase2-on-label.yml",
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41367188257",
+    "created_at": "2026-11-02T00:26:51Z",
+    "updated_at": "2026-11-02T00:27:39Z",
+    "run_attempt": 1,
+    "run_started_at": "2026-11-02T00:26:51Z"
+  },
+  {
+    "id": 41370622154,
+    "name": "Phase 3 frozen Snake cross-size evaluation (requires new label approval)",
+    "head_branch": "feat/phase3-ood-board-sizes",
+    "head_sha": "b37322add54d2751e16fc7db9177d1c7ef41817d",
+    "path": ".github/workflows/phase3-on-label.yml",
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41370622154",
+    "created_at": "2026-11-02T01:05:42Z",
+    "updated_at": "2026-11-02T01:06:42Z",
+    "run_attempt": 1,
+    "run_started_at": "2026-11-02T01:05:42Z"
+  },
+  {
+    "id": 41373651632,
+    "name": "Phase 4 frozen Snake start-state robustness (new approval required)",
+    "head_branch": "feat/phase4-startstate-robustness",
+    "head_sha": "af4bd307c6b6a75980a1b66c007cfd6a1d9a5d59",
+    "path": ".github/workflows/phase4-on-label.yml",
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41373651632",
+    "created_at": "2026-11-02T01:39:54Z",
+    "updated_at": "2026-11-02T01:41:03Z",
+    "run_attempt": 1,
+    "run_started_at": "2026-11-02T01:39:54Z"
+  }
+]

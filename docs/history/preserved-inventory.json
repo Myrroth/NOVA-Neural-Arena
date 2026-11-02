@@ -1,0 +1,122 @@
+{
+  "artifacts": [
+    {
+      "archive": "snake-pilot-seed-11-run-41350959549-attempt-1.zip",
+      "archive_bytes": 79401,
+      "archive_sha256": "f8e3ea85e2e7a01a2522ab24d7e96fa024d0232dec71f0f3171af25441ec1a74",
+      "artifact_id": 13101471957,
+      "expires_at_actions": "2026-12-01T21:15:00Z",
+      "internal_hashes": {
+        "commit.txt": "f9796934b6408360b894f066e589bb63e06f7ea449be55110362ed5601bea630",
+        "episodes.csv": "6263a10107c38b7ebb331e2a9ca4f56e5fda2d72d0ff3264b9dbb8ce0e2526de",
+        "evaluation.json": "790c65403dfb37e6e695195284834ce90c27367bb705372aebc4755b6a61493c",
+        "model.pt": "ff132bc23aaf5b56d00679a07961d23c2de30bafa7bbaa4e99ff966b61a49130",
+        "pip-freeze.txt": "d45bcb63b048e3787692c8cc0365e7637d10eb10201428d1646402984c4f7bfe",
+        "provenance.json": "a92af29a2e601a6c18c8b690d889706be721069b505d4451fdade2df226ccec8",
+        "run.json": "442b0a593f841af7dd7f555e5a0cadc64d8f8444170e0c531333c913338f2976"
+      },
+      "outer_zip_anchored_additional_hashes": {},
+      "recorded_training_or_evaluation_rows": 80,
+      "run_id": 41350959549
+    },
+    {
+      "archive": "snake-pilot-seed-42-run-41350959549-attempt-1.zip",
+      "archive_bytes": 77408,
+      "archive_sha256": "3bc28cc078a38323539090284c80976f53351cd894a10882a2d7138e52359642",
+      "artifact_id": 13101072100,
+      "expires_at_actions": "2026-12-01T21:15:02Z",
+      "internal_hashes": {
+        "commit.txt": "f9796934b6408360b894f066e589bb63e06f7ea449be55110362ed5601bea630",
+        "episodes.csv": "d10892ec1b5adfdfc3a89622bdaed8d110a7127aa69301b7915673e5b763148c",
+        "evaluation.json": "ae0a9d11101ad5144802596b4167a0d19905bbe2b919f534f0ec0e717a03d6eb",
+        "model.pt": "0623256abf3b068f212bacaa5c46f8bbcc6aabf2aeaa0f7ef5ecdc0ec8120cbe",
+        "pip-freeze.txt": "d45bcb63b048e3787692c8cc0365e7637d10eb10201428d1646402984c4f7bfe",
+        "provenance.json": "2806d4c6baaa371f9d75866f1d924051e9dc655a58f919f7b07e92aa8ee9c216",
+        "run.json": "7102e7e4e5243b1687be2285cb8ba3cc160bbc6fa51c09f648267aaf63a479a7"
+      },
+      "outer_zip_anchored_additional_hashes": {},
+      "recorded_training_or_evaluation_rows": 80,
+      "run_id": 41350959549
+    },
+    {
+      "archive": "snake-pilot-seed-73-run-41350959549-attempt-1.zip",
+      "archive_bytes": 80840,
+      "archive_sha256": "0c2dcde1586a3be8e3c55b3ff67c67d4f56dca53012b96b0d690db517ad54b48",
+      "artifact_id": 13100988601,
+      "expires_at_actions": "2026-12-01T21:14:59Z",
+      "internal_hashes": {
+        "commit.txt": "f9796934b6408360b894f066e589bb63e06f7ea449be55110362ed5601bea630",
+        "episodes.csv": "bcb49448124c1176f617210e9701094056bc4c0fd4739a5ae754552fcb2c4993",
+        "evaluation.json": "7eaf2a3050473930b6765bc2ae7ba193f7fe866c2244c02969d065d250b0bf8a",
+        "model.pt": "2899df84afe4512ca127bf3367490a5bc42c88f3ad7868daf8195ed419ecb8fe",
+        "pip-freeze.txt": "d45bcb63b048e3787692c8cc0365e7637d10eb10201428d1646402984c4f7bfe",
+        "provenance.json": "b1aa059ba2e7235547b7d6d5d423e100888588c9b61b853b45e8d44c4b21c1ab",
+        "run.json": "bf4462a6c351cefb409473593547a31daf8c960fc84e35cd48391fec9dac22b1"
+      },
+      "outer_zip_anchored_additional_hashes": {},
+      "recorded_training_or_evaluation_rows": 80,
+      "run_id": 41350959549
+    },
+    {
+      "archive": "phase2-frozen-evaluation-run-41367188257-attempt-1.zip",
+      "archive_bytes": 5864,
+      "archive_sha256": "cb74f81d59c3eeb37111998fa977346af381e3013c3116c6065e4e1569eed4cf",
+      "artifact_id": 13106764292,
+      "expires_at_actions": "2026-12-02T00:27:36Z",
+      "internal_hashes": {
+        "config.json": "df2222ea1a3f17405566b40cc9bbe2a7018daa68ad108db346b245779ae38334",
+        "episodes.csv": "25c5e81085a0245a37233e9804fcca1e757f7e2d8228d205446f1449f4a4efc0",
+        "summary.json": "8c0c1509f768723e99b20bbf2ab2e810947850d62c9bd6d454df7a55511f932b"
+      },
+      "outer_zip_anchored_additional_hashes": {
+        "evaluation-code-commit.txt": "142d5faa004feb9bbf2f1eed97b65dde28112e5e3cd5a350a059c5c82cd6a8e0",
+        "original-training-commit.txt": "f9796934b6408360b894f066e589bb63e06f7ea449be55110362ed5601bea630",
+        "pip-freeze.txt": "d34cae1c61061b61320e97154aa969f5b2f414676dd9eaa6b45ef62b5f3b7040"
+      },
+      "recorded_training_or_evaluation_rows": 350,
+      "run_id": 41367188257
+    },
+    {
+      "archive": "phase3-cross-size-run-41370622154-attempt-1.zip",
+      "archive_bytes": 15513,
+      "archive_sha256": "75c12daa2f5b0a126eed3d0ca8b72c9938d22f937e6911f27a5b5b5dcc83c2c4",
+      "artifact_id": 13108893868,
+      "expires_at_actions": "2026-12-02T01:06:38Z",
+      "internal_hashes": {
+        "config.json": "1c8a215d9f65ab0302f39cd8abd4afeffff051bd99c74a78132cdb52755c47ed",
+        "episodes.csv": "ee5ee8caab4f050a2f9a78f4de30c99aa12cf1f73f7d095f9b7e743a9eb69796",
+        "evaluation-code-commit.txt": "0f5a56b7f4e01e3a768c438dcc094611766a841a3a1df63bbacdb9f5912b347e",
+        "execution.json": "9823746e40c90c146108ef1f6fbb50851a33c7ede0d348b027b2050f712c2d06",
+        "original-training-commit.txt": "f9796934b6408360b894f066e589bb63e06f7ea449be55110362ed5601bea630",
+        "pip-freeze.txt": "395ad614274884b897c4f1f5cb75ab5fea7f20d89e474222651989bf400f69d7",
+        "summary.json": "6d1ebc3017145c4771c241814f18f19903bbd479956ab76a4b09055e5ea27fb1"
+      },
+      "outer_zip_anchored_additional_hashes": {},
+      "recorded_training_or_evaluation_rows": 1050,
+      "run_id": 41370622154
+    },
+    {
+      "archive": "phase4-startstate-run-41373651632-attempt-1.zip",
+      "archive_bytes": 51492,
+      "archive_sha256": "dc4bb9640b5e54ce3dcc53ea7b766c880097810ca37ec4e0532549dd75dc9289",
+      "artifact_id": 13110740130,
+      "expires_at_actions": "2026-12-02T01:40:58Z",
+      "internal_hashes": {
+        "config.json": "4d108d27a6bfe1e4065761865ed392467a50896433e8065079b4cac65a4f93d9",
+        "episodes.csv": "89bac44718b347be85862cd66f162f99b2c184e3c01eb9f49a4e1ae0c4f79f64",
+        "evaluation-code-commit.txt": "f2570b6efbf4699787ce4430c1438a7f454d0cbeacbbf679cedb96bcaa47edc5",
+        "execution.json": "97e31c954f62e29f666a217b4065c30b5d97979eb8618ba2e0895c8ee5abcd41",
+        "original-training-commit.txt": "f9796934b6408360b894f066e589bb63e06f7ea449be55110362ed5601bea630",
+        "pip-freeze.txt": "4b824d34c72c5134f02cd6aa690e98cdd8b2d8644a1e350a638e97f8a31b6d48",
+        "summary.json": "611201a0aa4db00dc2bae422de18671a76d0ec82d3bfa0067287170cd9d81a1d"
+      },
+      "outer_zip_anchored_additional_hashes": {},
+      "recorded_training_or_evaluation_rows": 4200,
+      "run_id": 41373651632
+    }
+  ],
+  "no_new_episodes": true,
+  "no_training": true,
+  "repository": "Myrroth/NOVA-Neural-Arena",
+  "schema_version": 1
+}
