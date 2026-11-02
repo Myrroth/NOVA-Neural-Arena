@@ -71,3 +71,13 @@ Workflow: `.github/workflows/neural-pilot-on-label.yml`.
 - Teste de regressão estático `tests/test_phase2_workflow_pin.py` incluído na CI da PR para exigir ambas as constantes, o gate por etiqueta específica e ausência de push, `pull_request_target` ou treinamento.
 - Garantia de código: uploads/documentação futuros da PR não mudam o commit executável; alterações no próprio workflow demandam nova revisão do Chat 1 antes da aplicação da etiqueta. O SHA do workflow no evento `labeled` não é necessariamente o SHA de checkout (este é congelado).
 - Nenhuma etiqueta de autorização foi aplicada. `main` e PR #1 preservadas, sem merge e sem tocar na NOVA original. A campanha de **350 episódios permanece bloqueada até autorização do Chat 1**.
+
+
+## 2026-11-01 — Fase 3: preparação da avaliação entre tamanhos (Chat 2)
+- Diretriz Chat 1 (última decisão da PR #2): https://github.com/Myrroth/NOVA-Neural-Arena/pull/2#issuecomment-6566397649; Fase 2 encerrada cientificamente, **Fase 3 sem autorização de executar**.
+- Nova branch `feat/phase3-ood-board-sizes`, derivada da PR #2, para PR #3 em rascunho; **PR #1/#2, main, modelos e Snake/DQN/treinador originais intactos**.
+- Implementado `arena/evaluation/phase3_generalization.py`: três modelos oficiais congelados + três QNetwork não treinadas + aleatória; sizes (8,10,12), seeds ambientais 300001..300050, máximo 200 passos. Matrix prevista 1.050 episódios, **não executados**.
+- Métricas: score/reward/steps, desfecho, primeiro alimento, alimentos por 100 passos, proveniência e estatísticas separadas por dimensão e política.
+- Testes sintéticos `tests/test_phase3_generalization.py` e CI isolada `phase3-tests.yml` com dependências oficiais e audit do download/checkpoints **sem episódios com modelos oficiais**.
+- Protocolo e limites em `docs/PHASE3_PROTOCOL.md`. A CI da PR verificará compatibilidade; depois de aprovada será congelado o commit do avaliador no workflow opt-in da Fase 3.
+- Checkpoints oficiais ID 13101471957/13101072100/13100988601 com retenção prevista até 2026-12-01 21:15 UTC. Preservar ZIPs originais fora da retenção temporária.
