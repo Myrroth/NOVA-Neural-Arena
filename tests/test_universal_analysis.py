@@ -215,3 +215,88 @@ def test_claimed_engineering_pass_needs_actual_untampered_receipt(tmp_path):
 def test_analysis_directory_empty_is_offline_and_json_finite(tmp_path):
     result = a.analyze_directory(tmp_path)
     assert json.loads(json.dumps(result, allow_nan=False))["overall"] == "NOT_CONCLUDED"
+
+
+def test_analysis_directory_default_preserves_local_training_curve_input(tmp_path, monkeypatch):
+    raw = b"synthetic_fixture\nlocal-training-input\n"
+    curve = tmp_path/"training_curve.csv"
+    curve.write_bytes(raw)
+    captured = {}
+
+    def inspect_only(rows, **kwargs):
+        captured.update(kwargs)
+        return {"synthetic_fixture": True}
+
+    monkeypatch.setattr(a, "analyze", inspect_only)
+    assert a.analyze_directory(tmp_path) == {"synthetic_fixture": True}
+    assert captured["training_curves"] == [{"synthetic_fixture": "local-training-input"}]
+    assert curve.read_bytes() == raw
+
+
+def test_analysis_directory_accepts_explicit_external_curve_with_exact_byte_hash(tmp_path, monkeypatch):
+    evaluation = tmp_path/"evaluation"
+    evaluation.mkdir()
+    curve = tmp_path/"training_curve.csv"
+    raw = b"synthetic_fixture\r\nexternal-training-input\r\n"
+    curve.write_bytes(raw)
+    (evaluation/"training_curve.csv").write_text("synthetic_fixture\nunused-local-input\n", encoding="utf-8")
+    captured = {}
+
+    def inspect_only(rows, **kwargs):
+        assert rows == []
+        captured.update(kwargs)
+        return {"synthetic_fixture": True}
+
+    monkeypatch.setattr(a, "analyze", inspect_only)
+    assert a.analyze_directory(evaluation, training_curve_path=curve,
+                              training_curve_sha256=hashlib.sha256(raw).hexdigest()) == {"synthetic_fixture": True}
+    assert captured["training_curves"] == [{"synthetic_fixture": "external-training-input"}]
+    assert captured["evidence_root"] == evaluation
+    assert curve.read_bytes() == raw
+
+
+@pytest.mark.parametrize("case, message", [
+    ("path_only", "both path and SHA256"),
+    ("hash_only", "both path and SHA256"),
+    ("invalid_hash", "valid SHA256"),
+    ("different_hash", "SHA256 mismatch"),
+    ("missing_file", "missing or unreadable"),
+    ("tampered_file", "SHA256 mismatch"),
+])
+def test_analysis_directory_rejects_unverified_explicit_curve_before_analysis(tmp_path, monkeypatch, case, message):
+    curve = tmp_path/"training_curve.csv"
+    raw = b"synthetic_fixture\noriginal-input\n"
+    curve.write_bytes(raw)
+    arguments = {"training_curve_path": curve, "training_curve_sha256": hashlib.sha256(raw).hexdigest()}
+    if case == "path_only":
+        del arguments["training_curve_sha256"]
+    elif case == "hash_only":
+        del arguments["training_curve_path"]
+    elif case == "invalid_hash":
+        arguments["training_curve_sha256"] = "g"*64
+    elif case == "different_hash":
+        arguments["training_curve_sha256"] = "0"*64
+    elif case == "missing_file":
+        arguments["training_curve_path"] = tmp_path/"absent.csv"
+    elif case == "tampered_file":
+        curve.write_bytes(b"synthetic_fixture\naltered-input\n")
+    monkeypatch.setattr(a, "analyze", lambda *args, **kwargs: pytest.fail("unverified input reached analysis"))
+    with pytest.raises(a.MissingEvidence, match=message):
+        a.analyze_directory(tmp_path, **arguments)
+
+
+def test_analysis_cli_forwards_explicit_curve_and_hash(tmp_path, monkeypatch, capsys):
+    curve, digest = tmp_path/"training_curve.csv", "a"*64
+    captured = {}
+
+    def inspect_only(directory, **kwargs):
+        captured.update(directory=directory, **kwargs)
+        return {"synthetic_fixture": True}
+
+    monkeypatch.setattr(a, "analyze_directory", inspect_only)
+    monkeypatch.setattr("sys.argv", ["analysis", str(tmp_path/"evaluation"),
+                                    "--training-curve", str(curve), "--training-curve-sha256", digest])
+    a.main()
+    assert captured == {"directory": tmp_path/"evaluation", "training_curve_path": curve,
+                        "training_curve_sha256": digest}
+    assert json.loads(capsys.readouterr().out) == {"synthetic_fixture": True}

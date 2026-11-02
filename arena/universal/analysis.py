@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+from io import StringIO
 import json
 import math
 from pathlib import Path
@@ -529,14 +530,37 @@ def _read_csv(path: Path):
         return list(csv.DictReader(handle))
 
 
-def analyze_directory(directory: str | Path) -> dict:
+def _read_explicit_training_curve(path: str | Path, digest: str) -> list[dict]:
+    if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", digest):
+        raise MissingEvidence("explicit training curve needs a valid SHA256")
+    try:
+        with Path(path).open("rb") as handle:
+            raw = handle.read(64*1024*1024+1)
+    except OSError as exc:
+        raise MissingEvidence("explicit training curve file is missing or unreadable") from exc
+    if len(raw) > 64*1024*1024:
+        raise MissingEvidence("explicit training curve exceeds 64 MiB")
+    if hashlib.sha256(raw).hexdigest() != digest.lower():
+        raise MissingEvidence("explicit training curve SHA256 mismatch")
+    try:
+        return list(csv.DictReader(StringIO(raw.decode("utf-8"), newline="")))
+    except UnicodeDecodeError as exc:
+        raise MissingEvidence("explicit training curve must be UTF-8 CSV") from exc
+
+
+def analyze_directory(directory: str | Path, *, training_curve_path: str | Path | None = None,
+                      training_curve_sha256: str | None = None) -> dict:
     root = Path(directory)
+    if (training_curve_path is None) != (training_curve_sha256 is None):
+        raise MissingEvidence("explicit training curve requires both path and SHA256")
+    training_curves = (_read_csv(root/"training_curve.csv") if training_curve_path is None else
+                       _read_explicit_training_curve(training_curve_path, training_curve_sha256))
     receipt = root/"evidence.json"
     evidence = json.loads(receipt.read_text(encoding="utf-8")) if receipt.is_file() else {}
     return analyze(_read_csv(root/"episodes.csv"),
                    world_predictions=_read_csv(root/"model_predictions.csv"),
                    action_pairs=_read_csv(root/"action_pairs.csv"),
-                   training_curves=_read_csv(root/"training_curve.csv"),
+                   training_curves=training_curves,
                    evidence=evidence, evidence_root=root)
 
 
@@ -544,8 +568,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--training-curve", type=Path,
+                        help="explicit training CSV, requiring its SHA256")
+    parser.add_argument("--training-curve-sha256",
+                        help="SHA256 of the exact explicit training CSV bytes")
     args = parser.parse_args()
-    result = analyze_directory(args.directory)
+    try:
+        result = analyze_directory(args.directory, training_curve_path=args.training_curve,
+                                   training_curve_sha256=args.training_curve_sha256)
+    except MissingEvidence as exc:
+        parser.exit(2, f"STOP: {exc}\n")
     rendered = json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False)+"\n"
     if args.output:
         args.output.write_text(rendered, encoding="utf-8")

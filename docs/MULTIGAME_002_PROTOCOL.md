@@ -195,6 +195,15 @@ Os testes deste módulo usam números inventados, explicitamente fixtures.
 Verificam matriz, aritmética, pareamento, denominadores, ausência de prova e
 hashes; não comprovam aprendizagem, transferência ou competência real.
 
+Na saída bruta do runner, os três CSVs de avaliação ficam em `evaluation/`
+e a curva de treino fica na raiz da campanha. Analise `evaluation/` passando
+explicitamente `--training-curve CAMINHO/training_curve.csv` e
+`--training-curve-sha256 SHA256_CONFERIDO_NO_MANIFESTO_DA_CAMPANHA`.
+A opção autentica os mesmos bytes que serão lidos, sem copiar ou alterar
+os arquivos originais. Sem esses parâmetros, permanece a leitura de
+`training_curve.csv` no próprio diretório informado. Análise não executa
+jogos nem permite preencher dados faltantes por estimativa.
+
 Telemetria de volta/estratos/oportunidades, baselines de treino, perdas,
 otimizador e sincronização target estão implementados e documentados no
 protocolo canônico. A emenda G1 aceita a derivação de custo com ressalvas,

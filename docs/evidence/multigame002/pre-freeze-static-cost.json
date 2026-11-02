@@ -1,0 +1,19 @@
+{
+  "kind": "STATIC_OPERATION_COMPARISON_AND_UNMEASURED_SENSITIVITY_ESTIMATE",
+  "status": "PENDING_CHAT1_RECERTIFICATION",
+  "base_source": "0538898f419b4618708071d143de4cf4ee6f509f",
+  "reviewed_source": "2de3d4acfde89df1bcc523a52bd41b377e77d0f5",
+  "evaluation_old_sha256": "55c71e7527af23b60cd27bad156cd89ef10bed9bfd28b7d90d0329ff6721d466",
+  "evaluation_new_sha256": "f1fa411f7f7cfb30d2524b32f5eee85fa1e47b734445ea3ba32b4104fa377b7d",
+  "all_ast_call_multisets_identical": true,
+  "base_receipt_sha256": "aa7ee8964afa6f412eec308c6dba6a8763b82cdcfe72cc3fb74828c956ecc97d",
+  "new_mechanical_steps": 0,
+  "new_synthetic_updates": 0,
+  "sensitivity_assumption": "Charge FOUR full mechanical+policy+planning baseline units to EVERY final evaluation interaction, including random and ablations; one unit to each training interaction; original maximum updates and20pct margin. This is a sensitivity estimate, not measurement or guarantee. Excludes unmeasured external/checkpoint IO.",
+  "sensitivity_projected_minutes": {
+    "wall": 110.23537799875321,
+    "process_cpu": 232.39100261475525
+  },
+  "max_allowed_minutes": 300,
+  "internal_stop_minutes": 285
+}

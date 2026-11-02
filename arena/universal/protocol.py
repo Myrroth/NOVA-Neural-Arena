@@ -140,7 +140,7 @@ _CONFIG = {
                     "unbound_buttons": "environment no-op; excluded by constant mechanical mask"},
     "random_generators": {"initial_weights": "torch.manual_seed(model_seed)",
                           "exploration": "NumPy default_rng(model_seed+41), continued across adaptation",
-                          "replay": "NumPy default_rng(model_seed+71), persisted across adaptation",
+                          "replay": "Python random.Random(model_seed+71), full getstate persisted across adaptation",
                           "environment": "SHA256 derivation in derive_training_seed; Gymnasium PCG64",
                           "target_environments": "same per-episode seeds for adaptation and from_scratch"},
     "environment_revisions": {"snake": "visual-snake-v2", "pong": "visual-pong-v1",
