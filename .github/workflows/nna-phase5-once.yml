@@ -1,0 +1,183 @@
+name: NNA-FECHAMENTO-001 Phase 5 SINGLE frozen campaign (separate approval)
+
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/nna-fechamento-001-pong]
+
+permissions:
+  contents: read
+  actions: read
+  issues: write # narrowly needed for durable unique reservation on central issue #6
+
+concurrency:
+  group: nna-fechamento-001-phase5-once
+  cancel-in-progress: false
+
+jobs:
+  single-frozen-evaluation:
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'neural-phase5-closure-approved' &&
+      github.event.pull_request.number == 8 &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.base.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'feat/nna-fechamento-001-phase5' &&
+      github.event.pull_request.base.ref == 'feat/nna-fechamento-001-pong'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      NNA_PHASE5_EVALUATOR_SHA: 39461168db30edb90a25385fb3a1eaca8dfdde33
+      NNA_PHASE5_APPROVED_HASH: ceb65ad7a9529d091611a7e0f60cc3b937abfc76d00cc8fd766b07557ed5160a
+      NNA_PHASE5_OUTPUT: experiments/phase5/official-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - name: Deny rerun before reading any checkpoint or episode
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = 1
+      - name: Checkout immutable CI-tested Phase 5 evaluator
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: 39461168db30edb90a25385fb3a1eaca8dfdde33
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Assert exact approved SHA and historical executable integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$NNA_PHASE5_EVALUATOR_SHA"
+          git diff --exit-code 24bd38e9e78a14e894f32d7d1c5b5b6d6d724463 HEAD -- arena/envs/snake.py arena/agents/dqn.py arena/training/train.py arena/evaluation/benchmark.py
+          git diff --exit-code f9e1b171a8c045f8bd7c874432114e4bc654665e HEAD -- arena/evaluation/frozen_phase2.py
+          git diff --exit-code 8892980eccfb623de30f3803a7550aa1fa31a9c6 HEAD -- arena/evaluation/phase3_generalization.py
+          git diff --exit-code 8b4b6696e980191349e803218af6e6d55d8ff7e9 HEAD -- arena/evaluation/phase4_startstates.py
+          git diff --exit-code c54d207a5d9785c0746fdb86b4e7bcaf6ef97a01 HEAD -- arena/shared/checkpoints.py arena/shared/integrity.py arena/evaluation/phase5_hardstates.py
+      - name: Python 3.11, pinned official CPU dependencies
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+      - name: Small safety tests, still NO official episodes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -c requirements-ci.txt -e '.[dev]'
+          python -m pip check
+          python -m pytest -q tests/test_phase5_campaign.py tests/test_phase5_hardstates.py tests/test_lab_integrity.py
+      - name: Verify EXACT scientific protocol BEFORE any execution
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m arena.evaluation.phase5_campaign --validate-only > "$RUNNER_TEMP/phase5-approved-manifest.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path(os.environ['RUNNER_TEMP'])/'phase5-approved-manifest.json'
+          m = json.loads(p.read_text())
+          assert m['approved_protocol_sha256'] == os.environ['NNA_PHASE5_APPROVED_HASH']
+          assert m['candidate_protocol_sha256'] == '00f71a9ebaedf54c31bf876298e31b99e7e2b913789fa0d4ccd18e8b5fcb1a65'
+          assert len(m['scenarios']) == 92 and len(m['policies']) == 7
+          assert m['total_episodes'] == 32200 and m['max_total_steps'] == 6440000
+          assert len(m['config']['environmental_seeds']) == 50
+          assert not m['hypothesis_tests'] and not m['noninferiority_or_equivalence']
+          print('Immutable Phase 5 manifest and strict budget verified')
+          PY
+      - name: Download immutable pilot seed 11 checkpoint
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: snake-pilot-seed-11-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase5/official/seed_11
+      - name: Download immutable pilot seed 42 checkpoint
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: snake-pilot-seed-42-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase5/official/seed_42
+      - name: Download immutable pilot seed 73 checkpoint
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: snake-pilot-seed-73-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase5/official/seed_73
+      - name: Precheck model hashes and provenance WITHOUT games
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from arena.evaluation.frozen_phase2 import TRAIN_SEEDS, verify_artifact_directory
+          for seed in TRAIN_SEEDS:
+              verified = verify_artifact_directory(Path('experiments/phase5/official')/f'seed_{seed}', seed=seed)
+              assert verified['model_sha256']
+          print('All three original models hash-checked before reservation')
+          PY
+      - name: Reserve ONE campaign irreversibly on Issue 6 before episodes
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          present="$(gh api "repos/$GITHUB_REPOSITORY/issues/6/comments?per_page=100" --paginate --jq '.[] | select((.body // "") | contains("NNA-FECHAMENTO-001:PHASE5-RESERVED")) | .id')"
+          if [ -n "$present" ]; then
+            echo "Duplicate Phase 5 campaign refused (reservation exists)."
+            exit 1
+          fi
+          marker="NNA-FECHAMENTO-001:PHASE5-RESERVED | immutable run $GITHUB_RUN_ID attempt $GITHUB_RUN_ATTEMPT | protocol $NNA_PHASE5_APPROVED_HASH | evaluator $NNA_PHASE5_EVALUATOR_SHA | no reruns, even on failure"
+          rid="$(gh api --method POST "repos/$GITHUB_REPOSITORY/issues/6/comments" -f body="$marker" --jq '.id')"
+          case "$rid" in
+            ''|*[!0-9]*) exit 1 ;;
+          esac
+          echo "NNA_PHASE5_RESERVATION_ID=$rid" >> "$GITHUB_ENV"
+          echo "Single-run reservation ID confirmed."
+      - name: EXACTLY ONE frozen evaluation, CPU only, 32200 episodes MAX
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m arena.evaluation.phase5_campaign --campaign \
+            --artifacts experiments/phase5/official --out "$NNA_PHASE5_OUTPUT"
+      - name: Audit rows, matrix, source integrity, budget and hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv, json, os
+          from pathlib import Path
+          from arena.evaluation.phase5_campaign import approved_manifest, SEEDS, POLICY_IDS
+          out = Path(os.environ['NNA_PHASE5_OUTPUT'])
+          cfg = json.loads((out/'protocol.json').read_text())
+          status = json.loads((out/'status.json').read_text())
+          assert cfg['approved_protocol_sha256'] == os.environ['NNA_PHASE5_APPROVED_HASH']
+          assert status['complete'] and status['episodes_written'] == 32200
+          assert status['steps_used'] <= 6440000
+          rows = list(csv.DictReader((out/'episodes.csv').open(encoding='utf-8',newline='')))
+          expected = {(s['id'], seed, policy) for s in cfg['scenarios'] for seed in SEEDS for policy in POLICY_IDS}
+          observed = [(r['scenario_id'], int(r['environment_seed']), r['policy_id']) for r in rows]
+          assert len(rows) == 32200 and len(set(observed)) == 32200 and set(observed) == expected
+          assert all(1 <= int(r['steps']) <= 200 for r in rows)
+          assert all(r['terminal_reason'] in ('collision','step_limit','board_filled') for r in rows)
+          assert all(r['food_mode'] in ('physical','relative') for r in rows)
+          print('Matrix complete, 92 scenarios x 50 seeds x 7 policies, no training')
+          PY
+          (cd "$NNA_PHASE5_OUTPUT" && sha256sum -c SHA256SUMS)
+      - name: Preserve data even if evaluation fails PARTIALLY
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: nna-phase5-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: experiments/phase5/official-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}/
+          if-no-files-found: warn
+          retention-days: 30
