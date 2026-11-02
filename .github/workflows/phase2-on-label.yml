@@ -1,0 +1,128 @@
+name: Phase 2 frozen Snake evaluation (new approval required)
+
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/snake-dqn-laboratory]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: phase2-frozen-evaluation-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  frozen-evaluation:
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'neural-phase2-evaluation-approved' &&
+      github.event.pull_request.number == 2 &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.base.repo.full_name == github.repository &&
+      github.event.pull_request.base.ref == 'feat/snake-dqn-laboratory' &&
+      github.event.pull_request.head.ref == 'feat/phase2-frozen-evaluation'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout the reviewed evaluation code (NOT pilot source changes)
+        uses: actions/checkout@v7
+        with:
+          # Immutable evaluator source: reviewed and CI-validated in run 41353905275.
+          # Future PR pushes must never change the code used by this approved campaign.
+          ref: f9e1b171a8c045f8bd7c874432114e4bc654665e
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Audit evaluation code commit
+        shell: bash
+        env:
+          EXPECTED_HEAD: f9e1b171a8c045f8bd7c874432114e4bc654665e
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git show 24bd38e9e78a14e894f32d7d1c5b5b6d6d724463:arena/envs/snake.py | sha256sum | cut -d' ' -f1)" = "$(sha256sum arena/envs/snake.py | cut -d' ' -f1)"
+          test "$(git show 24bd38e9e78a14e894f32d7d1c5b5b6d6d724463:arena/agents/dqn.py | sha256sum | cut -d' ' -f1)" = "$(sha256sum arena/agents/dqn.py | cut -d' ' -f1)"
+          mkdir -p experiments/phase2/output
+          git rev-parse HEAD > experiments/phase2/output/evaluation-code-commit.txt
+          printf '%s\n' '24bd38e9e78a14e894f32d7d1c5b5b6d6d724463' > experiments/phase2/output/original-training-commit.txt
+
+      - name: Configure official Python 3.11
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install pinned official libraries and run tests only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -c requirements-ci.txt -e '.[dev]'
+          python -m pip check
+          python -m pytest -q tests/test_phase2_frozen.py tests/test_snake.py
+          python -m pip freeze > experiments/phase2/output/pip-freeze.txt
+
+      - name: Download exact official seed 11 artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-11-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase2/official/seed_11
+
+      - name: Download exact official seed 42 artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-42-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase2/official/seed_42
+
+      - name: Download exact official seed 73 artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: snake-pilot-seed-73-run-41350959549-attempt-1
+          run-id: 41350959549
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          path: experiments/phase2/official/seed_73
+
+      - name: Validate all seven SHA-256 file hashes and official checkpoint hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          from arena.evaluation.frozen_phase2 import ARTIFACTS, verify_artifact_directory, load_verified_model
+          from pathlib import Path
+          root = Path('experiments/phase2/official')
+          for seed in (11, 42, 73):
+              source = root / f'seed_{seed}'
+              info = verify_artifact_directory(source, seed=seed)
+              model = load_verified_model(source, seed=seed, verified=info)
+              assert all(not p.requires_grad for p in model.parameters())
+              print(f'Integrity OK: seed={seed} artifact_id={ARTIFACTS[seed][0]}')
+          PYCODE
+
+      - name: Evaluate existing frozen networks; never call train or optimizer.step
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m arena.evaluation.frozen_phase2 \
+            --artifacts experiments/phase2/official \
+            --out experiments/phase2/output \
+            --authorized
+
+      - name: Upload scientific evaluation files and provenance
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: phase2-frozen-evaluation-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: experiments/phase2/output/
+          if-no-files-found: warn
+          retention-days: 30

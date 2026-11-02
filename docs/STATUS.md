@@ -46,3 +46,28 @@ Workflow: `.github/workflows/neural-pilot-on-label.yml`.
 - Dependências **diretas** pinadas; `pip-freeze.txt` registra transitivas efetivamente instaladas. O checkout da mesma versão não garante reprodutibilidade bit a bit entre máquinas.
 - Checkpoint de treinamento aprovado não salva replay/RNG para retomada exata. Desfechos `terminated`/`truncated` ausentes no arquivo de avaliação são uma melhoria futura, não alterar durante o piloto fixo.
 - Execução e avaliação científica reservadas ao Chat 3 e Chat 4. Sem campanhas extensas; sem merge; NOVA original intocada.
+
+
+## 2026-11-01 — Chat 2: preparação isolada Fase 2 (nova PR em rascunho)
+- Decisão do Chat 1: https://github.com/Myrroth/NOVA-Neural-Arena/pull/1#issuecomment-6564203362.
+- Piloto nº 001 concluído (run 41350959549): três jobs oficiais passaram; artefatos e seus hashes auditados no Relatório Científico nº 002.
+- Nova branch `feat/phase2-frozen-evaluation`, originada de `feat/snake-dqn-laboratory`; **Snake/DQN/treinador e resultados anteriores preservados**.
+- Infraestrutura proposta: `arena/evaluation/frozen_phase2.py` (verifica hashes e proveniência dos três checkpoints, avalia em modo congelado e registra causas explícitas dos desfechos); `tests/test_phase2_frozen.py` (somente checkpoints sintéticos, subset de 2 seeds em smoke tests); `phase2-tests.yml` (CI de testes) e `phase2-on-label.yml` (avaliação condicionada à nova etiqueta, NUNCA aplicada nesta etapa).
+- Protocolos e hashes documentados em `docs/PHASE2_PROTOCOL.md`.
+- **Campanha dos 50 ambientes NÃO executada; checkpoints oficiais NÃO modificados; nenhum novo treinamento.** Testes de integração com arquivos oficiais pendem da execução futura autorizada pelo Chat 1.
+- Artifact IDs: 13101471957, 13101072100, 13100988601; expiração por volta de **2026-12-01 21:15 UTC**. Preserve ZIPs oficiais antes disso.
+- **Estado:** código submetido para CI de infraestrutura; **aprovação científica e autorização de avaliação pendentes**. Nenhum merge na PR #1 ou nova PR, sem alteração da NOVA original.
+
+### Validação comprovada da infraestrutura da Fase 2 (2026-11-01)
+- [CI inicial #41353536523](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41353536523): **22 testes aprovados, 2 avisos Gymnasium não bloqueantes** (incluía ainda testes legados de treino curto da PR #1; não executou a campanha de Fase 2 nem treinou os checkpoints oficiais).
+- [CI com artefatos reais #41353674728](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41353674728): **22 testes aprovados**; baixou os 3 artifacts oficiais do piloto, conferiu `SHA256SUMS`, modelo esperado/proveniência e **carregou os 3 checkpoints sem executar episódios/inferência**. Seed 11/42/73 PASS nos logs.
+- [Teste do gatilho com `documentation` #41353590209](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41353590209): run **skipped**; nenhuma avaliação científica disparada. A etiqueta foi removida.
+- **Endurecimento concluído:** workflows da Fase 2 agora executam apenas `tests/test_phase2_frozen.py` e `tests/test_snake.py`, excluindo testes legados que invocavam microtreinamentos. [CI #41353805183](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41353805183): **18 testes aprovados, 2 avisos não bloqueantes; as três verificações de integridade dos artifacts e carregamento seguro das redes também passaram.** A campanha de 350 episódios nas 50 seeds comuns permanece **NÃO AUTORIZADA/NÃO EXECUTADA**.
+
+### 2026-11-01 — Correção de controle de versão obrigatória (Chat 2)
+- Decisão do Chat 1: https://github.com/Myrroth/NOVA-Neural-Arena/pull/2#issuecomment-6565513811. Protocolo científico aprovado **sem autorização de executar a campanha**.
+- Código avaliador efetivamente auditado e aprovado na CI https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41353905275: **`f9e1b171a8c045f8bd7c874432114e4bc654665e`** (18 testes; 3 checkpoints oficiais conferidos/carregados, nenhuma campanha).
+- `.github/workflows/phase2-on-label.yml`: `actions/checkout@v7` usa agora `ref: f9e1b171a8c045f8bd7c874432114e4bc654665e` **literal**, e `EXPECTED_HEAD: f9e1b171a8c045f8bd7c874432114e4bc654665e` para `git rev-parse HEAD`. Não utiliza mais o SHA mutável do HEAD da PR.
+- Teste de regressão estático `tests/test_phase2_workflow_pin.py` incluído na CI da PR para exigir ambas as constantes, o gate por etiqueta específica e ausência de push, `pull_request_target` ou treinamento.
+- Garantia de código: uploads/documentação futuros da PR não mudam o commit executável; alterações no próprio workflow demandam nova revisão do Chat 1 antes da aplicação da etiqueta. O SHA do workflow no evento `labeled` não é necessariamente o SHA de checkout (este é congelado).
+- Nenhuma etiqueta de autorização foi aplicada. `main` e PR #1 preservadas, sem merge e sem tocar na NOVA original. A campanha de **350 episódios permanece bloqueada até autorização do Chat 1**.
