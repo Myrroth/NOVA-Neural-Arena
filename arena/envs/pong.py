@@ -83,7 +83,7 @@ class PongEnv(gym.Env):
 
     def reset(self, *, seed: int | None = None,
               options: dict | None = None):
-        if options is not None:
+        if options not in (None, {}):
             raise ValueError("reset options/forced game states are not supported")
         super().reset(seed=seed)
         self.left_y = self.right_y = self.height // 2
