@@ -96,6 +96,12 @@ com hash confiável, rejeição de hash incorreto/limite de bytes/manifest dupli
 e recusa de substituir JSON. A suíte de checkpoint/PyTorch requer a instalação
 das dependências oficiais e a evidência da CI; não foi substituída por esse smoke.
 
+A [CI inicial 41377237661](https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41377237661)
+posteriormente confirmou **140 testes aprovados**, incluindo todos os testes de
+checkpoint/PyTorch desta revisão. Os dois avisos informativos vêm do verificador
+de renderização do Gymnasium, sem falhas. As Actions dos workflows novos agora
+estão fixadas por SHA completo; as tags dos workflows históricos foram preservadas.
+
 ## Qualidade científica e próximas decisões
 
 1. **Unidade de inferência:** três checkpoints representam três treinos, mesmo

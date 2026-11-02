@@ -36,11 +36,11 @@ A numeração literal dos relatórios 001 e 003 não foi confirmada: os parecere
 4. Restaure o código em outra pasta nova:
 
    ```text
-   git clone historical-source.bundle restored-source
+   git clone ../historical-source.bundle restored-source
    git -C restored-source switch -c restored-phase4 8b4b6696e980191349e803218af6e6d55d8ff7e9
    ```
 
-   Cada fase deve usar seu próprio commit congelado documentado na auditoria. O bundle é o histórico científico original, anterior às novas ferramentas desta PR.
+   Os comandos acima continuam dentro de `recovery-tools/`. Cada fase deve usar seu próprio commit congelado documentado na auditoria. O bundle e os helpers empacotados são um snapshot da preservação inicial, anterior à finalização desta PR; as ferramentas atuais de carregamento e proteção adicional de junctions estão na branch desta entrega.
 5. Para inferência futura, instale as dependências oficiais em ambiente isolado, confira o `pip-freeze.txt` do artefato e use o novo `arena.shared.checkpoints.load_official_checkpoint` desta PR para auditar/carregar os modelos. A API exige a seed oficial e hashes fixos, verifica os mesmos bytes que desserializa, usa CPU e `weights_only=True`, valida tensores e congela os parâmetros. Os arquivos recuperados estão separados por ID; copie-os para pastas novas `seed_11/`, `seed_42/`, `seed_73/` se utilizar o preparador de políticas da Fase 5.
 
 Python 3.11.17 foi usado no piloto oficial; a versão local disponível é 3.11.0. Dependências diretas: CPU torch 2.10.0, NumPy 2.3.5, Gymnasium 1.4.0, pytest 9.0.2. Versões transitivas efetivas estão em cada ZIP. Pesos recuperados permitem restaurar inferência, mas os checkpoints antigos não contêm replay/RNG suficientes para retomar treinamento de forma idêntica.
