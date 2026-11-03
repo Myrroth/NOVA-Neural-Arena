@@ -1,0 +1,211 @@
+{
+  "causal_trace": {
+    "absolute_tolerance": 1e-06,
+    "checkpoint_manifest_sha256": "495eeac0066435baff22c9193c8affa62924c1c9243e39cb96b1c3cb8f4d8f88",
+    "evaluation_manifest_sha256": "5dee3f29a96b067f68bd9509700862d8143396689080b5d963f5af0cabb2107a",
+    "failure": null,
+    "games": [
+      {
+        "game": "snake",
+        "maximum_abs_error": 0.0,
+        "network_sha256": "b341b0cddf98c46adb81acc91095224607f86a5f279dc4ba662a4c0e07920963",
+        "steps": 400
+      },
+      {
+        "game": "pong",
+        "maximum_abs_error": 0.0,
+        "network_sha256": "b341b0cddf98c46adb81acc91095224607f86a5f279dc4ba662a4c0e07920963",
+        "steps": 123
+      },
+      {
+        "game": "agar",
+        "maximum_abs_error": 0.0,
+        "network_sha256": "b341b0cddf98c46adb81acc91095224607f86a5f279dc4ba662a4c0e07920963",
+        "steps": 10
+      },
+      {
+        "game": "flappy",
+        "maximum_abs_error": 0.0,
+        "network_sha256": "b341b0cddf98c46adb81acc91095224607f86a5f279dc4ba662a4c0e07920963",
+        "steps": 29
+      },
+      {
+        "game": "racing",
+        "maximum_abs_error": 0.0,
+        "network_sha256": "b341b0cddf98c46adb81acc91095224607f86a5f279dc4ba662a4c0e07920963",
+        "steps": 400
+      }
+    ],
+    "new_environment_interactions": 0,
+    "new_episodes": 0,
+    "protocol_sha256": "93591ede5951438f92432fc6601773aaafe28b2ba5840309aa7bd3611170a324",
+    "scientific_conclusion": "OFFLINE_REPRODUCTION_ONLY_NOT_NEW_LEARNING_EVIDENCE",
+    "source_revision": "dc71247b2269d41c8d2aeb8c7d489977fac3ad3a",
+    "status": "VERIFIED",
+    "training_started": false,
+    "verified_steps": 962
+  },
+  "cpu_seconds": 22.399181854000002,
+  "elapsed_seconds": 21.897466459,
+  "failure": null,
+  "new_environment_interactions": 0,
+  "new_evaluation_episodes": 0,
+  "new_training_updates": 0,
+  "original_artifact": 13195542205,
+  "original_artifact_sha256": "f396acfcbc8de35e67cbe79be4b6b986d7b536019bca2a62a3effa60ccefa129",
+  "original_scientific_run": 41551291622,
+  "peak_rss_bytes": 635564032,
+  "protocol_sha256": "93591ede5951438f92432fc6601773aaafe28b2ba5840309aa7bd3611170a324",
+  "restored_models": [
+    {
+      "all_metadata_and_tensors_exact": true,
+      "global_steps": 300000,
+      "manifest_sha256": "f7505eb0da594a92daa92b8d5adfbecb8475981bfd2ddeb056f651f16883caa4",
+      "network_sha256": "c01c0bb2835e5cfdfacdf818ef1a28d782a6f9e7ff3d5c56b21001ebe00a80aa",
+      "q_updates": 18736,
+      "replay_games": {
+        "agar": 8000,
+        "flappy": 8000,
+        "pong": 8000,
+        "racing": 8000,
+        "snake": 8000
+      },
+      "replay_transitions": 40000,
+      "slot": "1103:after_adaptation",
+      "world_updates": 9369
+    },
+    {
+      "all_metadata_and_tensors_exact": true,
+      "global_steps": 240000,
+      "manifest_sha256": "d5ab92a1aaa898543dc3b1c0d60b9766848731c1b147558ad3d0088d84be77de",
+      "network_sha256": "aa86a08729808175e0fde77054b5362d1965f7a4f2c2ce960cb95cfaf146a2c6",
+      "q_updates": 14993,
+      "replay_games": {
+        "agar": 10000,
+        "flappy": 10000,
+        "pong": 10000,
+        "snake": 10000
+      },
+      "replay_transitions": 40000,
+      "slot": "1103:before_adaptation",
+      "world_updates": 7497
+    },
+    {
+      "all_metadata_and_tensors_exact": true,
+      "global_steps": 60000,
+      "manifest_sha256": "207bf9d335eba9602468e0fc7a484dbf1208f16696668fcd828bd51b47ffb246",
+      "network_sha256": "cf51542406c529e1eedec64da1b6057714b1d11a33ae5db18fb598248a9da43b",
+      "q_updates": 3743,
+      "replay_games": {
+        "racing": 10000
+      },
+      "replay_transitions": 10000,
+      "slot": "1103:from_scratch",
+      "world_updates": 1872
+    },
+    {
+      "all_metadata_and_tensors_exact": true,
+      "global_steps": 300000,
+      "manifest_sha256": "495eeac0066435baff22c9193c8affa62924c1c9243e39cb96b1c3cb8f4d8f88",
+      "network_sha256": "b341b0cddf98c46adb81acc91095224607f86a5f279dc4ba662a4c0e07920963",
+      "q_updates": 18736,
+      "replay_games": {
+        "agar": 8000,
+        "flappy": 8000,
+        "pong": 8000,
+        "racing": 8000,
+        "snake": 8000
+      },
+      "replay_transitions": 40000,
+      "slot": "2207:after_adaptation",
+      "world_updates": 9369
+    },
+    {
+      "all_metadata_and_tensors_exact": true,
+      "global_steps": 240000,
+      "manifest_sha256": "457c268e29fb0171e73ddca61928dc127676246ebfa4b49410205ca3a600299f",
+      "network_sha256": "5124f48b1af5130c3dc53bdd7baec1b4120f7d01eb78e323fd5c0c9e8c38f5d7",
+      "q_updates": 14993,
+      "replay_games": {
+        "agar": 10000,
+        "flappy": 10000,
+        "pong": 10000,
+        "snake": 10000
+      },
+      "replay_transitions": 40000,
+      "slot": "2207:before_adaptation",
+      "world_updates": 7497
+    },
+    {
+      "all_metadata_and_tensors_exact": true,
+      "global_steps": 60000,
+      "manifest_sha256": "9dee95b224c824d219da9b219a6b63585a730abfdd19f46ec45731627be768a2",
+      "network_sha256": "d7d8c83eb76df4084b7ee6b65d3f469a7016fc7ef3a4553ea6d65f422e61f83a",
+      "q_updates": 3743,
+      "replay_games": {
+        "racing": 10000
+      },
+      "replay_transitions": 10000,
+      "slot": "2207:from_scratch",
+      "world_updates": 1872
+    },
+    {
+      "all_metadata_and_tensors_exact": true,
+      "global_steps": 300000,
+      "manifest_sha256": "e75a0a86cf29da1dc09ac0679415c3ef54c40a68b55f72d5a759473764978bfb",
+      "network_sha256": "387f26597e573e4f2a3a54aa799d63dac38c323e173c61515f467cef6f6f1007",
+      "q_updates": 18736,
+      "replay_games": {
+        "agar": 8000,
+        "flappy": 8000,
+        "pong": 8000,
+        "racing": 8000,
+        "snake": 8000
+      },
+      "replay_transitions": 40000,
+      "slot": "3301:after_adaptation",
+      "world_updates": 9369
+    },
+    {
+      "all_metadata_and_tensors_exact": true,
+      "global_steps": 240000,
+      "manifest_sha256": "342637fb0950e10f18e0fd217e021bf85ef6828f107edc7bd6ef69f29bad0674",
+      "network_sha256": "f45d123ba1cd45a2564a5888afc9ba876da87173c0d5884184e455d182aab9c1",
+      "q_updates": 14993,
+      "replay_games": {
+        "agar": 10000,
+        "flappy": 10000,
+        "pong": 10000,
+        "snake": 10000
+      },
+      "replay_transitions": 40000,
+      "slot": "3301:before_adaptation",
+      "world_updates": 7497
+    },
+    {
+      "all_metadata_and_tensors_exact": true,
+      "global_steps": 60000,
+      "manifest_sha256": "f396acf18ddb3036cee2605129d5538db621350d5e732c8f25fdabc1b79e78f0",
+      "network_sha256": "7c7c43236b58473b19e11d448c862c55a5030cd24b33f1c78bfcc309bd38aded",
+      "q_updates": 3743,
+      "replay_games": {
+        "racing": 10000
+      },
+      "replay_transitions": 10000,
+      "slot": "3301:from_scratch",
+      "world_updates": 1872
+    }
+  ],
+  "runtime": {
+    "gymnasium": "1.4.0",
+    "machine": "x86_64",
+    "numpy": "2.3.5",
+    "python": "3.11.17",
+    "system": "Linux",
+    "torch": "2.10.0+cpu"
+  },
+  "scientific_conclusion": "NOT_ASSESSED_OFFLINE_RECOVERY_ONLY",
+  "script_sha256": "81dbe73355b22b6f4a356b9cabd008779162e31f43d06a19a20132be8d3489ad",
+  "source_revision": "dc71247b2269d41c8d2aeb8c7d489977fac3ad3a",
+  "status": "VERIFIED"
+}

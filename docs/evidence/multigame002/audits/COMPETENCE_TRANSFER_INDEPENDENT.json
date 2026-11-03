@@ -1,0 +1,3673 @@
+{
+  "schema_version": 1,
+  "status": "INDEPENDENT_RECALCULATION_COMPLETE",
+  "reviewer": "code_review_final",
+  "scope": "Competence criteria 1-5 and transfer/retention criterion 10 from authenticated CSV only; no overall 13-criterion acceptance.",
+  "created_at_utc": "2026-11-03T04:58:50.368972+00:00",
+  "source_A": "dc71247b2269d41c8d2aeb8c7d489977fac3ad3a",
+  "protocol_sha256": "93591ede5951438f92432fc6601773aaafe28b2ba5840309aa7bd3611170a324",
+  "protocol_source_sha256": "f7694f74db4563ee44f002d89eb77dc47e4e20732b0fd178603d5582ccdb4eb4",
+  "analysis_specification_source_sha256": "fe1408401679be6816c4dd3d1310e5b08cb7d7bb6da2a32907c2c54ec1345f3d",
+  "artifact_origin": {
+    "artifact_id": 13195542205,
+    "run_id": 41551291622,
+    "artifact_sha256": "f396acfcbc8de35e67cbe79be4b6b986d7b536019bca2a62a3effa60ccefa129",
+    "root_manifest_sha256": "2797b5280d367be9e067d8528f2b0c8973081342eb248aacca19054475b18840"
+  },
+  "csv_hash_authentication": "Each local CSV byte count and SHA256 matches DATA_PROVENANCE and its entry in ROOT_SHA256SUMS; manifest SHA matches provenance. ZIP/whole-checkpoint authentication is a separate review.",
+  "sources": {
+    "DATA_PROVENANCE.json": {
+      "bytes": 1783,
+      "sha256": "d1a4253d050947e9a15d84bb3c22accd21b7de0827b4b09119eaaa64852971c0"
+    },
+    "ROOT_SHA256SUMS": {
+      "bytes": 528030,
+      "sha256": "2797b5280d367be9e067d8528f2b0c8973081342eb248aacca19054475b18840"
+    },
+    "episodes.csv": {
+      "bytes": 502563,
+      "sha256": "034ad7329d3faa93452b022a2c38ccc801bd39ee2068adf0f911e83e0d0e1f08"
+    },
+    "training_curve.csv": {
+      "bytes": 5501973,
+      "sha256": "2bc186e834cfa880159597179df792a5f4a80cf2e24c64a3ac20e9563d68e115"
+    },
+    "action_pairs.csv": {
+      "bytes": 20413795,
+      "sha256": "a98841203bec14abff2633d93a8b6264f4213118e852d030bc1fc4bb01c1f1be"
+    },
+    "model_predictions.csv": {
+      "bytes": 12921710,
+      "sha256": "b45a32ba039da29d83275c06be47b1975410bb5f39b8bd72dcebf9175ca75945"
+    },
+    "ANALYSIS_RAW.json": {
+      "bytes": 62110,
+      "sha256": "d560e92f3e84d6e9b2bee15b8a192d6a2adb5984e53b753b764eed15a5c65b74",
+      "role": "Post-calculation agreement check only; not used as input to independent metric computation."
+    }
+  },
+  "matrix": {
+    "status": "PASS",
+    "expected_cells": 1735,
+    "rows": 1735,
+    "unique_cells": 1735,
+    "total_steps": 174664,
+    "maximum_episode_steps": 400,
+    "model_seeds": [
+      1103,
+      2207,
+      3301
+    ],
+    "environment_seeds": [
+      920001,
+      920002,
+      920003,
+      920004,
+      920005,
+      920006,
+      920007,
+      920008,
+      920009,
+      920010,
+      920011,
+      920012,
+      920013,
+      920014,
+      920015,
+      920016,
+      920017,
+      920018,
+      920019,
+      920020
+    ]
+  },
+  "method": {
+    "implementation": "Independent inline arithmetic; no arena module imported or executed and no call to analyze/paired_contrast. Frozen A source inspected as text/AST.",
+    "bootstrap": "Paired hierarchical percentile bootstrap: resample 3 model replicas first, then 20 paired environment indices within each selected model; treatment/control share draws. Random baseline seed0 is reused for each replica as preregistered.",
+    "bootstrap_repetitions": 10000,
+    "bootstrap_seed_base": 510002,
+    "label_salt": "Frozen A label SHA256 first8 bytes big-endian XOR base seed; exact labels are recorded per contrast.",
+    "numpy_version": "2.5.0",
+    "pass_condition": "Mean gain >= random margin (or >=0 for untrained), percentile CI lower >0, and at least2/3 positive per-model gains. Interception and collision/distance pool numerator/denominator before differencing.",
+    "thresholds_unchanged": true,
+    "independent_models": 3,
+    "environments_per_model": 20,
+    "network_requests": 0,
+    "new_game_steps": 0,
+    "new_updates": 0
+  },
+  "requirements": {
+    "1": {
+      "status": "PASS",
+      "components": {
+        "learning": {
+          "status": "PASS",
+          "components": {
+            "foods_vs_random": {
+              "status": "PASS",
+              "game": "snake",
+              "metric": "foods",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 2.816666666666667,
+              "control_mean": 0.0,
+              "gain": 2.816666666666667,
+              "minimum_gain": 1.0,
+              "ci95": [
+                1.9333333333333333,
+                3.983333333333333
+              ],
+              "model_seed_gains": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [],
+              "bootstrap_label": "snake:foods:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "51b92674238eacee798c895add6461ec0e5eed6a5b77849ba2aa2be54c24bded",
+              "bootstrap_repetitions": 10000
+            },
+            "foods_vs_untrained": {
+              "status": "PASS",
+              "game": "snake",
+              "metric": "foods",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "untrained"
+              ],
+              "treatment_means": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 2.816666666666667,
+              "control_mean": 0.0,
+              "gain": 2.816666666666667,
+              "minimum_gain": 0.0,
+              "ci95": [
+                1.9333333333333333,
+                3.983333333333333
+              ],
+              "model_seed_gains": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [],
+              "bootstrap_label": "snake:foods:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "be5418debe34fbefb6ff1449bac9ab443647158cbba076e81dfb03ae121bda62",
+              "bootstrap_repetitions": 10000
+            }
+          }
+        },
+        "spawn_coverage": {
+          "status": "PASS",
+          "positive_contexts": [
+            "interior",
+            "wall",
+            "corner"
+          ],
+          "strata": {
+            "interior": {
+              "episodes": 24,
+              "mean_foods": 3.2083333333333335
+            },
+            "wall": {
+              "episodes": 27,
+              "mean_foods": 2.4814814814814814
+            },
+            "corner": {
+              "episodes": 9,
+              "mean_foods": 2.7777777777777777
+            }
+          }
+        },
+        "outcome_telemetry": {
+          "status": "PASS",
+          "episodes": 60,
+          "required_fields": [
+            "foods",
+            "wall_collision",
+            "body_collision"
+          ]
+        }
+      }
+    },
+    "2": {
+      "status": "FAIL",
+      "components": {
+        "learning": {
+          "status": "FAIL",
+          "components": {
+            "net_points_vs_random": {
+              "status": "PASS",
+              "game": "pong",
+              "metric": "net_points",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                -1.85,
+                -2.25,
+                -2.35
+              ],
+              "control_means": [
+                -3.0,
+                -3.0,
+                -3.0
+              ],
+              "treatment_mean": -2.15,
+              "control_mean": -3.0,
+              "gain": 0.85,
+              "minimum_gain": 0.5,
+              "ci95": [
+                0.5333333333333333,
+                1.2833333333333334
+              ],
+              "model_seed_gains": [
+                1.15,
+                0.75,
+                0.6499999999999999
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [],
+              "bootstrap_label": "pong:net_points:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "594bf9c0ea78c2068568e17732269d2e2521eac1afd5b7e2f0d1601d2568eb16",
+              "bootstrap_repetitions": 10000
+            },
+            "net_points_vs_untrained": {
+              "status": "FAIL",
+              "game": "pong",
+              "metric": "net_points",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "untrained"
+              ],
+              "treatment_means": [
+                -1.85,
+                -2.25,
+                -2.35
+              ],
+              "control_means": [
+                -2.6,
+                -2.15,
+                -2.6
+              ],
+              "treatment_mean": -2.15,
+              "control_mean": -2.4499999999999997,
+              "gain": 0.3,
+              "minimum_gain": 0.0,
+              "ci95": [
+                -0.23374999999999982,
+                0.8833333333333333
+              ],
+              "model_seed_gains": [
+                0.75,
+                -0.10000000000000009,
+                0.25
+              ],
+              "favorable_models": 2,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [
+                "ci_lower_positive"
+              ],
+              "bootstrap_label": "pong:net_points:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "a77657feb8239f48708532fa8daaf42a4ec1cf993609663a3e1426b375136847",
+              "bootstrap_repetitions": 10000
+            },
+            "interception_vs_random": {
+              "status": "PASS",
+              "game": "pong",
+              "metric": "interception",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                0.4148936170212766,
+                0.375,
+                0.2625
+              ],
+              "control_means": [
+                0.15492957746478872,
+                0.15492957746478872,
+                0.15492957746478872
+              ],
+              "treatment_mean": 0.35079787234042553,
+              "control_mean": 0.15492957746478872,
+              "gain": 0.1958682948756368,
+              "minimum_gain": 0.1,
+              "ci95": [
+                0.09934762838397886,
+                0.29244703267247013
+              ],
+              "model_seed_gains": [
+                0.25996403955648784,
+                0.22007042253521128,
+                0.10757042253521129
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [],
+              "bootstrap_label": "pong:interception:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "8a5895e832bb95393aac6b07a3ca53a850e864e84cfc9445144d2357df167f6f",
+              "bootstrap_repetitions": 10000
+            },
+            "interception_vs_untrained": {
+              "status": "PASS",
+              "game": "pong",
+              "metric": "interception",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "untrained"
+              ],
+              "treatment_means": [
+                0.4148936170212766,
+                0.375,
+                0.2625
+              ],
+              "control_means": [
+                0.15492957746478872,
+                0.24324324324324326,
+                0.15492957746478872
+              ],
+              "treatment_mean": 0.35079787234042553,
+              "control_mean": 0.1843674660576069,
+              "gain": 0.1664304062828186,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.07417077280441729,
+                0.2686572625847101
+              ],
+              "model_seed_gains": [
+                0.25996403955648784,
+                0.13175675675675674,
+                0.10757042253521129
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [],
+              "bootstrap_label": "pong:interception:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "f17ad6ab0b77189df980c508cebc5087bd4393a46f0dbe3f0ad18cc9cd879121",
+              "bootstrap_repetitions": 10000
+            }
+          }
+        }
+      }
+    },
+    "3": {
+      "status": "FAIL",
+      "components": {
+        "learning": {
+          "status": "FAIL",
+          "components": {
+            "foods_vs_random": {
+              "status": "FAIL",
+              "game": "agar",
+              "metric": "foods",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                1.0,
+                1.7,
+                1.7
+              ],
+              "control_means": [
+                1.1,
+                1.1,
+                1.1
+              ],
+              "treatment_mean": 1.4666666666666668,
+              "control_mean": 1.1,
+              "gain": 0.36666666666666653,
+              "minimum_gain": 2.0,
+              "ci95": [
+                -0.16666666666666666,
+                0.8999999999999999
+              ],
+              "model_seed_gains": [
+                -0.10000000000000009,
+                0.5999999999999999,
+                0.5999999999999999
+              ],
+              "favorable_models": 2,
+              "conditions": {
+                "margin": false,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [
+                "margin",
+                "ci_lower_positive"
+              ],
+              "bootstrap_label": "agar:foods:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "4d607fad1e365786497fcedd6753c3e966b960bd03d421f4dcbad36a5ebe3493",
+              "bootstrap_repetitions": 10000
+            },
+            "foods_vs_untrained": {
+              "status": "FAIL",
+              "game": "agar",
+              "metric": "foods",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "untrained"
+              ],
+              "treatment_means": [
+                1.0,
+                1.7,
+                1.7
+              ],
+              "control_means": [
+                1.55,
+                1.25,
+                0.7
+              ],
+              "treatment_mean": 1.4666666666666668,
+              "control_mean": 1.1666666666666667,
+              "gain": 0.3,
+              "minimum_gain": 0.0,
+              "ci95": [
+                -0.5499999999999999,
+                1.0333333333333334
+              ],
+              "model_seed_gains": [
+                -0.55,
+                0.44999999999999996,
+                1.0
+              ],
+              "favorable_models": 2,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [
+                "ci_lower_positive"
+              ],
+              "bootstrap_label": "agar:foods:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "54a8fda4ba8fda6099e8d129e077d78ae6de89722520d9adf705af30b95f99e9",
+              "bootstrap_repetitions": 10000
+            },
+            "prey_eaten_vs_random": {
+              "status": "FAIL",
+              "game": "agar",
+              "metric": "prey_eaten",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                0.3,
+                0.3,
+                0.2
+              ],
+              "control_means": [
+                0.05,
+                0.05,
+                0.05
+              ],
+              "treatment_mean": 0.26666666666666666,
+              "control_mean": 0.05000000000000001,
+              "gain": 0.21666666666666667,
+              "minimum_gain": 0.3,
+              "ci95": [
+                0.05000000000000001,
+                0.39999999999999997
+              ],
+              "model_seed_gains": [
+                0.25,
+                0.25,
+                0.15000000000000002
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": false,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [
+                "margin"
+              ],
+              "bootstrap_label": "agar:prey_eaten:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "8edb53ce32615a0924e897fca9a1c18f0f547768e1ae840913007e5ca35eeb84",
+              "bootstrap_repetitions": 10000
+            },
+            "prey_eaten_vs_untrained": {
+              "status": "FAIL",
+              "game": "agar",
+              "metric": "prey_eaten",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "untrained"
+              ],
+              "treatment_means": [
+                0.3,
+                0.3,
+                0.2
+              ],
+              "control_means": [
+                0.2,
+                0.35,
+                0.05
+              ],
+              "treatment_mean": 0.26666666666666666,
+              "control_mean": 0.20000000000000004,
+              "gain": 0.06666666666666667,
+              "minimum_gain": 0.0,
+              "ci95": [
+                -0.13333333333333333,
+                0.2333333333333333
+              ],
+              "model_seed_gains": [
+                0.09999999999999998,
+                -0.04999999999999999,
+                0.15000000000000002
+              ],
+              "favorable_models": 2,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [
+                "ci_lower_positive"
+              ],
+              "bootstrap_label": "agar:prey_eaten:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "e47d7fe4dfcd80fdc961befb9aa042a4dd77d2cc73dc983978d9376beaa7c95a",
+              "bootstrap_repetitions": 10000
+            },
+            "survival_vs_random": {
+              "status": "FAIL",
+              "game": "agar",
+              "metric": "survival",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 0.0,
+              "control_mean": 0.0,
+              "gain": 0.0,
+              "minimum_gain": 0.1,
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "model_seed_gains": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "favorable_models": 0,
+              "conditions": {
+                "margin": false,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": false
+              },
+              "failed_conditions": [
+                "margin",
+                "ci_lower_positive",
+                "at_least_two_favorable_models"
+              ],
+              "bootstrap_label": "agar:survival:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "239733a5bb20f4a880bc0ffabbf632dd6ad9621f374d82576a408e54ad28693d",
+              "bootstrap_repetitions": 10000
+            },
+            "survival_vs_untrained": {
+              "status": "FAIL",
+              "game": "agar",
+              "metric": "survival",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "untrained"
+              ],
+              "treatment_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 0.0,
+              "control_mean": 0.0,
+              "gain": 0.0,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "model_seed_gains": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "favorable_models": 0,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": false
+              },
+              "failed_conditions": [
+                "ci_lower_positive",
+                "at_least_two_favorable_models"
+              ],
+              "bootstrap_label": "agar:survival:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "8b9da191274a4fcd44e883df0d7c349679f393f3734e7a73b6ca1f8ee296c8a9",
+              "bootstrap_repetitions": 10000
+            }
+          }
+        },
+        "opportunity_exposure": {
+          "status": "PASS",
+          "by_model": {
+            "1103": {
+              "large_near_steps": 377.0,
+              "small_near_steps": 324.0
+            },
+            "2207": {
+              "large_near_steps": 301.0,
+              "small_near_steps": 290.0
+            },
+            "3301": {
+              "large_near_steps": 336.0,
+              "small_near_steps": 295.0
+            }
+          },
+          "limitation": "Exposure counts alone do not show successful escape or pursuit."
+        },
+        "scenario_audit": {
+          "status": "NOT_EVIDENCED",
+          "reason": "No scenario/trajectory receipt was within this CSV-only audit."
+        },
+        "outcome_telemetry": {
+          "status": "PASS",
+          "episodes": 60,
+          "required_fields": [
+            "foods",
+            "prey_eaten",
+            "eaten",
+            "mass",
+            "large_near_steps",
+            "large_distance_change",
+            "small_near_steps",
+            "small_distance_change"
+          ]
+        }
+      }
+    },
+    "4": {
+      "status": "FAIL",
+      "components": {
+        "learning": {
+          "status": "FAIL",
+          "components": {
+            "pipes_passed_vs_random": {
+              "status": "FAIL",
+              "game": "flappy",
+              "metric": "pipes_passed",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 0.7333333333333334,
+              "control_mean": 0.0,
+              "gain": 0.7333333333333334,
+              "minimum_gain": 1.0,
+              "ci95": [
+                0.24999999999999997,
+                1.4666666666666668
+              ],
+              "model_seed_gains": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": false,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [
+                "margin"
+              ],
+              "bootstrap_label": "flappy:pipes_passed:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "0f08db6ee630ba5ed6b8ea28dc44e264c0a172e569f4e537e9f4268c96e8011e",
+              "bootstrap_repetitions": 10000
+            },
+            "pipes_passed_vs_untrained": {
+              "status": "PASS",
+              "game": "flappy",
+              "metric": "pipes_passed",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "untrained"
+              ],
+              "treatment_means": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 0.7333333333333334,
+              "control_mean": 0.0,
+              "gain": 0.7333333333333334,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.23333333333333336,
+                1.4833333333333334
+              ],
+              "model_seed_gains": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [],
+              "bootstrap_label": "flappy:pipes_passed:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "357eaa39c1e7fab22a98e757d89486cf5dd93be2d300fedc053b637e1a82fc2e",
+              "bootstrap_repetitions": 10000
+            }
+          }
+        },
+        "gap_coverage": {
+          "status": "PASS",
+          "components": {
+            "narrow": {
+              "status": "PASS",
+              "game": "flappy",
+              "metric": "narrow_pipes_passed",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                0.05,
+                0.05,
+                0.35
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 0.15,
+              "control_mean": 0.0,
+              "gain": 0.15,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.016666666666666666,
+                0.3666666666666667
+              ],
+              "model_seed_gains": [
+                0.05,
+                0.05,
+                0.35
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [],
+              "bootstrap_label": "flappy:narrow_pipes_passed:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "def70aa4ffe52c53e4c7cba71fef000b3b6b6d04cb0c962a0569145dd98e656a",
+              "bootstrap_repetitions": 10000
+            },
+            "wide": {
+              "status": "PASS",
+              "game": "flappy",
+              "metric": "wide_pipes_passed",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                0.25,
+                0.35,
+                1.15
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 0.5833333333333334,
+              "control_mean": 0.0,
+              "gain": 0.5833333333333334,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.19999999999999998,
+                1.1500000000000001
+              ],
+              "model_seed_gains": [
+                0.25,
+                0.35,
+                1.15
+              ],
+              "favorable_models": 3,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": true,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [],
+              "bootstrap_label": "flappy:wide_pipes_passed:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "90f22060a5a5348a1601aad2e5e6ffdb5f552d75dde574369c2540a6222dca14",
+              "bootstrap_repetitions": 10000
+            }
+          }
+        },
+        "outcome_telemetry": {
+          "status": "PASS",
+          "episodes": 60,
+          "required_fields": [
+            "pipes_passed",
+            "collision",
+            "flaps"
+          ]
+        }
+      }
+    },
+    "5": {
+      "status": "FAIL",
+      "components": {
+        "learning": {
+          "status": "FAIL",
+          "components": {
+            "progress_normalized_vs_random": {
+              "status": "FAIL",
+              "game": "racing",
+              "metric": "progress_normalized",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                0.645163621292505,
+                0.06808347230652886,
+                0.2581338554534085
+              ],
+              "control_means": [
+                0.1579870128915815,
+                0.1579870128915815,
+                0.1579870128915815
+              ],
+              "treatment_mean": 0.3237936496841475,
+              "control_mean": 0.1579870128915815,
+              "gain": 0.16580663679256596,
+              "minimum_gain": 0.15,
+              "ci95": [
+                -0.08627748283300248,
+                0.47599397222817286
+              ],
+              "model_seed_gains": [
+                0.4871766084009235,
+                -0.08990354058505265,
+                0.10014684256182699
+              ],
+              "favorable_models": 2,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [
+                "ci_lower_positive"
+              ],
+              "bootstrap_label": "racing:progress_normalized:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "582a29cac15509f7a1c97b4b3c1783d069c976abf194346a58b9fb1b934f70e3",
+              "bootstrap_repetitions": 10000
+            },
+            "progress_normalized_vs_untrained": {
+              "status": "FAIL",
+              "game": "racing",
+              "metric": "progress_normalized",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "untrained"
+              ],
+              "treatment_means": [
+                0.645163621292505,
+                0.06808347230652886,
+                0.2581338554534085
+              ],
+              "control_means": [
+                0.2524237088137291,
+                0.10303840913478657,
+                0.181886380211259
+              ],
+              "treatment_mean": 0.3237936496841475,
+              "control_mean": 0.17911616605325822,
+              "gain": 0.14467748363088925,
+              "minimum_gain": 0.0,
+              "ci95": [
+                -0.03383771994312583,
+                0.37474211500426424
+              ],
+              "model_seed_gains": [
+                0.39273991247877593,
+                -0.034954936828257704,
+                0.0762474752421495
+              ],
+              "favorable_models": 2,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": true
+              },
+              "failed_conditions": [
+                "ci_lower_positive"
+              ],
+              "bootstrap_label": "racing:progress_normalized:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "ed08d64a639a4914153af5e28288119d08b277ff6b5dcdfa90e218dde0feacab",
+              "bootstrap_repetitions": 10000
+            },
+            "lap_completed_vs_random": {
+              "status": "FAIL",
+              "game": "racing",
+              "metric": "lap_completed",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "random"
+              ],
+              "treatment_means": [
+                0.25,
+                0.0,
+                0.0
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 0.08333333333333333,
+              "control_mean": 0.0,
+              "gain": 0.08333333333333333,
+              "minimum_gain": 0.1,
+              "ci95": [
+                0.0,
+                0.25
+              ],
+              "model_seed_gains": [
+                0.25,
+                0.0,
+                0.0
+              ],
+              "favorable_models": 1,
+              "conditions": {
+                "margin": false,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": false
+              },
+              "failed_conditions": [
+                "margin",
+                "ci_lower_positive",
+                "at_least_two_favorable_models"
+              ],
+              "bootstrap_label": "racing:lap_completed:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "edd2abb5db91886977c88101a503ff51bfa30ae26e680b031584bb3448d06575",
+              "bootstrap_repetitions": 10000
+            },
+            "lap_completed_vs_untrained": {
+              "status": "FAIL",
+              "game": "racing",
+              "metric": "lap_completed",
+              "treatment": [
+                "after_adaptation",
+                "shared"
+              ],
+              "control": [
+                "baseline",
+                "untrained"
+              ],
+              "treatment_means": [
+                0.25,
+                0.0,
+                0.0
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "treatment_mean": 0.08333333333333333,
+              "control_mean": 0.0,
+              "gain": 0.08333333333333333,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.0,
+                0.25
+              ],
+              "model_seed_gains": [
+                0.25,
+                0.0,
+                0.0
+              ],
+              "favorable_models": 1,
+              "conditions": {
+                "margin": true,
+                "ci_lower_positive": false,
+                "at_least_two_favorable_models": false
+              },
+              "failed_conditions": [
+                "ci_lower_positive",
+                "at_least_two_favorable_models"
+              ],
+              "bootstrap_label": "racing:lap_completed:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+              "bootstrap_seed_base": 510002,
+              "bootstrap_label_salt_sha256": "0ec3efaf3c9ed0f5d573c5d40d5fda0d2b391103f52ce407b482c8abedb24299",
+              "bootstrap_repetitions": 10000
+            }
+          }
+        },
+        "collision_per_distance": {
+          "status": "PASS",
+          "treatment_rates": [
+            0.010843972837038363,
+            0.023239409361445338,
+            0.013792685850559686
+          ],
+          "random_rates": [
+            0.03593483046592931,
+            0.03593483046592931,
+            0.03593483046592931
+          ],
+          "difference_by_model": [
+            -0.025090857628890947,
+            -0.012695421104483972,
+            -0.022142144615369626
+          ]
+        },
+        "curve_throttle_brake_audit": {
+          "status": "NOT_EVIDENCED",
+          "reason": "No trajectory/control receipt was within this CSV-only audit."
+        },
+        "outcome_telemetry": {
+          "status": "PASS",
+          "episodes": 60,
+          "required_fields": [
+            "track_length",
+            "distance",
+            "accelerations",
+            "brakes",
+            "turns",
+            "curved_steps",
+            "curved_distance"
+          ]
+        }
+      }
+    },
+    "10": {
+      "status": "FAIL",
+      "components": {
+        "target_final_transfer": {
+          "status": "FAIL",
+          "game": "racing",
+          "metric": "progress_normalized",
+          "treatment": [
+            "after_adaptation",
+            "shared"
+          ],
+          "control": [
+            "from_scratch",
+            "scratch"
+          ],
+          "treatment_means": [
+            0.645163621292505,
+            0.06808347230652886,
+            0.2581338554534085
+          ],
+          "control_means": [
+            0.9402254195648446,
+            0.9453446182265728,
+            0.7655251947973698
+          ],
+          "treatment_mean": 0.3237936496841475,
+          "control_mean": 0.883698410862929,
+          "gain": -0.5599047611787816,
+          "minimum_gain": 0.05,
+          "ci95": [
+            -0.8663068656607628,
+            -0.29895719121860903
+          ],
+          "model_seed_gains": [
+            -0.2950617982723396,
+            -0.8772611459200439,
+            -0.5073913393439613
+          ],
+          "favorable_models": 0,
+          "conditions": {
+            "margin": false,
+            "ci_lower_positive": false,
+            "at_least_two_favorable_models": false
+          },
+          "failed_conditions": [
+            "margin",
+            "ci_lower_positive",
+            "at_least_two_favorable_models"
+          ],
+          "bootstrap_label": "racing:progress_normalized:('after_adaptation', 'shared'):('from_scratch', 'scratch'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+          "bootstrap_seed_base": 510002,
+          "bootstrap_label_salt_sha256": "4b77ae2161a0e0a289f5a77aa16914924cde85506d49ec4e5d82c61eb49962aa",
+          "bootstrap_repetitions": 10000
+        },
+        "target_training_auc": {
+          "status": "FAIL",
+          "adaptation_auc_by_model": [
+            0.4291745734986605,
+            0.14867873133110687,
+            0.27162661525394416
+          ],
+          "scratch_auc_by_model": [
+            0.4962385066296742,
+            0.5099360205569083,
+            0.4915130710605088
+          ],
+          "relative_gain_by_model": [
+            -0.1351445569722005,
+            -0.7084364992127195,
+            -0.4473664460888671
+          ],
+          "mean_relative_gain": -0.43031583409126234,
+          "minimum_relative_gain": 0.1,
+          "favorable_models": 0,
+          "curves": {
+            "1103:adaptation": {
+              "rows": 710,
+              "end": 60000,
+              "episode_steps_sum": 60000,
+              "weighted_sum": 25750.47440991963,
+              "auc": 0.4291745734986605
+            },
+            "1103:from_scratch": {
+              "rows": 720,
+              "end": 60000,
+              "episode_steps_sum": 60000,
+              "weighted_sum": 29774.310397780453,
+              "auc": 0.4962385066296742
+            },
+            "2207:adaptation": {
+              "rows": 302,
+              "end": 60000,
+              "episode_steps_sum": 60000,
+              "weighted_sum": 8920.723879866413,
+              "auc": 0.14867873133110687
+            },
+            "2207:from_scratch": {
+              "rows": 809,
+              "end": 60000,
+              "episode_steps_sum": 60000,
+              "weighted_sum": 30596.1612334145,
+              "auc": 0.5099360205569083
+            },
+            "3301:adaptation": {
+              "rows": 367,
+              "end": 60000,
+              "episode_steps_sum": 60000,
+              "weighted_sum": 16297.596915236649,
+              "auc": 0.27162661525394416
+            },
+            "3301:from_scratch": {
+              "rows": 709,
+              "end": 60000,
+              "episode_steps_sum": 60000,
+              "weighted_sum": 29490.78426363053,
+              "auc": 0.4915130710605088
+            }
+          },
+          "definition": "Each episode/final partial episode progress multiplied by steps since preceding right endpoint, divided by exactly 60000 target interactions; exploratory training returns."
+        },
+        "source_retention": {
+          "status": "FAIL",
+          "components": {
+            "snake": {
+              "status": "FAIL",
+              "metric": "foods",
+              "before_gains": [
+                4.55,
+                6.0,
+                5.1
+              ],
+              "after_gains": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "retained_gain_by_model": [
+                0.5164835164835165,
+                0.5333333333333333,
+                0.5686274509803921
+              ],
+              "minimum_fraction": 0.8,
+              "pre_gain_positive_by_model": [
+                true,
+                true,
+                true
+              ],
+              "reason": null
+            },
+            "pong": {
+              "status": "FAIL",
+              "metric": "net_points",
+              "before_gains": [
+                1.75,
+                3.5,
+                1.7
+              ],
+              "after_gains": [
+                1.15,
+                0.75,
+                0.6499999999999999
+              ],
+              "retained_gain_by_model": [
+                0.6571428571428571,
+                0.21428571428571427,
+                0.38235294117647056
+              ],
+              "minimum_fraction": 0.8,
+              "pre_gain_positive_by_model": [
+                true,
+                true,
+                true
+              ],
+              "reason": null
+            },
+            "agar": {
+              "status": "FAIL",
+              "metric": "foods",
+              "before_gains": [
+                1.1999999999999997,
+                0.7,
+                0.6499999999999999
+              ],
+              "after_gains": [
+                -0.10000000000000009,
+                0.5999999999999999,
+                0.5999999999999999
+              ],
+              "retained_gain_by_model": [
+                -0.08333333333333343,
+                0.857142857142857,
+                0.923076923076923
+              ],
+              "minimum_fraction": 0.8,
+              "pre_gain_positive_by_model": [
+                true,
+                true,
+                true
+              ],
+              "reason": null
+            },
+            "flappy": {
+              "status": "FAIL",
+              "metric": "pipes_passed",
+              "before_gains": [
+                0.9,
+                0.25,
+                1.05
+              ],
+              "after_gains": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "retained_gain_by_model": [
+                0.3333333333333333,
+                1.6,
+                1.4285714285714286
+              ],
+              "minimum_fraction": 0.8,
+              "pre_gain_positive_by_model": [
+                true,
+                true,
+                true
+              ],
+              "reason": null
+            }
+          }
+        },
+        "holdout_and_equal_budget": {
+          "status": "NOT_EVIDENCED",
+          "reason": "Curves cover exactly 60000 steps each; independent checkpoint/replay holdout receipts are outside this CSV-only audit."
+        }
+      }
+    }
+  },
+  "all_contrasts": [
+    {
+      "status": "PASS",
+      "game": "snake",
+      "metric": "foods",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        2.35,
+        3.2,
+        2.9
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 2.816666666666667,
+      "control_mean": 0.0,
+      "gain": 2.816666666666667,
+      "minimum_gain": 1.0,
+      "ci95": [
+        1.9333333333333333,
+        3.983333333333333
+      ],
+      "model_seed_gains": [
+        2.35,
+        3.2,
+        2.9
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [],
+      "bootstrap_label": "snake:foods:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "51b92674238eacee798c895add6461ec0e5eed6a5b77849ba2aa2be54c24bded",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "PASS",
+      "game": "snake",
+      "metric": "foods",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "untrained"
+      ],
+      "treatment_means": [
+        2.35,
+        3.2,
+        2.9
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 2.816666666666667,
+      "control_mean": 0.0,
+      "gain": 2.816666666666667,
+      "minimum_gain": 0.0,
+      "ci95": [
+        1.9333333333333333,
+        3.983333333333333
+      ],
+      "model_seed_gains": [
+        2.35,
+        3.2,
+        2.9
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [],
+      "bootstrap_label": "snake:foods:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "be5418debe34fbefb6ff1449bac9ab443647158cbba076e81dfb03ae121bda62",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "PASS",
+      "game": "pong",
+      "metric": "net_points",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        -1.85,
+        -2.25,
+        -2.35
+      ],
+      "control_means": [
+        -3.0,
+        -3.0,
+        -3.0
+      ],
+      "treatment_mean": -2.15,
+      "control_mean": -3.0,
+      "gain": 0.85,
+      "minimum_gain": 0.5,
+      "ci95": [
+        0.5333333333333333,
+        1.2833333333333334
+      ],
+      "model_seed_gains": [
+        1.15,
+        0.75,
+        0.6499999999999999
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [],
+      "bootstrap_label": "pong:net_points:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "594bf9c0ea78c2068568e17732269d2e2521eac1afd5b7e2f0d1601d2568eb16",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "pong",
+      "metric": "net_points",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "untrained"
+      ],
+      "treatment_means": [
+        -1.85,
+        -2.25,
+        -2.35
+      ],
+      "control_means": [
+        -2.6,
+        -2.15,
+        -2.6
+      ],
+      "treatment_mean": -2.15,
+      "control_mean": -2.4499999999999997,
+      "gain": 0.3,
+      "minimum_gain": 0.0,
+      "ci95": [
+        -0.23374999999999982,
+        0.8833333333333333
+      ],
+      "model_seed_gains": [
+        0.75,
+        -0.10000000000000009,
+        0.25
+      ],
+      "favorable_models": 2,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [
+        "ci_lower_positive"
+      ],
+      "bootstrap_label": "pong:net_points:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "a77657feb8239f48708532fa8daaf42a4ec1cf993609663a3e1426b375136847",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "PASS",
+      "game": "pong",
+      "metric": "interception",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        0.4148936170212766,
+        0.375,
+        0.2625
+      ],
+      "control_means": [
+        0.15492957746478872,
+        0.15492957746478872,
+        0.15492957746478872
+      ],
+      "treatment_mean": 0.35079787234042553,
+      "control_mean": 0.15492957746478872,
+      "gain": 0.1958682948756368,
+      "minimum_gain": 0.1,
+      "ci95": [
+        0.09934762838397886,
+        0.29244703267247013
+      ],
+      "model_seed_gains": [
+        0.25996403955648784,
+        0.22007042253521128,
+        0.10757042253521129
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [],
+      "bootstrap_label": "pong:interception:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "8a5895e832bb95393aac6b07a3ca53a850e864e84cfc9445144d2357df167f6f",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "PASS",
+      "game": "pong",
+      "metric": "interception",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "untrained"
+      ],
+      "treatment_means": [
+        0.4148936170212766,
+        0.375,
+        0.2625
+      ],
+      "control_means": [
+        0.15492957746478872,
+        0.24324324324324326,
+        0.15492957746478872
+      ],
+      "treatment_mean": 0.35079787234042553,
+      "control_mean": 0.1843674660576069,
+      "gain": 0.1664304062828186,
+      "minimum_gain": 0.0,
+      "ci95": [
+        0.07417077280441729,
+        0.2686572625847101
+      ],
+      "model_seed_gains": [
+        0.25996403955648784,
+        0.13175675675675674,
+        0.10757042253521129
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [],
+      "bootstrap_label": "pong:interception:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "f17ad6ab0b77189df980c508cebc5087bd4393a46f0dbe3f0ad18cc9cd879121",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "agar",
+      "metric": "foods",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        1.0,
+        1.7,
+        1.7
+      ],
+      "control_means": [
+        1.1,
+        1.1,
+        1.1
+      ],
+      "treatment_mean": 1.4666666666666668,
+      "control_mean": 1.1,
+      "gain": 0.36666666666666653,
+      "minimum_gain": 2.0,
+      "ci95": [
+        -0.16666666666666666,
+        0.8999999999999999
+      ],
+      "model_seed_gains": [
+        -0.10000000000000009,
+        0.5999999999999999,
+        0.5999999999999999
+      ],
+      "favorable_models": 2,
+      "conditions": {
+        "margin": false,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [
+        "margin",
+        "ci_lower_positive"
+      ],
+      "bootstrap_label": "agar:foods:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "4d607fad1e365786497fcedd6753c3e966b960bd03d421f4dcbad36a5ebe3493",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "agar",
+      "metric": "foods",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "untrained"
+      ],
+      "treatment_means": [
+        1.0,
+        1.7,
+        1.7
+      ],
+      "control_means": [
+        1.55,
+        1.25,
+        0.7
+      ],
+      "treatment_mean": 1.4666666666666668,
+      "control_mean": 1.1666666666666667,
+      "gain": 0.3,
+      "minimum_gain": 0.0,
+      "ci95": [
+        -0.5499999999999999,
+        1.0333333333333334
+      ],
+      "model_seed_gains": [
+        -0.55,
+        0.44999999999999996,
+        1.0
+      ],
+      "favorable_models": 2,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [
+        "ci_lower_positive"
+      ],
+      "bootstrap_label": "agar:foods:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "54a8fda4ba8fda6099e8d129e077d78ae6de89722520d9adf705af30b95f99e9",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "agar",
+      "metric": "prey_eaten",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        0.3,
+        0.3,
+        0.2
+      ],
+      "control_means": [
+        0.05,
+        0.05,
+        0.05
+      ],
+      "treatment_mean": 0.26666666666666666,
+      "control_mean": 0.05000000000000001,
+      "gain": 0.21666666666666667,
+      "minimum_gain": 0.3,
+      "ci95": [
+        0.05000000000000001,
+        0.39999999999999997
+      ],
+      "model_seed_gains": [
+        0.25,
+        0.25,
+        0.15000000000000002
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": false,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [
+        "margin"
+      ],
+      "bootstrap_label": "agar:prey_eaten:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "8edb53ce32615a0924e897fca9a1c18f0f547768e1ae840913007e5ca35eeb84",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "agar",
+      "metric": "prey_eaten",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "untrained"
+      ],
+      "treatment_means": [
+        0.3,
+        0.3,
+        0.2
+      ],
+      "control_means": [
+        0.2,
+        0.35,
+        0.05
+      ],
+      "treatment_mean": 0.26666666666666666,
+      "control_mean": 0.20000000000000004,
+      "gain": 0.06666666666666667,
+      "minimum_gain": 0.0,
+      "ci95": [
+        -0.13333333333333333,
+        0.2333333333333333
+      ],
+      "model_seed_gains": [
+        0.09999999999999998,
+        -0.04999999999999999,
+        0.15000000000000002
+      ],
+      "favorable_models": 2,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [
+        "ci_lower_positive"
+      ],
+      "bootstrap_label": "agar:prey_eaten:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "e47d7fe4dfcd80fdc961befb9aa042a4dd77d2cc73dc983978d9376beaa7c95a",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "agar",
+      "metric": "survival",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 0.0,
+      "control_mean": 0.0,
+      "gain": 0.0,
+      "minimum_gain": 0.1,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "model_seed_gains": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "favorable_models": 0,
+      "conditions": {
+        "margin": false,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": false
+      },
+      "failed_conditions": [
+        "margin",
+        "ci_lower_positive",
+        "at_least_two_favorable_models"
+      ],
+      "bootstrap_label": "agar:survival:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "239733a5bb20f4a880bc0ffabbf632dd6ad9621f374d82576a408e54ad28693d",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "agar",
+      "metric": "survival",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "untrained"
+      ],
+      "treatment_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 0.0,
+      "control_mean": 0.0,
+      "gain": 0.0,
+      "minimum_gain": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "model_seed_gains": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "favorable_models": 0,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": false
+      },
+      "failed_conditions": [
+        "ci_lower_positive",
+        "at_least_two_favorable_models"
+      ],
+      "bootstrap_label": "agar:survival:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "8b9da191274a4fcd44e883df0d7c349679f393f3734e7a73b6ca1f8ee296c8a9",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "flappy",
+      "metric": "pipes_passed",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        0.3,
+        0.4,
+        1.5
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 0.7333333333333334,
+      "control_mean": 0.0,
+      "gain": 0.7333333333333334,
+      "minimum_gain": 1.0,
+      "ci95": [
+        0.24999999999999997,
+        1.4666666666666668
+      ],
+      "model_seed_gains": [
+        0.3,
+        0.4,
+        1.5
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": false,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [
+        "margin"
+      ],
+      "bootstrap_label": "flappy:pipes_passed:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "0f08db6ee630ba5ed6b8ea28dc44e264c0a172e569f4e537e9f4268c96e8011e",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "PASS",
+      "game": "flappy",
+      "metric": "pipes_passed",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "untrained"
+      ],
+      "treatment_means": [
+        0.3,
+        0.4,
+        1.5
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 0.7333333333333334,
+      "control_mean": 0.0,
+      "gain": 0.7333333333333334,
+      "minimum_gain": 0.0,
+      "ci95": [
+        0.23333333333333336,
+        1.4833333333333334
+      ],
+      "model_seed_gains": [
+        0.3,
+        0.4,
+        1.5
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [],
+      "bootstrap_label": "flappy:pipes_passed:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "357eaa39c1e7fab22a98e757d89486cf5dd93be2d300fedc053b637e1a82fc2e",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "PASS",
+      "game": "flappy",
+      "metric": "narrow_pipes_passed",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        0.05,
+        0.05,
+        0.35
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 0.15,
+      "control_mean": 0.0,
+      "gain": 0.15,
+      "minimum_gain": 0.0,
+      "ci95": [
+        0.016666666666666666,
+        0.3666666666666667
+      ],
+      "model_seed_gains": [
+        0.05,
+        0.05,
+        0.35
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [],
+      "bootstrap_label": "flappy:narrow_pipes_passed:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "def70aa4ffe52c53e4c7cba71fef000b3b6b6d04cb0c962a0569145dd98e656a",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "PASS",
+      "game": "flappy",
+      "metric": "wide_pipes_passed",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        0.25,
+        0.35,
+        1.15
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 0.5833333333333334,
+      "control_mean": 0.0,
+      "gain": 0.5833333333333334,
+      "minimum_gain": 0.0,
+      "ci95": [
+        0.19999999999999998,
+        1.1500000000000001
+      ],
+      "model_seed_gains": [
+        0.25,
+        0.35,
+        1.15
+      ],
+      "favorable_models": 3,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": true,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [],
+      "bootstrap_label": "flappy:wide_pipes_passed:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "90f22060a5a5348a1601aad2e5e6ffdb5f552d75dde574369c2540a6222dca14",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "racing",
+      "metric": "progress_normalized",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        0.645163621292505,
+        0.06808347230652886,
+        0.2581338554534085
+      ],
+      "control_means": [
+        0.1579870128915815,
+        0.1579870128915815,
+        0.1579870128915815
+      ],
+      "treatment_mean": 0.3237936496841475,
+      "control_mean": 0.1579870128915815,
+      "gain": 0.16580663679256596,
+      "minimum_gain": 0.15,
+      "ci95": [
+        -0.08627748283300248,
+        0.47599397222817286
+      ],
+      "model_seed_gains": [
+        0.4871766084009235,
+        -0.08990354058505265,
+        0.10014684256182699
+      ],
+      "favorable_models": 2,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [
+        "ci_lower_positive"
+      ],
+      "bootstrap_label": "racing:progress_normalized:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "582a29cac15509f7a1c97b4b3c1783d069c976abf194346a58b9fb1b934f70e3",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "racing",
+      "metric": "progress_normalized",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "untrained"
+      ],
+      "treatment_means": [
+        0.645163621292505,
+        0.06808347230652886,
+        0.2581338554534085
+      ],
+      "control_means": [
+        0.2524237088137291,
+        0.10303840913478657,
+        0.181886380211259
+      ],
+      "treatment_mean": 0.3237936496841475,
+      "control_mean": 0.17911616605325822,
+      "gain": 0.14467748363088925,
+      "minimum_gain": 0.0,
+      "ci95": [
+        -0.03383771994312583,
+        0.37474211500426424
+      ],
+      "model_seed_gains": [
+        0.39273991247877593,
+        -0.034954936828257704,
+        0.0762474752421495
+      ],
+      "favorable_models": 2,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": true
+      },
+      "failed_conditions": [
+        "ci_lower_positive"
+      ],
+      "bootstrap_label": "racing:progress_normalized:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "ed08d64a639a4914153af5e28288119d08b277ff6b5dcdfa90e218dde0feacab",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "racing",
+      "metric": "lap_completed",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "random"
+      ],
+      "treatment_means": [
+        0.25,
+        0.0,
+        0.0
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 0.08333333333333333,
+      "control_mean": 0.0,
+      "gain": 0.08333333333333333,
+      "minimum_gain": 0.1,
+      "ci95": [
+        0.0,
+        0.25
+      ],
+      "model_seed_gains": [
+        0.25,
+        0.0,
+        0.0
+      ],
+      "favorable_models": 1,
+      "conditions": {
+        "margin": false,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": false
+      },
+      "failed_conditions": [
+        "margin",
+        "ci_lower_positive",
+        "at_least_two_favorable_models"
+      ],
+      "bootstrap_label": "racing:lap_completed:('after_adaptation', 'shared'):('baseline', 'random'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "edd2abb5db91886977c88101a503ff51bfa30ae26e680b031584bb3448d06575",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "racing",
+      "metric": "lap_completed",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "baseline",
+        "untrained"
+      ],
+      "treatment_means": [
+        0.25,
+        0.0,
+        0.0
+      ],
+      "control_means": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "treatment_mean": 0.08333333333333333,
+      "control_mean": 0.0,
+      "gain": 0.08333333333333333,
+      "minimum_gain": 0.0,
+      "ci95": [
+        0.0,
+        0.25
+      ],
+      "model_seed_gains": [
+        0.25,
+        0.0,
+        0.0
+      ],
+      "favorable_models": 1,
+      "conditions": {
+        "margin": true,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": false
+      },
+      "failed_conditions": [
+        "ci_lower_positive",
+        "at_least_two_favorable_models"
+      ],
+      "bootstrap_label": "racing:lap_completed:('after_adaptation', 'shared'):('baseline', 'untrained'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "0ec3efaf3c9ed0f5d573c5d40d5fda0d2b391103f52ce407b482c8abedb24299",
+      "bootstrap_repetitions": 10000
+    },
+    {
+      "status": "FAIL",
+      "game": "racing",
+      "metric": "progress_normalized",
+      "treatment": [
+        "after_adaptation",
+        "shared"
+      ],
+      "control": [
+        "from_scratch",
+        "scratch"
+      ],
+      "treatment_means": [
+        0.645163621292505,
+        0.06808347230652886,
+        0.2581338554534085
+      ],
+      "control_means": [
+        0.9402254195648446,
+        0.9453446182265728,
+        0.7655251947973698
+      ],
+      "treatment_mean": 0.3237936496841475,
+      "control_mean": 0.883698410862929,
+      "gain": -0.5599047611787816,
+      "minimum_gain": 0.05,
+      "ci95": [
+        -0.8663068656607628,
+        -0.29895719121860903
+      ],
+      "model_seed_gains": [
+        -0.2950617982723396,
+        -0.8772611459200439,
+        -0.5073913393439613
+      ],
+      "favorable_models": 0,
+      "conditions": {
+        "margin": false,
+        "ci_lower_positive": false,
+        "at_least_two_favorable_models": false
+      },
+      "failed_conditions": [
+        "margin",
+        "ci_lower_positive",
+        "at_least_two_favorable_models"
+      ],
+      "bootstrap_label": "racing:progress_normalized:('after_adaptation', 'shared'):('from_scratch', 'scratch'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+      "bootstrap_seed_base": 510002,
+      "bootstrap_label_salt_sha256": "4b77ae2161a0e0a289f5a77aa16914924cde85506d49ec4e5d82c61eb49962aa",
+      "bootstrap_repetitions": 10000
+    }
+  ],
+  "descriptive_outcomes": {
+    "snake": {
+      "before_adaptation/shared": {
+        "foods": {
+          "mean": 5.216666666666667,
+          "by_model": [
+            4.55,
+            6.0,
+            5.1
+          ]
+        },
+        "wall_collision": {
+          "mean": 0.016666666666666666,
+          "by_model": [
+            0.0,
+            0.0,
+            0.05
+          ]
+        },
+        "body_collision": {
+          "mean": 0.6000000000000001,
+          "by_model": [
+            0.55,
+            0.65,
+            0.6
+          ]
+        }
+      },
+      "after_adaptation/shared": {
+        "foods": {
+          "mean": 2.816666666666667,
+          "by_model": [
+            2.35,
+            3.2,
+            2.9
+          ]
+        },
+        "wall_collision": {
+          "mean": 0.26666666666666666,
+          "by_model": [
+            0.55,
+            0.25,
+            0.0
+          ]
+        },
+        "body_collision": {
+          "mean": 0.3,
+          "by_model": [
+            0.1,
+            0.4,
+            0.4
+          ]
+        }
+      },
+      "baseline/random": {
+        "foods": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "wall_collision": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "body_collision": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "baseline/untrained": {
+        "foods": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "wall_collision": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "body_collision": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "pong": {
+      "before_adaptation/shared": {
+        "net_points": {
+          "mean": -0.6833333333333332,
+          "by_model": [
+            -1.25,
+            0.5,
+            -1.3
+          ]
+        },
+        "points": {
+          "mean": 1.0333333333333332,
+          "by_model": [
+            1.05,
+            0.85,
+            1.2
+          ]
+        },
+        "conceded": {
+          "mean": 1.7166666666666668,
+          "by_model": [
+            2.3,
+            0.35,
+            2.5
+          ]
+        },
+        "hits": {
+          "mean": 3.9666666666666663,
+          "by_model": [
+            3.75,
+            5.45,
+            2.7
+          ]
+        },
+        "incoming": {
+          "mean": 5.683333333333334,
+          "by_model": [
+            6.05,
+            5.8,
+            5.2
+          ]
+        },
+        "interception": {
+          "mean": 0.6929068841294547,
+          "by_model": [
+            0.6198347107438017,
+            0.9396551724137931,
+            0.5192307692307693
+          ]
+        }
+      },
+      "after_adaptation/shared": {
+        "net_points": {
+          "mean": -2.15,
+          "by_model": [
+            -1.85,
+            -2.25,
+            -2.35
+          ]
+        },
+        "points": {
+          "mean": 0.75,
+          "by_model": [
+            0.9,
+            0.75,
+            0.6
+          ]
+        },
+        "conceded": {
+          "mean": 2.9,
+          "by_model": [
+            2.75,
+            3.0,
+            2.95
+          ]
+        },
+        "hits": {
+          "mean": 1.5999999999999999,
+          "by_model": [
+            1.95,
+            1.8,
+            1.05
+          ]
+        },
+        "incoming": {
+          "mean": 4.5,
+          "by_model": [
+            4.7,
+            4.8,
+            4.0
+          ]
+        },
+        "interception": {
+          "mean": 0.35079787234042553,
+          "by_model": [
+            0.4148936170212766,
+            0.375,
+            0.2625
+          ]
+        }
+      },
+      "baseline/random": {
+        "net_points": {
+          "mean": -3.0,
+          "by_model": [
+            -3.0,
+            -3.0,
+            -3.0
+          ]
+        },
+        "points": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "conceded": {
+          "mean": 3.0,
+          "by_model": [
+            3.0,
+            3.0,
+            3.0
+          ]
+        },
+        "hits": {
+          "mean": 0.55,
+          "by_model": [
+            0.55,
+            0.55,
+            0.55
+          ]
+        },
+        "incoming": {
+          "mean": 3.5499999999999994,
+          "by_model": [
+            3.55,
+            3.55,
+            3.55
+          ]
+        },
+        "interception": {
+          "mean": 0.15492957746478872,
+          "by_model": [
+            0.15492957746478872,
+            0.15492957746478872,
+            0.15492957746478872
+          ]
+        }
+      },
+      "baseline/untrained": {
+        "net_points": {
+          "mean": -2.4499999999999997,
+          "by_model": [
+            -2.6,
+            -2.15,
+            -2.6
+          ]
+        },
+        "points": {
+          "mean": 0.4833333333333334,
+          "by_model": [
+            0.4,
+            0.65,
+            0.4
+          ]
+        },
+        "conceded": {
+          "mean": 2.9333333333333336,
+          "by_model": [
+            3.0,
+            2.8,
+            3.0
+          ]
+        },
+        "hits": {
+          "mean": 0.6666666666666666,
+          "by_model": [
+            0.55,
+            0.9,
+            0.55
+          ]
+        },
+        "incoming": {
+          "mean": 3.6,
+          "by_model": [
+            3.55,
+            3.7,
+            3.55
+          ]
+        },
+        "interception": {
+          "mean": 0.1843674660576069,
+          "by_model": [
+            0.15492957746478872,
+            0.24324324324324326,
+            0.15492957746478872
+          ]
+        }
+      }
+    },
+    "agar": {
+      "before_adaptation/shared": {
+        "foods": {
+          "mean": 1.95,
+          "by_model": [
+            2.3,
+            1.8,
+            1.75
+          ]
+        },
+        "prey_eaten": {
+          "mean": 0.15,
+          "by_model": [
+            0.2,
+            0.05,
+            0.2
+          ]
+        },
+        "eaten": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "survival": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "mass": {
+          "mean": 11.387391525347894,
+          "by_model": [
+            11.608984506177418,
+            11.04131966599094,
+            11.511870403875324
+          ]
+        },
+        "large_encounters": {
+          "mean": 1.1833333333333333,
+          "by_model": [
+            1.3,
+            1.2,
+            1.05
+          ]
+        },
+        "escape_events": {
+          "mean": 0.18333333333333335,
+          "by_model": [
+            0.3,
+            0.2,
+            0.05
+          ]
+        }
+      },
+      "after_adaptation/shared": {
+        "foods": {
+          "mean": 1.4666666666666668,
+          "by_model": [
+            1.0,
+            1.7,
+            1.7
+          ]
+        },
+        "prey_eaten": {
+          "mean": 0.26666666666666666,
+          "by_model": [
+            0.3,
+            0.3,
+            0.2
+          ]
+        },
+        "eaten": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "survival": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "mass": {
+          "mean": 11.607925751983695,
+          "by_model": [
+            11.579542946209827,
+            11.77489703403979,
+            11.469337275701474
+          ]
+        },
+        "large_encounters": {
+          "mean": 1.0333333333333334,
+          "by_model": [
+            1.0,
+            1.0,
+            1.1
+          ]
+        },
+        "escape_events": {
+          "mean": 0.03333333333333333,
+          "by_model": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      },
+      "baseline/random": {
+        "foods": {
+          "mean": 1.1,
+          "by_model": [
+            1.1,
+            1.1,
+            1.1
+          ]
+        },
+        "prey_eaten": {
+          "mean": 0.05000000000000001,
+          "by_model": [
+            0.05,
+            0.05,
+            0.05
+          ]
+        },
+        "eaten": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "survival": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "mass": {
+          "mean": 10.821586951966216,
+          "by_model": [
+            10.821586951966214,
+            10.821586951966214,
+            10.821586951966214
+          ]
+        },
+        "large_encounters": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "escape_events": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "baseline/untrained": {
+        "foods": {
+          "mean": 1.1666666666666667,
+          "by_model": [
+            1.55,
+            1.25,
+            0.7
+          ]
+        },
+        "prey_eaten": {
+          "mean": 0.20000000000000004,
+          "by_model": [
+            0.2,
+            0.35,
+            0.05
+          ]
+        },
+        "eaten": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "survival": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "mass": {
+          "mean": 11.309575217965465,
+          "by_model": [
+            11.419660005642346,
+            11.797745982263109,
+            10.711319665990938
+          ]
+        },
+        "large_encounters": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "escape_events": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "flappy": {
+      "before_adaptation/shared": {
+        "pipes_passed": {
+          "mean": 0.7333333333333334,
+          "by_model": [
+            0.9,
+            0.25,
+            1.05
+          ]
+        },
+        "narrow_pipes_passed": {
+          "mean": 0.18333333333333335,
+          "by_model": [
+            0.4,
+            0.0,
+            0.15
+          ]
+        },
+        "wide_pipes_passed": {
+          "mean": 0.5499999999999999,
+          "by_model": [
+            0.5,
+            0.25,
+            0.9
+          ]
+        },
+        "collision": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "flaps": {
+          "mean": 8.9,
+          "by_model": [
+            11.1,
+            5.55,
+            10.05
+          ]
+        }
+      },
+      "after_adaptation/shared": {
+        "pipes_passed": {
+          "mean": 0.7333333333333334,
+          "by_model": [
+            0.3,
+            0.4,
+            1.5
+          ]
+        },
+        "narrow_pipes_passed": {
+          "mean": 0.15,
+          "by_model": [
+            0.05,
+            0.05,
+            0.35
+          ]
+        },
+        "wide_pipes_passed": {
+          "mean": 0.5833333333333334,
+          "by_model": [
+            0.25,
+            0.35,
+            1.15
+          ]
+        },
+        "collision": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "flaps": {
+          "mean": 8.766666666666666,
+          "by_model": [
+            5.65,
+            10.5,
+            10.15
+          ]
+        }
+      },
+      "baseline/random": {
+        "pipes_passed": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "narrow_pipes_passed": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "wide_pipes_passed": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "collision": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "flaps": {
+          "mean": 11.6,
+          "by_model": [
+            11.6,
+            11.6,
+            11.6
+          ]
+        }
+      },
+      "baseline/untrained": {
+        "pipes_passed": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "narrow_pipes_passed": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "wide_pipes_passed": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "collision": {
+          "mean": 1.0,
+          "by_model": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "flaps": {
+          "mean": 6.033333333333334,
+          "by_model": [
+            7.35,
+            0.0,
+            10.75
+          ]
+        }
+      }
+    },
+    "racing": {
+      "before_adaptation/shared": {
+        "progress_normalized": {
+          "mean": 0.1384825456303516,
+          "by_model": [
+            0.10169357856258096,
+            0.06958262327922915,
+            0.24417143504924468
+          ]
+        },
+        "lap_completed": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "collision": {
+          "mean": 0.8000000000000002,
+          "by_model": [
+            0.95,
+            0.65,
+            0.8
+          ]
+        },
+        "collision_rate": {
+          "mean": 0.06017184832174476,
+          "by_model": [
+            0.0689042163893583,
+            0.0832184566526677,
+            0.028392871923208305
+          ]
+        },
+        "distance": {
+          "mean": 16.59136941119597,
+          "by_model": [
+            13.787254971913734,
+            7.810767300250855,
+            28.176085961423325
+          ]
+        },
+        "accelerations": {
+          "mean": 10.316666666666668,
+          "by_model": [
+            8.55,
+            4.8,
+            17.6
+          ]
+        },
+        "brakes": {
+          "mean": 80.2,
+          "by_model": [
+            20.5,
+            140.95,
+            79.15
+          ]
+        },
+        "turns": {
+          "mean": 15.283333333333333,
+          "by_model": [
+            13.15,
+            6.45,
+            26.25
+          ]
+        }
+      },
+      "after_adaptation/shared": {
+        "progress_normalized": {
+          "mean": 0.3237936496841475,
+          "by_model": [
+            0.645163621292505,
+            0.06808347230652886,
+            0.2581338554534085
+          ]
+        },
+        "lap_completed": {
+          "mean": 0.08333333333333333,
+          "by_model": [
+            0.25,
+            0.0,
+            0.0
+          ]
+        },
+        "collision": {
+          "mean": 0.45,
+          "by_model": [
+            0.75,
+            0.2,
+            0.4
+          ]
+        },
+        "collision_rate": {
+          "mean": 0.015958689349681126,
+          "by_model": [
+            0.010843972837038363,
+            0.023239409361445338,
+            0.013792685850559686
+          ]
+        },
+        "distance": {
+          "mean": 35.58993085744251,
+          "by_model": [
+            69.16284384615217,
+            8.606070700394138,
+            29.000878025781226
+          ]
+        },
+        "accelerations": {
+          "mean": 18.066666666666666,
+          "by_model": [
+            26.9,
+            8.05,
+            19.25
+          ]
+        },
+        "brakes": {
+          "mean": 133.06666666666666,
+          "by_model": [
+            2.45,
+            249.75,
+            147.0
+          ]
+        },
+        "turns": {
+          "mean": 23.983333333333334,
+          "by_model": [
+            40.35,
+            12.35,
+            19.25
+          ]
+        }
+      },
+      "baseline/random": {
+        "progress_normalized": {
+          "mean": 0.1579870128915815,
+          "by_model": [
+            0.1579870128915815,
+            0.1579870128915815,
+            0.1579870128915815
+          ]
+        },
+        "lap_completed": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "collision": {
+          "mean": 0.9499999999999998,
+          "by_model": [
+            0.95,
+            0.95,
+            0.95
+          ]
+        },
+        "collision_rate": {
+          "mean": 0.03593483046592931,
+          "by_model": [
+            0.03593483046592931,
+            0.03593483046592931,
+            0.03593483046592931
+          ]
+        },
+        "distance": {
+          "mean": 26.436746401258755,
+          "by_model": [
+            26.436746401258752,
+            26.436746401258752,
+            26.436746401258752
+          ]
+        },
+        "accelerations": {
+          "mean": 50.15,
+          "by_model": [
+            50.15,
+            50.15,
+            50.15
+          ]
+        },
+        "brakes": {
+          "mean": 51.6,
+          "by_model": [
+            51.6,
+            51.6,
+            51.6
+          ]
+        },
+        "turns": {
+          "mean": 69.7,
+          "by_model": [
+            69.7,
+            69.7,
+            69.7
+          ]
+        }
+      },
+      "baseline/untrained": {
+        "progress_normalized": {
+          "mean": 0.17911616605325822,
+          "by_model": [
+            0.2524237088137291,
+            0.10303840913478657,
+            0.181886380211259
+          ]
+        },
+        "lap_completed": {
+          "mean": 0.0,
+          "by_model": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "collision": {
+          "mean": 0.8333333333333334,
+          "by_model": [
+            1.0,
+            0.5,
+            1.0
+          ]
+        },
+        "collision_rate": {
+          "mean": 0.045347715603345974,
+          "by_model": [
+            0.03810638882980932,
+            0.04362118599140935,
+            0.054315571988819256
+          ]
+        },
+        "distance": {
+          "mean": 18.705188432235555,
+          "by_model": [
+            26.242318695329487,
+            11.462320169343144,
+            18.41092643203404
+          ]
+        },
+        "accelerations": {
+          "mean": 16.933333333333334,
+          "by_model": [
+            21.95,
+            11.0,
+            17.85
+          ]
+        },
+        "brakes": {
+          "mean": 65.88333333333334,
+          "by_model": [
+            0.0,
+            197.65,
+            0.0
+          ]
+        },
+        "turns": {
+          "mean": 10.916666666666666,
+          "by_model": [
+            20.5,
+            7.75,
+            4.5
+          ]
+        }
+      },
+      "from_scratch/scratch": {
+        "progress_normalized": {
+          "mean": 0.883698410862929,
+          "by_model": [
+            0.9402254195648446,
+            0.9453446182265728,
+            0.7655251947973698
+          ]
+        },
+        "lap_completed": {
+          "mean": 0.75,
+          "by_model": [
+            0.75,
+            0.9,
+            0.6
+          ]
+        },
+        "collision": {
+          "mean": 0.25,
+          "by_model": [
+            0.25,
+            0.1,
+            0.4
+          ]
+        },
+        "collision_rate": {
+          "mean": 0.002861542928587569,
+          "by_model": [
+            0.002588112351723979,
+            0.0009978240795209606,
+            0.0049986923545177675
+          ]
+        },
+        "distance": {
+          "mean": 92.27816392225657,
+          "by_model": [
+            96.59549742246368,
+            100.21806654336145,
+            80.02092780094459
+          ]
+        },
+        "accelerations": {
+          "mean": 45.26666666666667,
+          "by_model": [
+            47.25,
+            43.65,
+            44.9
+          ]
+        },
+        "brakes": {
+          "mean": 10.950000000000001,
+          "by_model": [
+            8.5,
+            11.45,
+            12.9
+          ]
+        },
+        "turns": {
+          "mean": 70.8,
+          "by_model": [
+            71.8,
+            78.15,
+            62.45
+          ]
+        }
+      }
+    }
+  },
+  "analyzer_status_crosscheck": {
+    "1": {
+      "independent": "PASS",
+      "frozen_analyzer": "PASS",
+      "agrees": true
+    },
+    "2": {
+      "independent": "FAIL",
+      "frozen_analyzer": "FAIL",
+      "agrees": true
+    },
+    "3": {
+      "independent": "FAIL",
+      "frozen_analyzer": "FAIL",
+      "agrees": true
+    },
+    "4": {
+      "independent": "FAIL",
+      "frozen_analyzer": "FAIL",
+      "agrees": true
+    },
+    "5": {
+      "independent": "FAIL",
+      "frozen_analyzer": "FAIL",
+      "agrees": true
+    },
+    "10": {
+      "independent": "FAIL",
+      "frozen_analyzer": "FAIL",
+      "agrees": true
+    }
+  },
+  "limitations": [
+    "Only three independently fitted model replicas; hierarchical intervals are descriptive preregistered evidence and do not support a universal-game claim.",
+    "Numerical success in a submetric is retained even if another conjunctive requirement fails; FAIL does not mean absence of all learned ability.",
+    "CSV-only audit cannot authenticate checkpoint internals, replay held-out exclusions, scenario/trajectory behavior or demonstration/recovery/delivery receipts. Those remain separate evidence requirements.",
+    "No seeds, thresholds, bootstrap resampling hierarchy, negative outcomes, or evaluation cells were added, removed or selected.",
+    "The audit does not grant coordinated final acceptance or claim completion of criterion13."
+  ],
+  "frozen_analyzer_numeric_crosscheck_after_independent_calculation": {
+    "comparisons": [
+      {
+        "comparison": "1:foods_vs_random",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "1:foods_vs_untrained",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "2:net_points_vs_random",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "2:net_points_vs_untrained",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "2:interception_vs_random",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "2:interception_vs_untrained",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "3:foods_vs_random",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "3:foods_vs_untrained",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "3:prey_eaten_vs_random",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "3:prey_eaten_vs_untrained",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "3:survival_vs_random",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "3:survival_vs_untrained",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "4:pipes_passed_vs_random",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "4:pipes_passed_vs_untrained",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "5:progress_normalized_vs_random",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "5:progress_normalized_vs_untrained",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "5:lap_completed_vs_random",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "5:lap_completed_vs_untrained",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "4:gap:narrow",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "4:gap:wide",
+        "maximum_absolute_difference": 0.0
+      },
+      {
+        "comparison": "10:target_final_transfer",
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "tolerance": 1e-12,
+    "all_agree": true,
+    "maximum_absolute_difference": 0.0
+  }
+}

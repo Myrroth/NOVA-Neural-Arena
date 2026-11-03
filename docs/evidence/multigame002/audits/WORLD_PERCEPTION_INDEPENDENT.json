@@ -1,0 +1,5779 @@
+{
+  "audit": "WORLD_PERCEPTION_INDEPENDENT",
+  "created_utc": "2026-11-03T05:02:11.469271+00:00",
+  "mission": "NNA-MULTIJOGOS-002",
+  "scope": "Independent read-only recomputation of gates 7 and 8 from authenticated real campaign CSV; engineering receipts separately unassessed.",
+  "campaign": {
+    "run_id": 41551291622,
+    "attempt": 1,
+    "source_A": "dc71247b2269d41c8d2aeb8c7d489977fac3ad3a",
+    "workflow_B": "1c824f17922aa5dfb415e315e7873a1ebfb6db57",
+    "protocol_sha256": "93591ede5951438f92432fc6601773aaafe28b2ba5840309aa7bd3611170a324",
+    "artifact_sha256": "f396acfcbc8de35e67cbe79be4b6b986d7b536019bca2a62a3effa60ccefa129",
+    "artifact_bytes": 50240431,
+    "archive_rehashed_in_this_audit": true,
+    "no_new_experiments": true,
+    "new_game_steps": 0,
+    "new_updates": 0,
+    "new_model_inference": false
+  },
+  "inputs": {
+    "episodes": {
+      "path": "experiments/multigame-002/authenticated-csv-analysis/episodes.csv",
+      "sha256": "034ad7329d3faa93452b022a2c38ccc801bd39ee2068adf0f911e83e0d0e1f08",
+      "bytes": 502563,
+      "rows": 1735,
+      "archive_entry": "NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/evaluation/episodes.csv",
+      "matches_archive_and_authenticated_manifest": true
+    },
+    "action_pairs": {
+      "path": "experiments/multigame-002/authenticated-csv-analysis/action_pairs.csv",
+      "sha256": "a98841203bec14abff2633d93a8b6264f4213118e852d030bc1fc4bb01c1f1be",
+      "bytes": 20413795,
+      "rows": 39688,
+      "archive_entry": "NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/evaluation/action_pairs.csv",
+      "matches_archive_and_authenticated_manifest": true
+    },
+    "model_predictions": {
+      "path": "experiments/multigame-002/authenticated-csv-analysis/model_predictions.csv",
+      "sha256": "b45a32ba039da29d83275c06be47b1975410bb5f39b8bd72dcebf9175ca75945",
+      "bytes": 12921710,
+      "rows": 39688,
+      "archive_entry": "NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/evaluation/model_predictions.csv",
+      "matches_archive_and_authenticated_manifest": true
+    },
+    "training_curve": {
+      "path": "experiments/multigame-002/authenticated-csv-analysis/training_curve.csv",
+      "sha256": "2bc186e834cfa880159597179df792a5f4a80cf2e24c64a3ac20e9563d68e115",
+      "bytes": 5501973,
+      "rows": 28906,
+      "archive_entry": "NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/training_curve.csv",
+      "matches_archive_and_authenticated_manifest": true
+    },
+    "data_provenance": {
+      "path": "experiments/multigame-002/authenticated-csv-analysis/DATA_PROVENANCE.json",
+      "sha256": "d1a4253d050947e9a15d84bb3c22accd21b7de0827b4b09119eaaa64852971c0",
+      "bytes": 1783
+    },
+    "root_manifest": {
+      "path": "experiments/multigame-002/authenticated-csv-analysis/ROOT_SHA256SUMS",
+      "sha256": "2797b5280d367be9e067d8528f2b0c8973081342eb248aacca19054475b18840",
+      "bytes": 528030
+    },
+    "protocol_snapshot": {
+      "path": "experiments/multigame-002/PROTOCOL_FIXED_FOR_REVIEW.json",
+      "sha256": "f95e0ae4c7f0f0974173b1510a021579958e3d872fb5f107ecc20df758162be4",
+      "bytes": 310532
+    }
+  },
+  "frozen_definition_sources": {
+    "arena/universal/protocol.py": {
+      "sha256": "f7694f74db4563ee44f002d89eb77dc47e4e20732b0fd178603d5582ccdb4eb4",
+      "verified_identical_to_frozen_source_A": true,
+      "use": "definition/static reading only; never imported"
+    },
+    "arena/universal/analysis.py": {
+      "sha256": "fe1408401679be6816c4dd3d1310e5b08cb7d7bb6da2a32907c2c54ec1345f3d",
+      "verified_identical_to_frozen_source_A": true,
+      "use": "definition/static reading only; never imported"
+    },
+    "arena/universal/evaluation.py": {
+      "sha256": "f1fa411f7f7cfb30d2524b32f5eee85fa1e47b734445ea3ba32b4104fa377b7d",
+      "verified_identical_to_frozen_source_A": true,
+      "use": "definition/static reading only; never imported"
+    },
+    "arena/universal/trainer.py": {
+      "sha256": "0d312531ac051027970d2bf4d8dd3c001c53f0f9c38dcd92d1c811c38ad44d89",
+      "verified_identical_to_frozen_source_A": true,
+      "use": "definition/static reading only; never imported"
+    },
+    "arena/universal/network.py": {
+      "sha256": "52cd61f21c6fec0c20e81bff9ab7a15c123ee82889c80d2fc404496a8b734a45",
+      "verified_identical_to_frozen_source_A": true,
+      "use": "definition/static reading only; never imported"
+    },
+    "arena/universal/envs.py": {
+      "sha256": "e83f727f24b9814fe4fcb3578a82fc923b52fb24dfcaa4818535de8ed09064a9",
+      "verified_identical_to_frozen_source_A": true,
+      "use": "definition/static reading only; never imported"
+    }
+  },
+  "method": {
+    "implementation": "Independent inline Python standard library plus NumPy. No arena imports; no call to arena.universal.analysis.analyze or its helpers; no Torch, environments, checkpoints, gradients, new seeds or rollouts. Frozen sources read as definitions only.",
+    "bootstrap": "10000 hierarchical paired percentile replicates: resample 3 model replicas, then paired environment seeds within each selected replica; seed 510002 XOR first 8 SHA256 bytes of frozen comparison label, big endian. Same preregistered algorithm and thresholds.",
+    "action_fraction": "For each game, arithmetic mean of the three within-model changed/step fractions. Pixel gate uses environment seeds 920001..920005 only; GRU/world use 920001..920020.",
+    "performance_endpoints": {
+      "snake": "foods",
+      "pong": "net_points",
+      "agar": "foods",
+      "flappy": "pipes_passed",
+      "racing": "progress_normalized"
+    },
+    "performance_pass_rule": "mean(shared minus ablation) >= 0 AND percentile CI95 lower bound > 0 AND at least 2/3 model gains strictly > 0; require 2/5 games.",
+    "world_pass_rule": "Mean logged hidden-state MSE_model / mean logged MSE_copy <= 0.95 separately in EVERY one of 5 games x 3 replicas.",
+    "reward_terminal_metrics": "Recomputed MAE from scalar reward_prediction/reward_target_clipped and Brier from terminal_probability/terminated. Compare against TRAIN reward mean/terminal rate, never fit evaluation baseline. Reward MAE/terminal Brier descriptive: frozen analyzer applies its prediction gate to latent ratio only.",
+    "bootstrap_repetitions": 10000,
+    "bootstrap_seed": 510002
+  },
+  "coverage": {
+    "status": "PASS",
+    "complete_evaluation_episodes": 1735,
+    "total_evaluation_steps": 174664,
+    "shared_after_episodes": 300,
+    "shared_after_transitions": 39688,
+    "action_pairs": {
+      "status": "PASS",
+      "observed_rows": 39688,
+      "unique_transition_keys": 39688,
+      "duplicates": 0,
+      "missing": 0,
+      "unexpected": 0
+    },
+    "model_predictions": {
+      "status": "PASS",
+      "observed_rows": 39688,
+      "unique_transition_keys": 39688,
+      "duplicates": 0,
+      "missing": 0,
+      "unexpected": 0
+    },
+    "per_shared_after_stage_game_model_env_cell": [
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920001,
+        "expected_steps": 15,
+        "action_pairs": 15,
+        "model_predictions": 15,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920002,
+        "expected_steps": 70,
+        "action_pairs": 70,
+        "model_predictions": 70,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920003,
+        "expected_steps": 18,
+        "action_pairs": 18,
+        "model_predictions": 18,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920004,
+        "expected_steps": 33,
+        "action_pairs": 33,
+        "model_predictions": 33,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920005,
+        "expected_steps": 60,
+        "action_pairs": 60,
+        "model_predictions": 60,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920006,
+        "expected_steps": 64,
+        "action_pairs": 64,
+        "model_predictions": 64,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920007,
+        "expected_steps": 24,
+        "action_pairs": 24,
+        "model_predictions": 24,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920008,
+        "expected_steps": 59,
+        "action_pairs": 59,
+        "model_predictions": 59,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920009,
+        "expected_steps": 10,
+        "action_pairs": 10,
+        "model_predictions": 10,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920010,
+        "expected_steps": 46,
+        "action_pairs": 46,
+        "model_predictions": 46,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920011,
+        "expected_steps": 65,
+        "action_pairs": 65,
+        "model_predictions": 65,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920012,
+        "expected_steps": 33,
+        "action_pairs": 33,
+        "model_predictions": 33,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920013,
+        "expected_steps": 16,
+        "action_pairs": 16,
+        "model_predictions": 16,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920014,
+        "expected_steps": 60,
+        "action_pairs": 60,
+        "model_predictions": 60,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920015,
+        "expected_steps": 64,
+        "action_pairs": 64,
+        "model_predictions": 64,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920016,
+        "expected_steps": 57,
+        "action_pairs": 57,
+        "model_predictions": 57,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920017,
+        "expected_steps": 45,
+        "action_pairs": 45,
+        "model_predictions": 45,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920018,
+        "expected_steps": 55,
+        "action_pairs": 55,
+        "model_predictions": 55,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920019,
+        "expected_steps": 24,
+        "action_pairs": 24,
+        "model_predictions": 24,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 1103,
+        "environment_seed": 920020,
+        "expected_steps": 21,
+        "action_pairs": 21,
+        "model_predictions": 21,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920001,
+        "expected_steps": 10,
+        "action_pairs": 10,
+        "model_predictions": 10,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920002,
+        "expected_steps": 52,
+        "action_pairs": 52,
+        "model_predictions": 52,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920003,
+        "expected_steps": 25,
+        "action_pairs": 25,
+        "model_predictions": 25,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920004,
+        "expected_steps": 30,
+        "action_pairs": 30,
+        "model_predictions": 30,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920005,
+        "expected_steps": 53,
+        "action_pairs": 53,
+        "model_predictions": 53,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920006,
+        "expected_steps": 63,
+        "action_pairs": 63,
+        "model_predictions": 63,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920007,
+        "expected_steps": 13,
+        "action_pairs": 13,
+        "model_predictions": 13,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920008,
+        "expected_steps": 56,
+        "action_pairs": 56,
+        "model_predictions": 56,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920009,
+        "expected_steps": 35,
+        "action_pairs": 35,
+        "model_predictions": 35,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920010,
+        "expected_steps": 65,
+        "action_pairs": 65,
+        "model_predictions": 65,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920011,
+        "expected_steps": 43,
+        "action_pairs": 43,
+        "model_predictions": 43,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920012,
+        "expected_steps": 88,
+        "action_pairs": 88,
+        "model_predictions": 88,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920013,
+        "expected_steps": 77,
+        "action_pairs": 77,
+        "model_predictions": 77,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920014,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920015,
+        "expected_steps": 57,
+        "action_pairs": 57,
+        "model_predictions": 57,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920016,
+        "expected_steps": 51,
+        "action_pairs": 51,
+        "model_predictions": 51,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920017,
+        "expected_steps": 17,
+        "action_pairs": 17,
+        "model_predictions": 17,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920018,
+        "expected_steps": 19,
+        "action_pairs": 19,
+        "model_predictions": 19,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920019,
+        "expected_steps": 11,
+        "action_pairs": 11,
+        "model_predictions": 11,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 2207,
+        "environment_seed": 920020,
+        "expected_steps": 66,
+        "action_pairs": 66,
+        "model_predictions": 66,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920001,
+        "expected_steps": 8,
+        "action_pairs": 8,
+        "model_predictions": 8,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920002,
+        "expected_steps": 59,
+        "action_pairs": 59,
+        "model_predictions": 59,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920003,
+        "expected_steps": 51,
+        "action_pairs": 51,
+        "model_predictions": 51,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920004,
+        "expected_steps": 33,
+        "action_pairs": 33,
+        "model_predictions": 33,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920005,
+        "expected_steps": 56,
+        "action_pairs": 56,
+        "model_predictions": 56,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920006,
+        "expected_steps": 53,
+        "action_pairs": 53,
+        "model_predictions": 53,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920007,
+        "expected_steps": 34,
+        "action_pairs": 34,
+        "model_predictions": 34,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920008,
+        "expected_steps": 40,
+        "action_pairs": 40,
+        "model_predictions": 40,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920009,
+        "expected_steps": 15,
+        "action_pairs": 15,
+        "model_predictions": 15,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920010,
+        "expected_steps": 56,
+        "action_pairs": 56,
+        "model_predictions": 56,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920011,
+        "expected_steps": 51,
+        "action_pairs": 51,
+        "model_predictions": 51,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920012,
+        "expected_steps": 44,
+        "action_pairs": 44,
+        "model_predictions": 44,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920013,
+        "expected_steps": 35,
+        "action_pairs": 35,
+        "model_predictions": 35,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920014,
+        "expected_steps": 48,
+        "action_pairs": 48,
+        "model_predictions": 48,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920015,
+        "expected_steps": 52,
+        "action_pairs": 52,
+        "model_predictions": 52,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920016,
+        "expected_steps": 42,
+        "action_pairs": 42,
+        "model_predictions": 42,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920017,
+        "expected_steps": 27,
+        "action_pairs": 27,
+        "model_predictions": 27,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920018,
+        "expected_steps": 29,
+        "action_pairs": 29,
+        "model_predictions": 29,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920019,
+        "expected_steps": 25,
+        "action_pairs": 25,
+        "model_predictions": 25,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "agar",
+        "model_seed": 3301,
+        "environment_seed": 920020,
+        "expected_steps": 14,
+        "action_pairs": 14,
+        "model_predictions": 14,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920001,
+        "expected_steps": 58,
+        "action_pairs": 58,
+        "model_predictions": 58,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920002,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920003,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920004,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920005,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920006,
+        "expected_steps": 58,
+        "action_pairs": 58,
+        "model_predictions": 58,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920007,
+        "expected_steps": 58,
+        "action_pairs": 58,
+        "model_predictions": 58,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920008,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920009,
+        "expected_steps": 58,
+        "action_pairs": 58,
+        "model_predictions": 58,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920010,
+        "expected_steps": 28,
+        "action_pairs": 28,
+        "model_predictions": 28,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920011,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920012,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920013,
+        "expected_steps": 28,
+        "action_pairs": 28,
+        "model_predictions": 28,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920014,
+        "expected_steps": 24,
+        "action_pairs": 24,
+        "model_predictions": 24,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920015,
+        "expected_steps": 30,
+        "action_pairs": 30,
+        "model_predictions": 30,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920016,
+        "expected_steps": 33,
+        "action_pairs": 33,
+        "model_predictions": 33,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920017,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920018,
+        "expected_steps": 58,
+        "action_pairs": 58,
+        "model_predictions": 58,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920019,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 1103,
+        "environment_seed": 920020,
+        "expected_steps": 58,
+        "action_pairs": 58,
+        "model_predictions": 58,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920001,
+        "expected_steps": 29,
+        "action_pairs": 29,
+        "model_predictions": 29,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920002,
+        "expected_steps": 33,
+        "action_pairs": 33,
+        "model_predictions": 33,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920003,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920004,
+        "expected_steps": 91,
+        "action_pairs": 91,
+        "model_predictions": 91,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920005,
+        "expected_steps": 92,
+        "action_pairs": 92,
+        "model_predictions": 92,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920006,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920007,
+        "expected_steps": 24,
+        "action_pairs": 24,
+        "model_predictions": 24,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920008,
+        "expected_steps": 58,
+        "action_pairs": 58,
+        "model_predictions": 58,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920009,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920010,
+        "expected_steps": 15,
+        "action_pairs": 15,
+        "model_predictions": 15,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920011,
+        "expected_steps": 27,
+        "action_pairs": 27,
+        "model_predictions": 27,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920012,
+        "expected_steps": 17,
+        "action_pairs": 17,
+        "model_predictions": 17,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920013,
+        "expected_steps": 20,
+        "action_pairs": 20,
+        "model_predictions": 20,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920014,
+        "expected_steps": 27,
+        "action_pairs": 27,
+        "model_predictions": 27,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920015,
+        "expected_steps": 18,
+        "action_pairs": 18,
+        "model_predictions": 18,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920016,
+        "expected_steps": 30,
+        "action_pairs": 30,
+        "model_predictions": 30,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920017,
+        "expected_steps": 17,
+        "action_pairs": 17,
+        "model_predictions": 17,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920018,
+        "expected_steps": 61,
+        "action_pairs": 61,
+        "model_predictions": 61,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920019,
+        "expected_steps": 32,
+        "action_pairs": 32,
+        "model_predictions": 32,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 2207,
+        "environment_seed": 920020,
+        "expected_steps": 92,
+        "action_pairs": 92,
+        "model_predictions": 92,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920001,
+        "expected_steps": 98,
+        "action_pairs": 98,
+        "model_predictions": 98,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920002,
+        "expected_steps": 134,
+        "action_pairs": 134,
+        "model_predictions": 134,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920003,
+        "expected_steps": 35,
+        "action_pairs": 35,
+        "model_predictions": 35,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920004,
+        "expected_steps": 163,
+        "action_pairs": 163,
+        "model_predictions": 163,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920005,
+        "expected_steps": 124,
+        "action_pairs": 124,
+        "model_predictions": 124,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920006,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920007,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920008,
+        "expected_steps": 92,
+        "action_pairs": 92,
+        "model_predictions": 92,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920009,
+        "expected_steps": 62,
+        "action_pairs": 62,
+        "model_predictions": 62,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920010,
+        "expected_steps": 31,
+        "action_pairs": 31,
+        "model_predictions": 31,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920011,
+        "expected_steps": 55,
+        "action_pairs": 55,
+        "model_predictions": 55,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920012,
+        "expected_steps": 124,
+        "action_pairs": 124,
+        "model_predictions": 124,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920013,
+        "expected_steps": 62,
+        "action_pairs": 62,
+        "model_predictions": 62,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920014,
+        "expected_steps": 99,
+        "action_pairs": 99,
+        "model_predictions": 99,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920015,
+        "expected_steps": 59,
+        "action_pairs": 59,
+        "model_predictions": 59,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920016,
+        "expected_steps": 35,
+        "action_pairs": 35,
+        "model_predictions": 35,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920017,
+        "expected_steps": 27,
+        "action_pairs": 27,
+        "model_predictions": 27,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920018,
+        "expected_steps": 125,
+        "action_pairs": 125,
+        "model_predictions": 125,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920019,
+        "expected_steps": 26,
+        "action_pairs": 26,
+        "model_predictions": 26,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "flappy",
+        "model_seed": 3301,
+        "environment_seed": 920020,
+        "expected_steps": 162,
+        "action_pairs": 162,
+        "model_predictions": 162,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920001,
+        "expected_steps": 330,
+        "action_pairs": 330,
+        "model_predictions": 330,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920002,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920003,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920004,
+        "expected_steps": 227,
+        "action_pairs": 227,
+        "model_predictions": 227,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920005,
+        "expected_steps": 261,
+        "action_pairs": 261,
+        "model_predictions": 261,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920006,
+        "expected_steps": 192,
+        "action_pairs": 192,
+        "model_predictions": 192,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920007,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920008,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920009,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920010,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920011,
+        "expected_steps": 192,
+        "action_pairs": 192,
+        "model_predictions": 192,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920012,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920013,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920014,
+        "expected_steps": 192,
+        "action_pairs": 192,
+        "model_predictions": 192,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920015,
+        "expected_steps": 156,
+        "action_pairs": 156,
+        "model_predictions": 156,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920016,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920017,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920018,
+        "expected_steps": 244,
+        "action_pairs": 244,
+        "model_predictions": 244,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920019,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 1103,
+        "environment_seed": 920020,
+        "expected_steps": 192,
+        "action_pairs": 192,
+        "model_predictions": 192,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920001,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920002,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920003,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920004,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920005,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920006,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920007,
+        "expected_steps": 192,
+        "action_pairs": 192,
+        "model_predictions": 192,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920008,
+        "expected_steps": 158,
+        "action_pairs": 158,
+        "model_predictions": 158,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920009,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920010,
+        "expected_steps": 244,
+        "action_pairs": 244,
+        "model_predictions": 244,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920011,
+        "expected_steps": 244,
+        "action_pairs": 244,
+        "model_predictions": 244,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920012,
+        "expected_steps": 227,
+        "action_pairs": 227,
+        "model_predictions": 227,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920013,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920014,
+        "expected_steps": 331,
+        "action_pairs": 331,
+        "model_predictions": 331,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920015,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920016,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920017,
+        "expected_steps": 244,
+        "action_pairs": 244,
+        "model_predictions": 244,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920018,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920019,
+        "expected_steps": 244,
+        "action_pairs": 244,
+        "model_predictions": 244,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 2207,
+        "environment_seed": 920020,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920001,
+        "expected_steps": 192,
+        "action_pairs": 192,
+        "model_predictions": 192,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920002,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920003,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920004,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920005,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920006,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920007,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920008,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920009,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920010,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920011,
+        "expected_steps": 106,
+        "action_pairs": 106,
+        "model_predictions": 106,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920012,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920013,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920014,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920015,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920016,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920017,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920018,
+        "expected_steps": 192,
+        "action_pairs": 192,
+        "model_predictions": 192,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920019,
+        "expected_steps": 175,
+        "action_pairs": 175,
+        "model_predictions": 175,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "pong",
+        "model_seed": 3301,
+        "environment_seed": 920020,
+        "expected_steps": 123,
+        "action_pairs": 123,
+        "model_predictions": 123,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920001,
+        "expected_steps": 33,
+        "action_pairs": 33,
+        "model_predictions": 33,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920002,
+        "expected_steps": 42,
+        "action_pairs": 42,
+        "model_predictions": 42,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920003,
+        "expected_steps": 80,
+        "action_pairs": 80,
+        "model_predictions": 80,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920004,
+        "expected_steps": 33,
+        "action_pairs": 33,
+        "model_predictions": 33,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920005,
+        "expected_steps": 38,
+        "action_pairs": 38,
+        "model_predictions": 38,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920006,
+        "expected_steps": 108,
+        "action_pairs": 108,
+        "model_predictions": 108,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920007,
+        "expected_steps": 86,
+        "action_pairs": 86,
+        "model_predictions": 86,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920008,
+        "expected_steps": 27,
+        "action_pairs": 27,
+        "model_predictions": 27,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920009,
+        "expected_steps": 41,
+        "action_pairs": 41,
+        "model_predictions": 41,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920010,
+        "expected_steps": 82,
+        "action_pairs": 82,
+        "model_predictions": 82,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920011,
+        "expected_steps": 47,
+        "action_pairs": 47,
+        "model_predictions": 47,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920012,
+        "expected_steps": 43,
+        "action_pairs": 43,
+        "model_predictions": 43,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920013,
+        "expected_steps": 84,
+        "action_pairs": 84,
+        "model_predictions": 84,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920014,
+        "expected_steps": 42,
+        "action_pairs": 42,
+        "model_predictions": 42,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920015,
+        "expected_steps": 57,
+        "action_pairs": 57,
+        "model_predictions": 57,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920016,
+        "expected_steps": 60,
+        "action_pairs": 60,
+        "model_predictions": 60,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920017,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920018,
+        "expected_steps": 28,
+        "action_pairs": 28,
+        "model_predictions": 28,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920019,
+        "expected_steps": 33,
+        "action_pairs": 33,
+        "model_predictions": 33,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 1103,
+        "environment_seed": 920020,
+        "expected_steps": 38,
+        "action_pairs": 38,
+        "model_predictions": 38,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920001,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920002,
+        "expected_steps": 29,
+        "action_pairs": 29,
+        "model_predictions": 29,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920003,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920004,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920005,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920006,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920007,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920008,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920009,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920010,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920011,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920012,
+        "expected_steps": 12,
+        "action_pairs": 12,
+        "model_predictions": 12,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920013,
+        "expected_steps": 22,
+        "action_pairs": 22,
+        "model_predictions": 22,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920014,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920015,
+        "expected_steps": 11,
+        "action_pairs": 11,
+        "model_predictions": 11,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920016,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920017,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920018,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920019,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 2207,
+        "environment_seed": 920020,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920001,
+        "expected_steps": 38,
+        "action_pairs": 38,
+        "model_predictions": 38,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920002,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920003,
+        "expected_steps": 39,
+        "action_pairs": 39,
+        "model_predictions": 39,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920004,
+        "expected_steps": 103,
+        "action_pairs": 103,
+        "model_predictions": 103,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920005,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920006,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920007,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920008,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920009,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920010,
+        "expected_steps": 42,
+        "action_pairs": 42,
+        "model_predictions": 42,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920011,
+        "expected_steps": 44,
+        "action_pairs": 44,
+        "model_predictions": 44,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920012,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920013,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920014,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920015,
+        "expected_steps": 30,
+        "action_pairs": 30,
+        "model_predictions": 30,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920016,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920017,
+        "expected_steps": 28,
+        "action_pairs": 28,
+        "model_predictions": 28,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920018,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920019,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "racing",
+        "model_seed": 3301,
+        "environment_seed": 920020,
+        "expected_steps": 42,
+        "action_pairs": 42,
+        "model_predictions": 42,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920001,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920002,
+        "expected_steps": 72,
+        "action_pairs": 72,
+        "model_predictions": 72,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920003,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920004,
+        "expected_steps": 64,
+        "action_pairs": 64,
+        "model_predictions": 64,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920005,
+        "expected_steps": 66,
+        "action_pairs": 66,
+        "model_predictions": 66,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920006,
+        "expected_steps": 8,
+        "action_pairs": 8,
+        "model_predictions": 8,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920007,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920008,
+        "expected_steps": 80,
+        "action_pairs": 80,
+        "model_predictions": 80,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920009,
+        "expected_steps": 92,
+        "action_pairs": 92,
+        "model_predictions": 92,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920010,
+        "expected_steps": 35,
+        "action_pairs": 35,
+        "model_predictions": 35,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920011,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920012,
+        "expected_steps": 22,
+        "action_pairs": 22,
+        "model_predictions": 22,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920013,
+        "expected_steps": 8,
+        "action_pairs": 8,
+        "model_predictions": 8,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920014,
+        "expected_steps": 16,
+        "action_pairs": 16,
+        "model_predictions": 16,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920015,
+        "expected_steps": 54,
+        "action_pairs": 54,
+        "model_predictions": 54,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920016,
+        "expected_steps": 95,
+        "action_pairs": 95,
+        "model_predictions": 95,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920017,
+        "expected_steps": 48,
+        "action_pairs": 48,
+        "model_predictions": 48,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920018,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920019,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 1103,
+        "environment_seed": 920020,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920001,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920002,
+        "expected_steps": 39,
+        "action_pairs": 39,
+        "model_predictions": 39,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920003,
+        "expected_steps": 111,
+        "action_pairs": 111,
+        "model_predictions": 111,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920004,
+        "expected_steps": 31,
+        "action_pairs": 31,
+        "model_predictions": 31,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920005,
+        "expected_steps": 87,
+        "action_pairs": 87,
+        "model_predictions": 87,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920006,
+        "expected_steps": 43,
+        "action_pairs": 43,
+        "model_predictions": 43,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920007,
+        "expected_steps": 28,
+        "action_pairs": 28,
+        "model_predictions": 28,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920008,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920009,
+        "expected_steps": 1,
+        "action_pairs": 1,
+        "model_predictions": 1,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920010,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920011,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920012,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920013,
+        "expected_steps": 223,
+        "action_pairs": 223,
+        "model_predictions": 223,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920014,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920015,
+        "expected_steps": 23,
+        "action_pairs": 23,
+        "model_predictions": 23,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920016,
+        "expected_steps": 39,
+        "action_pairs": 39,
+        "model_predictions": 39,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920017,
+        "expected_steps": 11,
+        "action_pairs": 11,
+        "model_predictions": 11,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920018,
+        "expected_steps": 6,
+        "action_pairs": 6,
+        "model_predictions": 6,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920019,
+        "expected_steps": 29,
+        "action_pairs": 29,
+        "model_predictions": 29,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 2207,
+        "environment_seed": 920020,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920001,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920002,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920003,
+        "expected_steps": 161,
+        "action_pairs": 161,
+        "model_predictions": 161,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920004,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920005,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920006,
+        "expected_steps": 171,
+        "action_pairs": 171,
+        "model_predictions": 171,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920007,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920008,
+        "expected_steps": 62,
+        "action_pairs": 62,
+        "model_predictions": 62,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920009,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920010,
+        "expected_steps": 41,
+        "action_pairs": 41,
+        "model_predictions": 41,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920011,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920012,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920013,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920014,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920015,
+        "expected_steps": 66,
+        "action_pairs": 66,
+        "model_predictions": 66,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920016,
+        "expected_steps": 49,
+        "action_pairs": 49,
+        "model_predictions": 49,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920017,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920018,
+        "expected_steps": 60,
+        "action_pairs": 60,
+        "model_predictions": 60,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920019,
+        "expected_steps": 400,
+        "action_pairs": 400,
+        "model_predictions": 400,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      },
+      {
+        "stage": "after_adaptation",
+        "policy": "shared",
+        "game": "snake",
+        "model_seed": 3301,
+        "environment_seed": 920020,
+        "expected_steps": 112,
+        "action_pairs": 112,
+        "model_predictions": 112,
+        "action_pairs_exact_steps": true,
+        "model_predictions_exact_steps": true
+      }
+    ],
+    "action_pairs_stage_policy_limitation": "CSV omits stage/policy columns. Origin is inferred by exact unique step-key join to explicit after_adaptation/shared prediction rows and frozen evaluation producer; no independent stage label exists in action_pairs itself."
+  },
+  "consistency": {
+    "status": "PASS",
+    "incorrect_prediction_stage_policy_or_domain_rows": 0,
+    "incorrect_transition_ids": 0,
+    "ending_flag_inconsistencies": 0,
+    "episode_clipped_return_sum_inconsistencies": 0,
+    "invalid_or_disagreeing_actions": 0,
+    "invalid_q_vectors": 0,
+    "nonfinite_loss_values": 0,
+    "negative_loss_values": 0,
+    "maximum_absolute_scalar_error_recomputation_differences": {
+      "reward_mae_model": 0.0,
+      "reward_mae_baseline": 0.0,
+      "terminal_brier_model": 1.1102230246251565e-16,
+      "terminal_brier_baseline": 0.0
+    },
+    "maximum_float32_mixed_q_recomputation_difference": 0.0,
+    "q_mix_definition": "0.8*q_direct + 0.2*model_values; default argmax(q_mixed); world_off argmax(q_direct); first index wins ties.",
+    "constant_mechanical_mask_per_game": {
+      "snake": true,
+      "pong": true,
+      "agar": true,
+      "flappy": true,
+      "racing": true
+    },
+    "legal_actions_by_game": {
+      "snake": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "pong": [
+        0,
+        1,
+        2
+      ],
+      "agar": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "flappy": [
+        0,
+        9
+      ],
+      "racing": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    "terminal_events": 246,
+    "truncations": 54,
+    "truncations_incorrectly_counted_as_terminal": 0
+  },
+  "ablations": {
+    "pixels_hidden": {
+      "status": "PASS",
+      "action_effect_status": "PASS",
+      "games_at_action_threshold": 5,
+      "minimum_action_changed_games": 4,
+      "performance_status": "PASS",
+      "games_with_preregistered_performance_improvement": 2,
+      "minimum_improved_games": 2,
+      "by_game": {
+        "snake": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.8390719979688551,
+            "minimum_fraction": 0.05,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 914,
+                "steps": 1002,
+                "fraction": 0.9121756487025948
+              },
+              {
+                "model_seed": 2207,
+                "changes": 510,
+                "steps": 668,
+                "fraction": 0.7634730538922155
+              },
+              {
+                "model_seed": 3301,
+                "changes": 1482,
+                "steps": 1761,
+                "fraction": 0.8415672913117547
+              }
+            ]
+          },
+          "performance": {
+            "status": "PASS",
+            "endpoint": "foods",
+            "shared_minus_ablation_gain": 3.4000000000000004,
+            "minimum_gain": 0.0,
+            "ci95": [
+              1.4666666666666668,
+              5.8
+            ],
+            "favorable_models": 3,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 2.6,
+                "ablation_mean": 0.0,
+                "gain": 2.6
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 4.2,
+                "ablation_mean": 0.0,
+                "gain": 4.2
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 3.4,
+                "ablation_mean": 0.0,
+                "gain": 3.4
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005
+            ],
+            "bootstrap_label": "snake:foods:('after_adaptation', 'shared'):('ablation', 'pixels_hidden'):(920001, 920002, 920003, 920004, 920005)",
+            "bootstrap_effective_numpy_seed": 12329757650808695759
+          }
+        },
+        "pong": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.5973103349150223,
+            "minimum_fraction": 0.05,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 840,
+                "steps": 1047,
+                "fraction": 0.8022922636103151
+              },
+              {
+                "model_seed": 2207,
+                "changes": 166,
+                "steps": 564,
+                "fraction": 0.29432624113475175
+              },
+              {
+                "model_seed": 3301,
+                "changes": 356,
+                "steps": 512,
+                "fraction": 0.6953125
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "net_points",
+            "shared_minus_ablation_gain": 0.4000000000000001,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.13333333333333333,
+              1.2666666666666666
+            ],
+            "favorable_models": 2,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": -1.6,
+                "ablation_mean": -2.6,
+                "gain": 1.0
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": -2.4,
+                "ablation_mean": -2.6,
+                "gain": 0.20000000000000018
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": -2.6,
+                "ablation_mean": -2.6,
+                "gain": 0.0
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005
+            ],
+            "bootstrap_label": "pong:net_points:('after_adaptation', 'shared'):('ablation', 'pixels_hidden'):(920001, 920002, 920003, 920004, 920005)",
+            "bootstrap_effective_numpy_seed": 1208290975736870860
+          }
+        },
+        "agar": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.5007514116757815,
+            "minimum_fraction": 0.05,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 106,
+                "steps": 196,
+                "fraction": 0.5408163265306123
+              },
+              {
+                "model_seed": 2207,
+                "changes": 69,
+                "steps": 170,
+                "fraction": 0.40588235294117647
+              },
+              {
+                "model_seed": 3301,
+                "changes": 115,
+                "steps": 207,
+                "fraction": 0.5555555555555556
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "foods",
+            "shared_minus_ablation_gain": 0.13333333333333333,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.7333333333333334,
+              1.1333333333333335
+            ],
+            "favorable_models": 1,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 0.6,
+                "ablation_mean": 1.2,
+                "gain": -0.6
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 1.2,
+                "ablation_mean": 1.2,
+                "gain": 0.0
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 2.0,
+                "ablation_mean": 1.0,
+                "gain": 1.0
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005
+            ],
+            "bootstrap_label": "agar:foods:('after_adaptation', 'shared'):('ablation', 'pixels_hidden'):(920001, 920002, 920003, 920004, 920005)",
+            "bootstrap_effective_numpy_seed": 3128458032885573438
+          }
+        },
+        "flappy": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.5703578602840448,
+            "minimum_fraction": 0.05,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 23,
+                "steps": 162,
+                "fraction": 0.1419753086419753
+              },
+              {
+                "model_seed": 2207,
+                "changes": 187,
+                "steps": 271,
+                "fraction": 0.6900369003690037
+              },
+              {
+                "model_seed": 3301,
+                "changes": 487,
+                "steps": 554,
+                "fraction": 0.8790613718411552
+              }
+            ]
+          },
+          "performance": {
+            "status": "PASS",
+            "endpoint": "pipes_passed",
+            "shared_minus_ablation_gain": 1.1333333333333333,
+            "minimum_gain": 0.0,
+            "ci95": [
+              0.13333333333333333,
+              2.4
+            ],
+            "favorable_models": 3,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 0.2,
+                "ablation_mean": 0.0,
+                "gain": 0.2
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 0.8,
+                "ablation_mean": 0.0,
+                "gain": 0.8
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 2.4,
+                "ablation_mean": 0.0,
+                "gain": 2.4
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005
+            ],
+            "bootstrap_label": "flappy:pipes_passed:('after_adaptation', 'shared'):('ablation', 'pixels_hidden'):(920001, 920002, 920003, 920004, 920005)",
+            "bootstrap_effective_numpy_seed": 7215556400688887740
+          }
+        },
+        "racing": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.9207194405003318,
+            "minimum_fraction": 0.05,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 186,
+                "steps": 226,
+                "fraction": 0.8230088495575221
+              },
+              {
+                "model_seed": 2207,
+                "changes": 1608,
+                "steps": 1629,
+                "fraction": 0.9871086556169429
+              },
+              {
+                "model_seed": 3301,
+                "changes": 933,
+                "steps": 980,
+                "fraction": 0.9520408163265306
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "progress_normalized",
+            "shared_minus_ablation_gain": 0.18685078764479232,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.2553609711008005,
+              0.5445088092673078
+            ],
+            "favorable_models": 2,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 0.5899139789753477,
+                "ablation_mean": 0.05939995508185436,
+                "gain": 0.5305140238934933
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 0.057196225093357735,
+                "ablation_mean": 0.3418133737447103,
+                "gain": -0.28461714865135257
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 0.3325135654994206,
+                "ablation_mean": 0.01785807780718447,
+                "gain": 0.31465548769223617
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005
+            ],
+            "bootstrap_label": "racing:progress_normalized:('after_adaptation', 'shared'):('ablation', 'pixels_hidden'):(920001, 920002, 920003, 920004, 920005)",
+            "bootstrap_effective_numpy_seed": 17901105451422905402
+          }
+        }
+      }
+    },
+    "gru_reset": {
+      "status": "PASS",
+      "action_effect_status": "PASS",
+      "games_at_action_threshold": 5,
+      "minimum_action_changed_games": 4,
+      "performance_status": "PASS",
+      "games_with_preregistered_performance_improvement": 2,
+      "minimum_improved_games": 2,
+      "by_game": {
+        "snake": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.3722199866380693,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 1430,
+                "steps": 3460,
+                "fraction": 0.41329479768786126
+              },
+              {
+                "model_seed": 2207,
+                "changes": 1342,
+                "steps": 3471,
+                "fraction": 0.38663209449726305
+              },
+              {
+                "model_seed": 3301,
+                "changes": 1749,
+                "steps": 5522,
+                "fraction": 0.31673306772908366
+              }
+            ]
+          },
+          "performance": {
+            "status": "PASS",
+            "endpoint": "foods",
+            "shared_minus_ablation_gain": 2.0166666666666666,
+            "minimum_gain": 0.0,
+            "ci95": [
+              0.9166666666666666,
+              3.266666666666667
+            ],
+            "favorable_models": 3,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 2.35,
+                "ablation_mean": 1.25,
+                "gain": 1.1
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 3.2,
+                "ablation_mean": 0.7,
+                "gain": 2.5
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 2.9,
+                "ablation_mean": 0.45,
+                "gain": 2.4499999999999997
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "snake:foods:('after_adaptation', 'shared'):('ablation', 'gru_reset'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 11022585873630905087
+          }
+        },
+        "pong": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.2721378497917732,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 1599,
+                "steps": 3375,
+                "fraction": 0.4737777777777778
+              },
+              {
+                "model_seed": 2207,
+                "changes": 675,
+                "steps": 3310,
+                "fraction": 0.2039274924471299
+              },
+              {
+                "model_seed": 3301,
+                "changes": 320,
+                "steps": 2307,
+                "fraction": 0.13870827915041178
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "net_points",
+            "shared_minus_ablation_gain": 0.18333333333333326,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.23333333333333336,
+              0.7833333333333333
+            ],
+            "favorable_models": 1,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": -1.85,
+                "ablation_mean": -2.6,
+                "gain": 0.75
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": -2.25,
+                "ablation_mean": -2.1,
+                "gain": -0.1499999999999999
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": -2.35,
+                "ablation_mean": -2.3,
+                "gain": -0.050000000000000266
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "pong:net_points:('after_adaptation', 'shared'):('ablation', 'gru_reset'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 10149976588938950116
+          }
+        },
+        "agar": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.4825931111432802,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 425,
+                "steps": 839,
+                "fraction": 0.5065554231227652
+              },
+              {
+                "model_seed": 2207,
+                "changes": 559,
+                "steps": 885,
+                "fraction": 0.631638418079096
+              },
+              {
+                "model_seed": 3301,
+                "changes": 239,
+                "steps": 772,
+                "fraction": 0.30958549222797926
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "foods",
+            "shared_minus_ablation_gain": 0.21666666666666665,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.15,
+              0.5833333333333334
+            ],
+            "favorable_models": 3,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 1.0,
+                "ablation_mean": 0.95,
+                "gain": 0.050000000000000044
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 1.7,
+                "ablation_mean": 1.5,
+                "gain": 0.19999999999999996
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 1.7,
+                "ablation_mean": 1.3,
+                "gain": 0.3999999999999999
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "agar:foods:('after_adaptation', 'shared'):('ablation', 'gru_reset'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 10508801756213796819
+          }
+        },
+        "flappy": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.22084862603690789,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 121,
+                "steps": 725,
+                "fraction": 0.16689655172413792
+              },
+              {
+                "model_seed": 2207,
+                "changes": 260,
+                "steps": 761,
+                "fraction": 0.3416557161629435
+              },
+              {
+                "model_seed": 3301,
+                "changes": 241,
+                "steps": 1565,
+                "fraction": 0.15399361022364216
+              }
+            ]
+          },
+          "performance": {
+            "status": "PASS",
+            "endpoint": "pipes_passed",
+            "shared_minus_ablation_gain": 0.4833333333333334,
+            "minimum_gain": 0.0,
+            "ci95": [
+              0.03333333333333333,
+              1.0999999999999999
+            ],
+            "favorable_models": 3,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 0.3,
+                "ablation_mean": 0.0,
+                "gain": 0.3
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 0.4,
+                "ablation_mean": 0.35,
+                "gain": 0.050000000000000044
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 1.5,
+                "ablation_mean": 0.4,
+                "gain": 1.1
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "flappy:pipes_passed:('after_adaptation', 'shared'):('ablation', 'gru_reset'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 17699246030748898604
+          }
+        },
+        "racing": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.722697888250342,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 484,
+                "steps": 1056,
+                "fraction": 0.4583333333333333
+              },
+              {
+                "model_seed": 2207,
+                "changes": 5090,
+                "steps": 6474,
+                "fraction": 0.7862218103181958
+              },
+              {
+                "model_seed": 3301,
+                "changes": 4771,
+                "steps": 5166,
+                "fraction": 0.9235385210994967
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "progress_normalized",
+            "shared_minus_ablation_gain": 0.01671402248439968,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.04245476696678229,
+              0.10482739264126964
+            ],
+            "favorable_models": 1,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 0.645163621292505,
+                "ablation_mean": 0.5586535835670838,
+                "gain": 0.08651003772542121
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 0.06808347230652886,
+                "ablation_mean": 0.09815465615769968,
+                "gain": -0.030071183851170816
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 0.2581338554534085,
+                "ablation_mean": 0.26443064187445986,
+                "gain": -0.006296786421051359
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "racing:progress_normalized:('after_adaptation', 'shared'):('ablation', 'gru_reset'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 5680816754925925077
+          }
+        }
+      }
+    },
+    "world_off": {
+      "status": "FAIL",
+      "action_effect_status": "PASS",
+      "games_at_action_threshold": 5,
+      "minimum_action_changed_games": 4,
+      "performance_status": "FAIL",
+      "games_with_preregistered_performance_improvement": 0,
+      "minimum_improved_games": 2,
+      "by_game": {
+        "snake": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.09408281261348307,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 484,
+                "steps": 3460,
+                "fraction": 0.13988439306358383
+              },
+              {
+                "model_seed": 2207,
+                "changes": 161,
+                "steps": 3471,
+                "fraction": 0.046384327283203686
+              },
+              {
+                "model_seed": 3301,
+                "changes": 530,
+                "steps": 5522,
+                "fraction": 0.09597971749366171
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "foods",
+            "shared_minus_ablation_gain": 0.20000000000000004,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.8333333333333334,
+              1.1333333333333333
+            ],
+            "favorable_models": 2,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 2.35,
+                "ablation_mean": 1.9,
+                "gain": 0.4500000000000002
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 3.2,
+                "ablation_mean": 2.95,
+                "gain": 0.25
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 2.9,
+                "ablation_mean": 3.0,
+                "gain": -0.10000000000000009
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "snake:foods:('after_adaptation', 'shared'):('ablation', 'world_off'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 2540564741960637604
+          }
+        },
+        "pong": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.05662490838557374,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 396,
+                "steps": 3375,
+                "fraction": 0.11733333333333333
+              },
+              {
+                "model_seed": 2207,
+                "changes": 95,
+                "steps": 3310,
+                "fraction": 0.028700906344410877
+              },
+              {
+                "model_seed": 3301,
+                "changes": 55,
+                "steps": 2307,
+                "fraction": 0.023840485478977026
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "net_points",
+            "shared_minus_ablation_gain": -0.016666666666666757,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.13333333333333333,
+              0.08333333333333333
+            ],
+            "favorable_models": 1,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": -1.85,
+                "ablation_mean": -1.85,
+                "gain": 0.0
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": -2.25,
+                "ablation_mean": -2.15,
+                "gain": -0.10000000000000009
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": -2.35,
+                "ablation_mean": -2.4,
+                "gain": 0.04999999999999982
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "pong:net_points:('after_adaptation', 'shared'):('ablation', 'world_off'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 12830626024777246938
+          }
+        },
+        "agar": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.07590525348563,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 55,
+                "steps": 839,
+                "fraction": 0.06555423122765197
+              },
+              {
+                "model_seed": 2207,
+                "changes": 116,
+                "steps": 885,
+                "fraction": 0.1310734463276836
+              },
+              {
+                "model_seed": 3301,
+                "changes": 24,
+                "steps": 772,
+                "fraction": 0.031088082901554404
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "foods",
+            "shared_minus_ablation_gain": 0.01666666666666668,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.18333333333333335,
+              0.18333333333333335
+            ],
+            "favorable_models": 2,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 1.0,
+                "ablation_mean": 0.95,
+                "gain": 0.050000000000000044
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 1.7,
+                "ablation_mean": 1.75,
+                "gain": -0.050000000000000044
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 1.7,
+                "ablation_mean": 1.65,
+                "gain": 0.050000000000000044
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "agar:foods:('after_adaptation', 'shared'):('ablation', 'world_off'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 881107791319398181
+          }
+        },
+        "flappy": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.0345093650753897,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 23,
+                "steps": 725,
+                "fraction": 0.031724137931034485
+              },
+              {
+                "model_seed": 2207,
+                "changes": 42,
+                "steps": 761,
+                "fraction": 0.05519053876478318
+              },
+              {
+                "model_seed": 3301,
+                "changes": 26,
+                "steps": 1565,
+                "fraction": 0.016613418530351438
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "pipes_passed",
+            "shared_minus_ablation_gain": 0.050000000000000044,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.21666666666666665,
+              0.2333333333333333
+            ],
+            "favorable_models": 2,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 0.3,
+                "ablation_mean": 0.1,
+                "gain": 0.19999999999999998
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 0.4,
+                "ablation_mean": 0.3,
+                "gain": 0.10000000000000003
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 1.5,
+                "ablation_mean": 1.65,
+                "gain": -0.1499999999999999
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "flappy:pipes_passed:('after_adaptation', 'shared'):('ablation', 'world_off'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 2788287076788399961
+          }
+        },
+        "racing": {
+          "same_state_action_effect": {
+            "status": "PASS",
+            "mean_across_model_fractions": 0.31232169268460774,
+            "minimum_fraction": 0.01,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "changes": 68,
+                "steps": 1056,
+                "fraction": 0.06439393939393939
+              },
+              {
+                "model_seed": 2207,
+                "changes": 3481,
+                "steps": 6474,
+                "fraction": 0.5376892184121099
+              },
+              {
+                "model_seed": 3301,
+                "changes": 1730,
+                "steps": 5166,
+                "fraction": 0.3348819202477739
+              }
+            ]
+          },
+          "performance": {
+            "status": "FAIL",
+            "endpoint": "progress_normalized",
+            "shared_minus_ablation_gain": -0.0012898890315656737,
+            "minimum_gain": 0.0,
+            "ci95": [
+              -0.041882821215946324,
+              0.04552064230420365
+            ],
+            "favorable_models": 1,
+            "minimum_favorable_models": 2,
+            "by_model": [
+              {
+                "model_seed": 1103,
+                "shared_mean": 0.645163621292505,
+                "ablation_mean": 0.6675187251162322,
+                "gain": -0.022355103823727185
+              },
+              {
+                "model_seed": 2207,
+                "shared_mean": 0.06808347230652886,
+                "ablation_mean": 0.0767431903403615,
+                "gain": -0.008659718033832642
+              },
+              {
+                "model_seed": 3301,
+                "shared_mean": 0.2581338554534085,
+                "ablation_mean": 0.2309887006905457,
+                "gain": 0.027145154762862805
+              }
+            ],
+            "environment_seeds": [
+              920001,
+              920002,
+              920003,
+              920004,
+              920005,
+              920006,
+              920007,
+              920008,
+              920009,
+              920010,
+              920011,
+              920012,
+              920013,
+              920014,
+              920015,
+              920016,
+              920017,
+              920018,
+              920019,
+              920020
+            ],
+            "bootstrap_label": "racing:progress_normalized:('after_adaptation', 'shared'):('ablation', 'world_off'):(920001, 920002, 920003, 920004, 920005, 920006, 920007, 920008, 920009, 920010, 920011, 920012, 920013, 920014, 920015, 920016, 920017, 920018, 920019, 920020)",
+            "bootstrap_effective_numpy_seed": 1895138620263965227
+          }
+        }
+      }
+    }
+  },
+  "world_prediction": {
+    "status": "FAIL",
+    "latent_ratio_passing_cells": 9,
+    "latent_ratio_required_cells": 15,
+    "games_passing_every_replica": 2,
+    "required_games": 5,
+    "failed_cells": [
+      {
+        "game": "pong",
+        "model_seed": 1103,
+        "latent_ratio": 0.987492288244579
+      },
+      {
+        "game": "agar",
+        "model_seed": 1103,
+        "latent_ratio": 0.9841187293115066
+      },
+      {
+        "game": "agar",
+        "model_seed": 2207,
+        "latent_ratio": 0.978911482105874
+      },
+      {
+        "game": "agar",
+        "model_seed": 3301,
+        "latent_ratio": 1.008825789262191
+      },
+      {
+        "game": "racing",
+        "model_seed": 2207,
+        "latent_ratio": 1.119241947376928
+      },
+      {
+        "game": "racing",
+        "model_seed": 3301,
+        "latent_ratio": 1.006572067461816
+      }
+    ],
+    "reward_mae_better_cells": 7,
+    "terminal_brier_better_cells": 14,
+    "reward_terminal_total_cells": 15,
+    "by_game": {
+      "snake": {
+        "status": "PASS",
+        "by_model": {
+          "1103": {
+            "status": "PASS",
+            "transitions": 3460,
+            "terminal_events": 13,
+            "truncations": 7,
+            "latent_mse_model": 0.022081311461832,
+            "latent_mse_copy": 0.0246226276187603,
+            "reward_mae_model": 0.0857137549622598,
+            "reward_mae_baseline": 0.055245818940229695,
+            "terminal_brier_model": 0.0037355005537888872,
+            "terminal_brier_baseline": 0.007334247098587025,
+            "latent_ratio": 0.8967894005353011,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": false,
+            "reward_mae_baseline_minus_model": -0.030467936022030108,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.003598746544798138
+          },
+          "2207": {
+            "status": "PASS",
+            "transitions": 3471,
+            "terminal_events": 13,
+            "truncations": 7,
+            "latent_mse_model": 0.032548961372299054,
+            "latent_mse_copy": 0.040068514423672395,
+            "reward_mae_model": 0.08948453355414213,
+            "reward_mae_baseline": 0.0578207917986735,
+            "terminal_brier_model": 0.0039992986412268885,
+            "terminal_brier_baseline": 0.007559354684769039,
+            "latent_ratio": 0.8123326217722011,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": false,
+            "reward_mae_baseline_minus_model": -0.03166374175546863,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.0035600560435421506
+          },
+          "3301": {
+            "status": "PASS",
+            "transitions": 5522,
+            "terminal_events": 8,
+            "truncations": 12,
+            "latent_mse_model": 0.03996832447056684,
+            "latent_mse_copy": 0.04847771127170916,
+            "reward_mae_model": 0.10476760826177546,
+            "reward_mae_baseline": 0.05424342493054072,
+            "terminal_brier_model": 0.0015597648827538743,
+            "terminal_brier_baseline": 0.0058934851688196704,
+            "latent_ratio": 0.824468058043238,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": false,
+            "reward_mae_baseline_minus_model": -0.05052418333123474,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.004333720286065796
+          }
+        }
+      },
+      "pong": {
+        "status": "FAIL",
+        "by_model": {
+          "1103": {
+            "status": "FAIL",
+            "transitions": 3375,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.0025306163566980373,
+            "latent_mse_copy": 0.0025626694879780794,
+            "reward_mae_model": 0.0450513556106797,
+            "reward_mae_baseline": 0.037969343604920366,
+            "terminal_brier_model": 0.005650235694113322,
+            "terminal_brier_baseline": 0.00589130975308642,
+            "latent_ratio": 0.987492288244579,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": false,
+            "reward_mae_baseline_minus_model": -0.007082012005759336,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.00024107405897309721
+          },
+          "2207": {
+            "status": "PASS",
+            "transitions": 3310,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.0036282422250015216,
+            "latent_mse_copy": 0.003919901658312228,
+            "reward_mae_model": 0.02905575005026742,
+            "reward_mae_baseline": 0.03713477114801804,
+            "terminal_brier_model": 0.004631814655668755,
+            "terminal_brier_baseline": 0.006005862009902654,
+            "latent_ratio": 0.9255952167340126,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": true,
+            "reward_mae_baseline_minus_model": 0.008079021097750619,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.001374047354233899
+          },
+          "3301": {
+            "status": "PASS",
+            "transitions": 2307,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.004487741919091134,
+            "latent_mse_copy": 0.004938060894956835,
+            "reward_mae_model": 0.04149735963205057,
+            "reward_mae_baseline": 0.045636589669104874,
+            "terminal_brier_model": 0.008184042271423766,
+            "terminal_brier_baseline": 0.008598744938953908,
+            "latent_ratio": 0.9088065162732997,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": true,
+            "reward_mae_baseline_minus_model": 0.004139230037054305,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.0004147026675301417
+          }
+        }
+      },
+      "agar": {
+        "status": "FAIL",
+        "by_model": {
+          "1103": {
+            "status": "FAIL",
+            "transitions": 839,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.006224889037503469,
+            "latent_mse_copy": 0.006325343530305969,
+            "reward_mae_model": 0.055135490122192383,
+            "reward_mae_baseline": 0.053764005204591826,
+            "terminal_brier_model": 0.020376121915674752,
+            "terminal_brier_baseline": 0.02329201789299431,
+            "latent_ratio": 0.9841187293115066,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": false,
+            "reward_mae_baseline_minus_model": -0.0013714849176005572,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.002915895977319557
+          },
+          "2207": {
+            "status": "FAIL",
+            "transitions": 885,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.004638561170606079,
+            "latent_mse_copy": 0.004738488878103073,
+            "reward_mae_model": 0.07425100035613541,
+            "reward_mae_baseline": 0.05528879585685691,
+            "terminal_brier_model": 0.023287034629078524,
+            "terminal_brier_baseline": 0.02214146762711864,
+            "latent_ratio": 0.978911482105874,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": false,
+            "reward_mae_baseline_minus_model": -0.018962204499278504,
+            "terminal_brier_model_better_than_train_baseline": false,
+            "terminal_brier_baseline_minus_model": -0.0011455670019598838
+          },
+          "3301": {
+            "status": "FAIL",
+            "transitions": 772,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.0033112476320700224,
+            "latent_mse_copy": 0.003282278929934689,
+            "reward_mae_model": 0.05066062422316771,
+            "reward_mae_baseline": 0.0587507181346982,
+            "terminal_brier_model": 0.025033846317174483,
+            "terminal_brier_baseline": 0.025258552176165808,
+            "latent_ratio": 1.008825789262191,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": true,
+            "reward_mae_baseline_minus_model": 0.00809009391153049,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.00022470585899132464
+          }
+        }
+      },
+      "flappy": {
+        "status": "PASS",
+        "by_model": {
+          "1103": {
+            "status": "PASS",
+            "transitions": 725,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.008727791176281934,
+            "latent_mse_copy": 0.009906390901185284,
+            "reward_mae_model": 0.06445163421918605,
+            "reward_mae_baseline": 0.06907868563212881,
+            "terminal_brier_model": 0.01917945960421296,
+            "terminal_brier_baseline": 0.026930211685823748,
+            "latent_ratio": 0.8810263256659565,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": true,
+            "reward_mae_baseline_minus_model": 0.0046270514129427565,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.007750752081610787
+          },
+          "2207": {
+            "status": "PASS",
+            "transitions": 761,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.0064892598848747705,
+            "latent_mse_copy": 0.007512936230676075,
+            "reward_mae_model": 0.054869092863234215,
+            "reward_mae_baseline": 0.0725190066797514,
+            "terminal_brier_model": 0.013609798025650145,
+            "terminal_brier_baseline": 0.025763924050591337,
+            "latent_ratio": 0.8637448376546135,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": true,
+            "reward_mae_baseline_minus_model": 0.01764991381651719,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.012154126024941193
+          },
+          "3301": {
+            "status": "PASS",
+            "transitions": 1565,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.00993092026098069,
+            "latent_mse_copy": 0.01092758898173085,
+            "reward_mae_model": 0.053255116759969016,
+            "reward_mae_baseline": 0.064044086794405,
+            "terminal_brier_model": 0.008322283359330045,
+            "terminal_brier_baseline": 0.013188423546325878,
+            "latent_ratio": 0.9087933557515361,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": true,
+            "reward_mae_baseline_minus_model": 0.010788970034435984,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.0048661401869958334
+          }
+        }
+      },
+      "racing": {
+        "status": "FAIL",
+        "by_model": {
+          "1103": {
+            "status": "PASS",
+            "transitions": 1056,
+            "terminal_events": 20,
+            "truncations": 0,
+            "latent_mse_model": 0.0047718395274965915,
+            "latent_mse_copy": 0.005109911097971428,
+            "reward_mae_model": 0.03884624468309539,
+            "reward_mae_baseline": 0.0571912181353758,
+            "terminal_brier_model": 0.015565861279370945,
+            "terminal_brier_baseline": 0.018636037878787873,
+            "latent_ratio": 0.9338400289177151,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": true,
+            "reward_mae_baseline_minus_model": 0.018344973452280415,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 0.0030701765994169284
+          },
+          "2207": {
+            "status": "FAIL",
+            "transitions": 6474,
+            "terminal_events": 4,
+            "truncations": 16,
+            "latent_mse_model": 0.00025413475281244676,
+            "latent_mse_copy": 0.00022705971073371648,
+            "reward_mae_model": 0.008701034176132863,
+            "reward_mae_baseline": 0.002586499416523675,
+            "terminal_brier_model": 0.0006249128774232016,
+            "terminal_brier_baseline": 0.0006266681904541239,
+            "latent_ratio": 1.119241947376928,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": false,
+            "reward_mae_baseline_minus_model": -0.0061145347596091885,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 1.755313030922241e-06
+          },
+          "3301": {
+            "status": "FAIL",
+            "transitions": 5166,
+            "terminal_events": 8,
+            "truncations": 12,
+            "latent_mse_model": 0.0005177574298721155,
+            "latent_mse_copy": 0.0005143769101180195,
+            "reward_mae_model": 0.008806088273610048,
+            "reward_mae_baseline": 0.006064400110128788,
+            "terminal_brier_model": 0.0014821880133390427,
+            "terminal_brier_baseline": 0.0015591589692218351,
+            "latent_ratio": 1.006572067461816,
+            "maximum_latent_ratio": 0.95,
+            "reward_mae_model_better_than_train_baseline": false,
+            "reward_mae_baseline_minus_model": -0.0027416881634812597,
+            "terminal_brier_model_better_than_train_baseline": true,
+            "terminal_brier_baseline_minus_model": 7.69709558827924e-05
+          }
+        }
+      }
+    },
+    "train_baseline_checks": [
+      {
+        "game": "snake",
+        "model_seed": 1103,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 3822,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.0401719666666263,
+        "baseline_terminal_rate": 0.06368333333333333,
+        "training_terminal_events": 3821,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen per-step reward range is [-1,1]; aggregate TRAIN raw-return mean reproduces clipped-reward mean.",
+          "aggregate_raw_return_sum": -2410.317999999999,
+          "reported_train_clipped_reward_sum": -2410.3179999975778,
+          "raw_minus_reported_clipped_sum": -2.421074896119535e-09,
+          "reconstructed_reward_mean": -0.04017196666666665,
+          "absolute_mean_difference": 4.034966805122053e-14
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "snake",
+        "model_seed": 2207,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 3938,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.03787633333329339,
+        "baseline_terminal_rate": 0.06561666666666667,
+        "training_terminal_events": 3937,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen per-step reward range is [-1,1]; aggregate TRAIN raw-return mean reproduces clipped-reward mean.",
+          "aggregate_raw_return_sum": -2272.579999999999,
+          "reported_train_clipped_reward_sum": -2272.5799999976034,
+          "raw_minus_reported_clipped_sum": -2.395609044469893e-09,
+          "reconstructed_reward_mean": -0.03787633333333332,
+          "absolute_mean_difference": 3.992639552308219e-14
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "snake",
+        "model_seed": 3301,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 4089,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.04439596666662657,
+        "baseline_terminal_rate": 0.06813333333333334,
+        "training_terminal_events": 4088,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen per-step reward range is [-1,1]; aggregate TRAIN raw-return mean reproduces clipped-reward mean.",
+          "aggregate_raw_return_sum": -2663.7579999999994,
+          "reported_train_clipped_reward_sum": -2663.757999997594,
+          "raw_minus_reported_clipped_sum": -2.4051587388385087e-09,
+          "reconstructed_reward_mean": -0.044395966666666654,
+          "absolute_mean_difference": 4.008599008287206e-14
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "pong",
+        "model_seed": 1103,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 423,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.016097866666648163,
+        "baseline_terminal_rate": 0.006633333333333333,
+        "training_terminal_events": 398,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen per-step reward range is [-1,1]; aggregate TRAIN raw-return mean reproduces clipped-reward mean.",
+          "aggregate_raw_return_sum": -965.8719999999978,
+          "reported_train_clipped_reward_sum": -965.8719999988898,
+          "raw_minus_reported_clipped_sum": -1.1079919204348698e-09,
+          "reconstructed_reward_mean": -0.01609786666666663,
+          "absolute_mean_difference": 1.8467866125249088e-14
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "pong",
+        "model_seed": 2207,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 405,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.0143307499999811,
+        "baseline_terminal_rate": 0.006316666666666667,
+        "training_terminal_events": 379,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen per-step reward range is [-1,1]; aggregate TRAIN raw-return mean reproduces clipped-reward mean.",
+          "aggregate_raw_return_sum": -859.844999999998,
+          "reported_train_clipped_reward_sum": -859.844999998866,
+          "raw_minus_reported_clipped_sum": -1.1319798431941308e-09,
+          "reconstructed_reward_mean": -0.014330749999999967,
+          "absolute_mean_difference": 1.8866852524723754e-14
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "pong",
+        "model_seed": 3301,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 417,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.015234633333314257,
+        "baseline_terminal_rate": 0.006516666666666666,
+        "training_terminal_events": 391,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen per-step reward range is [-1,1]; aggregate TRAIN raw-return mean reproduces clipped-reward mean.",
+          "aggregate_raw_return_sum": -914.0779999999978,
+          "reported_train_clipped_reward_sum": -914.0779999988555,
+          "raw_minus_reported_clipped_sum": -1.1423253454267979e-09,
+          "reconstructed_reward_mean": -0.015234633333333298,
+          "absolute_mean_difference": 1.9040324872321435e-14
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "agar",
+        "model_seed": 1103,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 1715,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.021372966666648983,
+        "baseline_terminal_rate": 0.028566666666666667,
+        "training_terminal_events": 1714,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "NOT_EVIDENCED",
+          "reason": "TRAIN CSV contains aggregate raw returns, not per-transition clipped rewards; clipping cannot be independently reconstructed for every Agar event from these aggregate fields.",
+          "aggregate_raw_return_sum": -1280.3359999999998,
+          "reported_train_clipped_reward_sum": -1282.377999998939,
+          "raw_minus_reported_clipped_sum": 2.041999998939218
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "agar",
+        "model_seed": 2207,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 1795,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.022302466666648937,
+        "baseline_terminal_rate": 0.0299,
+        "training_terminal_events": 1794,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "NOT_EVIDENCED",
+          "reason": "TRAIN CSV contains aggregate raw returns, not per-transition clipped rewards; clipping cannot be independently reconstructed for every Agar event from these aggregate fields.",
+          "aggregate_raw_return_sum": -1335.1059999999998,
+          "reported_train_clipped_reward_sum": -1338.1479999989363,
+          "raw_minus_reported_clipped_sum": 3.0419999989364896
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "agar",
+        "model_seed": 3301,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 1843,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.02364419999998225,
+        "baseline_terminal_rate": 0.0307,
+        "training_terminal_events": 1842,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "NOT_EVIDENCED",
+          "reason": "TRAIN CSV contains aggregate raw returns, not per-transition clipped rewards; clipping cannot be independently reconstructed for every Agar event from these aggregate fields.",
+          "aggregate_raw_return_sum": -1416.908,
+          "reported_train_clipped_reward_sum": -1418.651999998935,
+          "raw_minus_reported_clipped_sum": 1.7439999989351236
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "flappy",
+        "model_seed": 1103,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 2271,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.030054083333275014,
+        "baseline_terminal_rate": 0.03783333333333333,
+        "training_terminal_events": 2270,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen .005 living reward plus one pipe reward per crossing step, terminal collision -1: integer rewarded crossings reconstructed from raw return, then .005 clipping excess removed per crossing. Colliding crossings with overridden reward are excluded by reconstruction.",
+          "aggregate_raw_return_sum": -1802.3500000000004,
+          "reported_train_clipped_reward_sum": -1803.2449999965008,
+          "raw_minus_reported_clipped_sum": 0.8949999965004736,
+          "reconstructed_rewarded_crossings": 179,
+          "reconstructed_clipped_sum": -1803.2450000000003,
+          "reconstructed_reward_mean": -0.03005408333333334,
+          "absolute_mean_difference": 5.832487270929221e-14
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "flappy",
+        "model_seed": 2207,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 2368,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.032624083333274365,
+        "baseline_terminal_rate": 0.03945,
+        "training_terminal_events": 2367,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen .005 living reward plus one pipe reward per crossing step, terminal collision -1: integer rewarded crossings reconstructed from raw return, then .005 clipping excess removed per crossing. Colliding crossings with overridden reward are excluded by reconstruction.",
+          "aggregate_raw_return_sum": -1956.8350000000003,
+          "reported_train_clipped_reward_sum": -1957.4449999964618,
+          "raw_minus_reported_clipped_sum": 0.6099999964615108,
+          "reconstructed_rewarded_crossings": 122,
+          "reconstructed_clipped_sum": -1957.4450000000002,
+          "reconstructed_reward_mean": -0.03262408333333334,
+          "absolute_mean_difference": 5.897365928930753e-14
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "flappy",
+        "model_seed": 3301,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 2203,
+        "training_stage": "pretrain",
+        "baseline_reward_mean": -0.027969833333274647,
+        "baseline_terminal_rate": 0.0367,
+        "training_terminal_events": 2202,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen .005 living reward plus one pipe reward per crossing step, terminal collision -1: integer rewarded crossings reconstructed from raw return, then .005 clipping excess removed per crossing. Colliding crossings with overridden reward are excluded by reconstruction.",
+          "aggregate_raw_return_sum": -1677.0100000000007,
+          "reported_train_clipped_reward_sum": -1678.1899999964787,
+          "raw_minus_reported_clipped_sum": 1.1799999964780454,
+          "reconstructed_rewarded_crossings": 236,
+          "reconstructed_clipped_sum": -1678.1900000000007,
+          "reconstructed_reward_mean": -0.027969833333333347,
+          "absolute_mean_difference": 5.86995729801032e-14
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "racing",
+        "model_seed": 1103,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 710,
+        "training_stage": "adaptation",
+        "baseline_reward_mean": 0.004135612630736815,
+        "baseline_terminal_rate": 0.0115,
+        "training_terminal_events": 690,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen per-step reward range is [-1,1]; aggregate TRAIN raw-return mean reproduces clipped-reward mean.",
+          "aggregate_raw_return_sum": 248.13675784420474,
+          "reported_train_clipped_reward_sum": 248.1367578442089,
+          "raw_minus_reported_clipped_sum": -4.149569576838985e-12,
+          "reconstructed_reward_mean": 0.004135612630736745,
+          "absolute_mean_difference": 6.938893903907228e-17
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "racing",
+        "model_seed": 2207,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 302,
+        "training_stage": "adaptation",
+        "baseline_reward_mean": -0.004251031873940449,
+        "baseline_terminal_rate": 0.00365,
+        "training_terminal_events": 219,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen per-step reward range is [-1,1]; aggregate TRAIN raw-return mean reproduces clipped-reward mean.",
+          "aggregate_raw_return_sum": -255.06191243674203,
+          "reported_train_clipped_reward_sum": -255.06191243642695,
+          "raw_minus_reported_clipped_sum": -3.1508307074545883e-10,
+          "reconstructed_reward_mean": -0.0042510318739457,
+          "absolute_mean_difference": 5.251007961781795e-15
+        },
+        "train_eval_seed_overlap": 0
+      },
+      {
+        "game": "racing",
+        "model_seed": 3301,
+        "baseline_sources": [
+          "training"
+        ],
+        "baseline_support": 60000,
+        "support_reconstructed_from_training_curve": 60000,
+        "train_rows": 367,
+        "training_stage": "adaptation",
+        "baseline_reward_mean": -0.0018904391345867888,
+        "baseline_terminal_rate": 0.00515,
+        "training_terminal_events": 309,
+        "terminal_rate_reconstruction_status": "PASS",
+        "reward_mean_reconstruction": {
+          "status": "PASS",
+          "reason": "Frozen per-step reward range is [-1,1]; aggregate TRAIN raw-return mean reproduces clipped-reward mean.",
+          "aggregate_raw_return_sum": -113.42634807536704,
+          "reported_train_clipped_reward_sum": -113.42634807520733,
+          "raw_minus_reported_clipped_sum": -1.5971579614415532e-10,
+          "reconstructed_reward_mean": -0.0018904391345894507,
+          "absolute_mean_difference": 2.6619331738864105e-15
+        },
+        "train_eval_seed_overlap": 0
+      }
+    ],
+    "latent_loss_reconstruction": {
+      "status": "NOT_EVIDENCED",
+      "reason": "model_predictions.csv provides scalar latent_mse_model and latent_mse_copy, but not the predicted, actual-next and copied 64-dimensional hidden vectors. This audit independently aggregates recorded per-transition MSEs; it cannot recompute those MSEs from the hidden coordinates. No checkpoint inference was performed."
+    }
+  },
+  "gate7": {
+    "status": "NOT_EVIDENCED",
+    "numeric_components_status": "PASS",
+    "perception": "PASS",
+    "temporal_memory": "PASS",
+    "observation_audit_receipt": {
+      "status": "NOT_EVIDENCED",
+      "reason": "Engineering observation audit receipt contents are outside this CSV-only audit. Pixel/GRU arithmetic PASS does not independently certify the input path or issue full gate acceptance."
+    }
+  },
+  "gate8": {
+    "status": "FAIL",
+    "prediction": "FAIL",
+    "causal_control": "FAIL",
+    "heldout_provenance_receipt": {
+      "status": "NOT_EVIDENCED",
+      "reason": "TRAIN support, distinct training/test seed namespaces, fixed baselines and recorded final shared coverage checked from CSV plus frozen producer source. Independent engineering provenance receipt not reviewed here; per-transition TRAIN clipped rewards absent for Agar."
+    }
+  },
+  "conclusions": {
+    "supported": [
+      "The real recorded policy is sensitive to same-state pixel and GRU interventions in all five games at preregistered action thresholds.",
+      "Paired separate ablation episodes demonstrate preregistered endpoint losses after hiding pixels and resetting GRU in Snake and Flappy, with only three independent trained models.",
+      "World model values participate in mixed control and change actions in all five games. This supports computational use of the world branch, not beneficial planning.",
+      "Hidden prediction ratio and world-off performance conditions both FAIL. World-off demonstrates no preregistered performance improvement in any of five games."
+    ],
+    "not_supported": [
+      "Full gate 7 acceptance from CSV alone; separate observation audit remains unassessed.",
+      "World prediction improvement in every game and replica, or a demonstrated world-control performance benefit under the fixed endpoint rule.",
+      "Universal gameplay mastery, general Pong mastery, external game transfer or conclusions beyond these five frozen local simulators."
+    ],
+    "limitations": [
+      "Exactly one real campaign; no retries or additional scientific interactions were performed.",
+      "Only three independent training replicas. Hierarchical bootstrap intervals follow preregistration but remain uncertain.",
+      "Same-state intervention sensitivity is not by itself task mastery or a general memory-capacity measurement.",
+      "Separate ablation trajectories have different subsequent histories; comparisons are paired by initial environment seed, while action effects are measured on fixed shared states.",
+      "Every transition is equally weighted within each game/replica for prediction MSE; episodes have unequal lengths. No post-hoc reweighting or favorable-game selection.",
+      "Reward MAE and terminal Brier comparisons use fixed TRAIN baselines and are reported even where negative; neither is silently promoted to a new acceptance threshold.",
+      "TRAIN clipped reward mean reconstructs for 12/15 game/replica cells from aggregate CSV plus frozen reward formulas; Agar 3/15 is specifically NOT_EVIDENCED at raw clipping reconstruction level."
+    ]
+  }
+}

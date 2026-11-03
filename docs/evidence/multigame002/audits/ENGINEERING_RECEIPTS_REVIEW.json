@@ -1,0 +1,819 @@
+{
+  "authenticated_inputs": {
+    "SHA256SUMS": {
+      "bytes": 528030,
+      "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/SHA256SUMS",
+      "sha256": "2797b5280d367be9e067d8528f2b0c8973081342eb248aacca19054475b18840"
+    },
+    "evaluation/action_pairs.csv": {
+      "bytes": 20413795,
+      "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/evaluation/action_pairs.csv",
+      "sha256": "a98841203bec14abff2633d93a8b6264f4213118e852d030bc1fc4bb01c1f1be"
+    },
+    "evaluation/episodes.csv": {
+      "bytes": 502563,
+      "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/evaluation/episodes.csv",
+      "sha256": "034ad7329d3faa93452b022a2c38ccc801bd39ee2068adf0f911e83e0d0e1f08"
+    },
+    "evaluation/model_predictions.csv": {
+      "bytes": 12921710,
+      "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/evaluation/model_predictions.csv",
+      "sha256": "b45a32ba039da29d83275c06be47b1975410bb5f39b8bd72dcebf9175ca75945"
+    },
+    "model_index.json": {
+      "bytes": 7919,
+      "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/model_index.json",
+      "sha256": "a1cb5f64700b1f12fc8c3a4d64dfcd55a0302c847c80c46def0ddb4c0a8058fc"
+    },
+    "training_curve.csv": {
+      "bytes": 5501973,
+      "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/training_curve.csv",
+      "sha256": "2bc186e834cfa880159597179df792a5f4a80cf2e24c64a3ac20e9563d68e115"
+    }
+  },
+  "checkpoints": {
+    "1103:after_adaptation": {
+      "checkpoint_manifest_sha256": "f7505eb0da594a92daa92b8d5adfbecb8475981bfd2ddeb056f651f16883caa4",
+      "global_steps": 300000,
+      "metadata": {
+        "bytes": 8606030,
+        "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/models/1103/after_adaptation/metadata.json",
+        "sha256": "bb22420ca3c3a0d7a5ee493911c497dba32dee44e2ab8519c2a09a2b85a8c4c5"
+      },
+      "stage": "adaptation",
+      "stage_steps": 60000,
+      "training_statistics": {
+        "agar": {
+          "clipped_reward_sum": -1282.377999998939,
+          "support": 60000,
+          "terminations": 1714
+        },
+        "flappy": {
+          "clipped_reward_sum": -1803.2449999965008,
+          "support": 60000,
+          "terminations": 2270
+        },
+        "pong": {
+          "clipped_reward_sum": -965.8719999988897,
+          "support": 60000,
+          "terminations": 398
+        },
+        "racing": {
+          "clipped_reward_sum": 248.1367578442089,
+          "support": 60000,
+          "terminations": 690
+        },
+        "snake": {
+          "clipped_reward_sum": -2410.3179999975778,
+          "support": 60000,
+          "terminations": 3821
+        }
+      },
+      "versions": {
+        "gymnasium": "1.4.0",
+        "machine": "x86_64",
+        "numpy": "2.3.5",
+        "python": "3.11.17",
+        "system": "Linux",
+        "torch": "2.10.0+cpu"
+      }
+    },
+    "1103:before_adaptation": {
+      "checkpoint_manifest_sha256": "d5ab92a1aaa898543dc3b1c0d60b9766848731c1b147558ad3d0088d84be77de",
+      "global_steps": 240000,
+      "metadata": {
+        "bytes": 7356874,
+        "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/models/1103/before_adaptation/metadata.json",
+        "sha256": "33095521cdd5f3b1a17984351aa769580cfa1b58e906a289e011fae345e2e2bf"
+      },
+      "stage": "pretrain",
+      "stage_steps": 240000,
+      "training_statistics": {
+        "agar": {
+          "clipped_reward_sum": -1282.377999998939,
+          "support": 60000,
+          "terminations": 1714
+        },
+        "flappy": {
+          "clipped_reward_sum": -1803.2449999965008,
+          "support": 60000,
+          "terminations": 2270
+        },
+        "pong": {
+          "clipped_reward_sum": -965.8719999988897,
+          "support": 60000,
+          "terminations": 398
+        },
+        "snake": {
+          "clipped_reward_sum": -2410.3179999975778,
+          "support": 60000,
+          "terminations": 3821
+        }
+      },
+      "versions": {
+        "gymnasium": "1.4.0",
+        "machine": "x86_64",
+        "numpy": "2.3.5",
+        "python": "3.11.17",
+        "system": "Linux",
+        "torch": "2.10.0+cpu"
+      }
+    },
+    "1103:from_scratch": {
+      "checkpoint_manifest_sha256": "207bf9d335eba9602468e0fc7a484dbf1208f16696668fcd828bd51b47ffb246",
+      "global_steps": 60000,
+      "metadata": {
+        "bytes": 1285216,
+        "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/models/1103/from_scratch/metadata.json",
+        "sha256": "3a0b2414292fa3060f9272aee6e02b3b84a885b7687ad7057df7cd83b25016af"
+      },
+      "stage": "from_scratch",
+      "stage_steps": 60000,
+      "training_statistics": {
+        "racing": {
+          "clipped_reward_sum": 567.7440578729428,
+          "support": 60000,
+          "terminations": 708
+        }
+      },
+      "versions": {
+        "gymnasium": "1.4.0",
+        "machine": "x86_64",
+        "numpy": "2.3.5",
+        "python": "3.11.17",
+        "system": "Linux",
+        "torch": "2.10.0+cpu"
+      }
+    },
+    "2207:after_adaptation": {
+      "checkpoint_manifest_sha256": "495eeac0066435baff22c9193c8affa62924c1c9243e39cb96b1c3cb8f4d8f88",
+      "global_steps": 300000,
+      "metadata": {
+        "bytes": 8389585,
+        "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/models/2207/after_adaptation/metadata.json",
+        "sha256": "a03e90e631dba93a6d3b789679c3a79479fbea637b140213282f3e778a4c0034"
+      },
+      "stage": "adaptation",
+      "stage_steps": 60000,
+      "training_statistics": {
+        "agar": {
+          "clipped_reward_sum": -1338.1479999989363,
+          "support": 60000,
+          "terminations": 1794
+        },
+        "flappy": {
+          "clipped_reward_sum": -1957.4449999964618,
+          "support": 60000,
+          "terminations": 2367
+        },
+        "pong": {
+          "clipped_reward_sum": -859.844999998866,
+          "support": 60000,
+          "terminations": 379
+        },
+        "racing": {
+          "clipped_reward_sum": -255.06191243642695,
+          "support": 60000,
+          "terminations": 219
+        },
+        "snake": {
+          "clipped_reward_sum": -2272.5799999976034,
+          "support": 60000,
+          "terminations": 3937
+        }
+      },
+      "versions": {
+        "gymnasium": "1.4.0",
+        "machine": "x86_64",
+        "numpy": "2.3.5",
+        "python": "3.11.17",
+        "system": "Linux",
+        "torch": "2.10.0+cpu"
+      }
+    },
+    "2207:before_adaptation": {
+      "checkpoint_manifest_sha256": "457c268e29fb0171e73ddca61928dc127676246ebfa4b49410205ca3a600299f",
+      "global_steps": 240000,
+      "metadata": {
+        "bytes": 7539798,
+        "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/models/2207/before_adaptation/metadata.json",
+        "sha256": "e24790fed2d7341aa34f93a782e46d1a83363794f5d6260b7b60ebbed8cbbe37"
+      },
+      "stage": "pretrain",
+      "stage_steps": 240000,
+      "training_statistics": {
+        "agar": {
+          "clipped_reward_sum": -1338.1479999989363,
+          "support": 60000,
+          "terminations": 1794
+        },
+        "flappy": {
+          "clipped_reward_sum": -1957.4449999964618,
+          "support": 60000,
+          "terminations": 2367
+        },
+        "pong": {
+          "clipped_reward_sum": -859.844999998866,
+          "support": 60000,
+          "terminations": 379
+        },
+        "snake": {
+          "clipped_reward_sum": -2272.5799999976034,
+          "support": 60000,
+          "terminations": 3937
+        }
+      },
+      "versions": {
+        "gymnasium": "1.4.0",
+        "machine": "x86_64",
+        "numpy": "2.3.5",
+        "python": "3.11.17",
+        "system": "Linux",
+        "torch": "2.10.0+cpu"
+      }
+    },
+    "2207:from_scratch": {
+      "checkpoint_manifest_sha256": "9dee95b224c824d219da9b219a6b63585a730abfdd19f46ec45731627be768a2",
+      "global_steps": 60000,
+      "metadata": {
+        "bytes": 1371568,
+        "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/models/2207/from_scratch/metadata.json",
+        "sha256": "d88858fae5f9fef46998f12f432d7641284466378845ee6204c401a95a17616d"
+      },
+      "stage": "from_scratch",
+      "stage_steps": 60000,
+      "training_statistics": {
+        "racing": {
+          "clipped_reward_sum": 580.6218673829726,
+          "support": 60000,
+          "terminations": 801
+        }
+      },
+      "versions": {
+        "gymnasium": "1.4.0",
+        "machine": "x86_64",
+        "numpy": "2.3.5",
+        "python": "3.11.17",
+        "system": "Linux",
+        "torch": "2.10.0+cpu"
+      }
+    },
+    "3301:after_adaptation": {
+      "checkpoint_manifest_sha256": "e75a0a86cf29da1dc09ac0679415c3ef54c40a68b55f72d5a759473764978bfb",
+      "global_steps": 300000,
+      "metadata": {
+        "bytes": 8455764,
+        "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/models/3301/after_adaptation/metadata.json",
+        "sha256": "3b27224e77425a78160baa6c04d25991b121eba2b7ae7242905aba517ca0e45e"
+      },
+      "stage": "adaptation",
+      "stage_steps": 60000,
+      "training_statistics": {
+        "agar": {
+          "clipped_reward_sum": -1418.651999998935,
+          "support": 60000,
+          "terminations": 1842
+        },
+        "flappy": {
+          "clipped_reward_sum": -1678.1899999964787,
+          "support": 60000,
+          "terminations": 2202
+        },
+        "pong": {
+          "clipped_reward_sum": -914.0779999988555,
+          "support": 60000,
+          "terminations": 391
+        },
+        "racing": {
+          "clipped_reward_sum": -113.42634807520733,
+          "support": 60000,
+          "terminations": 309
+        },
+        "snake": {
+          "clipped_reward_sum": -2663.757999997594,
+          "support": 60000,
+          "terminations": 4088
+        }
+      },
+      "versions": {
+        "gymnasium": "1.4.0",
+        "machine": "x86_64",
+        "numpy": "2.3.5",
+        "python": "3.11.17",
+        "system": "Linux",
+        "torch": "2.10.0+cpu"
+      }
+    },
+    "3301:before_adaptation": {
+      "checkpoint_manifest_sha256": "342637fb0950e10f18e0fd217e021bf85ef6828f107edc7bd6ef69f29bad0674",
+      "global_steps": 240000,
+      "metadata": {
+        "bytes": 7540453,
+        "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/models/3301/before_adaptation/metadata.json",
+        "sha256": "a27eeda3df38ce4129f8625a305cb116e0affc68cf38896fc6a6ea6ae631e9db"
+      },
+      "stage": "pretrain",
+      "stage_steps": 240000,
+      "training_statistics": {
+        "agar": {
+          "clipped_reward_sum": -1418.651999998935,
+          "support": 60000,
+          "terminations": 1842
+        },
+        "flappy": {
+          "clipped_reward_sum": -1678.1899999964787,
+          "support": 60000,
+          "terminations": 2202
+        },
+        "pong": {
+          "clipped_reward_sum": -914.0779999988555,
+          "support": 60000,
+          "terminations": 391
+        },
+        "snake": {
+          "clipped_reward_sum": -2663.757999997594,
+          "support": 60000,
+          "terminations": 4088
+        }
+      },
+      "versions": {
+        "gymnasium": "1.4.0",
+        "machine": "x86_64",
+        "numpy": "2.3.5",
+        "python": "3.11.17",
+        "system": "Linux",
+        "torch": "2.10.0+cpu"
+      }
+    },
+    "3301:from_scratch": {
+      "checkpoint_manifest_sha256": "f396acf18ddb3036cee2605129d5538db621350d5e732c8f25fdabc1b79e78f0",
+      "global_steps": 60000,
+      "metadata": {
+        "bytes": 1275063,
+        "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/models/3301/from_scratch/metadata.json",
+        "sha256": "a40a7ae89ffbb9c8b938a94734a4dcdd8d39207414256a77a6c7ff44b74456a7"
+      },
+      "stage": "from_scratch",
+      "stage_steps": 60000,
+      "training_statistics": {
+        "racing": {
+          "clipped_reward_sum": 523.0861280369376,
+          "support": 60000,
+          "terminations": 696
+        }
+      },
+      "versions": {
+        "gymnasium": "1.4.0",
+        "machine": "x86_64",
+        "numpy": "2.3.5",
+        "python": "3.11.17",
+        "system": "Linux",
+        "torch": "2.10.0+cpu"
+      }
+    }
+  },
+  "created_at_utc": "2026-11-03T10:30:23.046910+00:00",
+  "criteria": {
+    "10": {
+      "evidence": [
+        "Before-adaptation checkpoint games/statistics and source curve exclude Racing.",
+        "Each source game60000steps/replica; target adaptation and scratch60000steps/replica. Training seeds>=1000000, final seeds920001..920020 disjoint.",
+        "Final checkpoints fixed at budget; no test-best selection."
+      ],
+      "finding": "SUPPORTED_HOLDOUT_AND_EQUAL_BUDGET; SCIENTIFIC_TRANSFER_RETENTION_FAIL",
+      "limitations": [
+        "Different episode durations produce different episode counts; same target episode indices are seed-paired and step budgets equal.",
+        "A held-out prepared simulator is narrower than an arbitrary third-party game.",
+        "Valid comparison does not make measured transfer or retention positive; numericalFAIL remains."
+      ],
+      "not_overall_acceptance": true,
+      "paired_target_environments": {
+        "adaptation_episode_count": 1379,
+        "all_seeds_identical": true,
+        "common_episode_indices": 1379,
+        "scratch_episode_count": 2238
+      },
+      "receipt_name": "holdout_equal_budget",
+      "source_games_recorded": [
+        "agar",
+        "flappy",
+        "pong",
+        "snake"
+      ],
+      "target_games_recorded": {
+        "adaptation": [
+          "racing"
+        ],
+        "from_scratch": [
+          "racing"
+        ]
+      },
+      "training_and_test_seed_intersection": 0,
+      "training_rows": 28906,
+      "training_steps_by_model_stage_game": {
+        "1103:adaptation:racing": 60000,
+        "1103:from_scratch:racing": 60000,
+        "1103:pretrain:agar": 60000,
+        "1103:pretrain:flappy": 60000,
+        "1103:pretrain:pong": 60000,
+        "1103:pretrain:snake": 60000,
+        "2207:adaptation:racing": 60000,
+        "2207:from_scratch:racing": 60000,
+        "2207:pretrain:agar": 60000,
+        "2207:pretrain:flappy": 60000,
+        "2207:pretrain:pong": 60000,
+        "2207:pretrain:snake": 60000,
+        "3301:adaptation:racing": 60000,
+        "3301:from_scratch:racing": 60000,
+        "3301:pretrain:agar": 60000,
+        "3301:pretrain:flappy": 60000,
+        "3301:pretrain:pong": 60000,
+        "3301:pretrain:snake": 60000
+      },
+      "unique_training_environment_seeds": 27527,
+      "world_prediction_baselines": {
+        "all_training_only_and_match_index": true,
+        "rows": 39688
+      }
+    },
+    "11": {
+      "all_limits_checks_pass": true,
+      "evaluation_episodes": 1735,
+      "evaluation_steps": 174664,
+      "finding": "SUPPORTED_SEPARATION_MATRIX_AND_EXECUTION_LIMITS",
+      "independent_limits_review": {
+        "bytes": 11854,
+        "path": "experiments/multigame-002/evidence-audits/EXECUTION_LIMITS_INDEPENDENT.json",
+        "sha256": "7bb673e3c1169f6698ec5c6ac96ab5696e1f49de4b86a6ef60af21c7057b50a1"
+      },
+      "limitations": [
+        "Execution success does not imply scientific success.",
+        "Protocol budget is3GiB, clarified beforeconsent; old001source/models remain distinct."
+      ],
+      "limits_checks_count": 34,
+      "not_overall_acceptance": true,
+      "raw_statuses": {
+        "TRAIN_STATUS.json": {
+          "bytes": 1527,
+          "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/TRAIN_STATUS.json",
+          "sha256": "741b781468deb87150641a4d1d18e70e11ed4a6dc0430447bb2a21018a6979ae"
+        },
+        "evaluation/EVALUATION_STATUS.json": {
+          "bytes": 1660,
+          "path": "experiments/multigame-002/verified-run-41551291622/payload/NOVA-Neural-Arena/NOVA-Neural-Arena/experiments/multigame-002-scientific/evaluation/EVALUATION_STATUS.json",
+          "sha256": "77bfa8014ec1be9c73c9dd467e0f56e4ce2aed245864fa2ad0300f48df91fe8d"
+        }
+      },
+      "receipt_name": "separation_and_limits",
+      "training_steps": 1080000
+    },
+    "6": {
+      "evidence": [
+        "Single VisualQNetwork CNN+GRU64+one Q-head10 and learned transition. step signature accepts pixels, previous action/reward, hidden; no explicit game ID or per-game heads.",
+        "UniversalTrainer keeps one online model, target, optimizer and replay per independent seed; game labels schedule samples, and adaptation continues the same trainer.",
+        "Six recorded shared slots each use one network fingerprint across5games and20seeds/game.",
+        "All9checkpoint metadata have identical architecture/action/observation contract, source and protocol."
+      ],
+      "finding": "SUPPORTED_SHARED_ARCHITECTURE_AND_EXECUTED_SHARED_POLICY",
+      "fingerprints": {
+        "1103:after_adaptation": {
+          "episodes_by_game": {
+            "agar": 20,
+            "flappy": 20,
+            "pong": 20,
+            "racing": 20,
+            "snake": 20
+          },
+          "network_sha256": "c01c0bb2835e5cfdfacdf818ef1a28d782a6f9e7ff3d5c56b21001ebe00a80aa"
+        },
+        "1103:before_adaptation": {
+          "episodes_by_game": {
+            "agar": 20,
+            "flappy": 20,
+            "pong": 20,
+            "racing": 20,
+            "snake": 20
+          },
+          "network_sha256": "aa86a08729808175e0fde77054b5362d1965f7a4f2c2ce960cb95cfaf146a2c6"
+        },
+        "2207:after_adaptation": {
+          "episodes_by_game": {
+            "agar": 20,
+            "flappy": 20,
+            "pong": 20,
+            "racing": 20,
+            "snake": 20
+          },
+          "network_sha256": "b341b0cddf98c46adb81acc91095224607f86a5f279dc4ba662a4c0e07920963"
+        },
+        "2207:before_adaptation": {
+          "episodes_by_game": {
+            "agar": 20,
+            "flappy": 20,
+            "pong": 20,
+            "racing": 20,
+            "snake": 20
+          },
+          "network_sha256": "5124f48b1af5130c3dc53bdd7baec1b4120f7d01eb78e323fd5c0c9e8c38f5d7"
+        },
+        "3301:after_adaptation": {
+          "episodes_by_game": {
+            "agar": 20,
+            "flappy": 20,
+            "pong": 20,
+            "racing": 20,
+            "snake": 20
+          },
+          "network_sha256": "387f26597e573e4f2a3a54aa799d63dac38c323e173c61515f467cef6f6f1007"
+        },
+        "3301:before_adaptation": {
+          "episodes_by_game": {
+            "agar": 20,
+            "flappy": 20,
+            "pong": 20,
+            "racing": 20,
+            "snake": 20
+          },
+          "network_sha256": "f45d123ba1cd45a2564a5888afc9ba876da87173c0d5884184e455d182aab9c1"
+        }
+      },
+      "limitations": [
+        "There are3independent replicas; one shared network per replica does not mean identical weights across different seeds.",
+        "Mechanical control masks vary by game and may indirectly cue game identity, although they do not dynamically expose safety or preferred moves.",
+        "Shared parameters do not prove positive transfer or competence in allgames."
+      ],
+      "not_overall_acceptance": true,
+      "receipt_name": "shared_policy"
+    },
+    "7": {
+      "evidence": [
+        "PixelGame emits uint8RGB32x32. Decision inputs are pixels, own previous action/reward, recurrent hidden and mechanical control availability. Private environment telemetry is logged and never fed to network.step.",
+        "Source masks derive only from class-level available_actions; evaluator rejects changing masks. All39688same-state pairs have exactlyone mask per game.",
+        "Pixel/GRU interventions use current-frame counterfactuals plus prespecified separate ablation episodes, without changing simulator physics."
+      ],
+      "finding": "SUPPORTED_OBSERVATION_CONTRACT; NUMERICAL_ABLATION_AUDIT_SEPARATE",
+      "independent_numeric_review": {
+        "bytes": 192121,
+        "path": "experiments/multigame-002/evidence-audits/WORLD_PERCEPTION_INDEPENDENT.json",
+        "sha256": "3d65258f78cf542288509ea4d1f82ec79cef1c974ba1185235af385c94892a71"
+      },
+      "limitations": [
+        "No semantic object detection or arbitrary unseen-game perception was separately established."
+      ],
+      "masks_by_game": {
+        "agar": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        "flappy": [
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          true
+        ],
+        "pong": [
+          true,
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "racing": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        "snake": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      },
+      "not_overall_acceptance": true,
+      "receipt_name": "observation_audit"
+    },
+    "9": {
+      "existing_named_fixture_result": {
+        "file": {
+          "bytes": 13644,
+          "path": "experiments/multigame-002/engineering-tests.xml",
+          "sha256": "87f4d187fcd37a9ba813acad816d4251af58586c8a450a6d16315d377cbdcde2"
+        },
+        "limitations": "Pre-campaign XML has no embedded sourceSHA; original A/B unfiltered full-suite CI logs are independently reviewed above.",
+        "suite": {
+          "errors": "0",
+          "failures": "0",
+          "hostname": "DESKTOP-BR70VBF",
+          "name": "pytest",
+          "skipped": "0",
+          "tests": "99",
+          "time": "5.594",
+          "timestamp": "2026-11-02T15:10:17.260128-03:00"
+        },
+        "testcase": {
+          "classname": "tests.test_universal_persistence",
+          "name": "test_exact_25_future_transitions_and_updates_after_reload",
+          "time": "1.877"
+        }
+      },
+      "finding": "SUPPORTED_SYNTHETIC25_CONTINUATION_AND_ORIGINAL_RUNTIME_OFFLINE_RECOVERY",
+      "fixture_behavior": "Snapshots online/target, optimizer, replay and RNG, actor hidden/observations, physical environments and counters. Test compares25future physical transitions collected learn=False plus25updates forced to synthetic-pixel replay; loss tolerance1e-6, weight hashes and physical snapshots exact.",
+      "fixture_source": "tests/test_universal_persistence.py:47-93",
+      "limitations": [
+        "25future steps/updates concern the synthetic technical fixture, not additional training of official campaign models.",
+        "Actual9snapshot recovery is from original-runtime offline proof; zero new scientific interactions/updates. Root must attach its authenticated detailed artifact rather than claiming this reviewer reloaded models.",
+        "Prior Windows causal reconstruction failed tolerance1e-6 and must remain preserved alongside successful Linux proof."
+      ],
+      "not_overall_acceptance": true,
+      "original_runtime_recovery_log": {
+        "job_id": 125860603211,
+        "log": {
+          "bytes": 46440,
+          "path": "experiments/multigame-002/evidence-api/OFFLINE_PROOF_JOB_LOG.txt",
+          "sha256": "2884e2487a0af6d6471db420bc5d9b7daead799782c82538690ebb614492e34b"
+        },
+        "proof_artifact_independently_extracted_this_review": false,
+        "run_id": 41619297256,
+        "verified_stdout": {
+          "line": 436,
+          "text": "2026-11-03T10:27:35.1966075Z {\"status\": \"VERIFIED\", \"restored_models\": 9, \"failure\": null, \"new_environment_interactions\": 0, \"new_training_updates\": 0}",
+          "value": {
+            "failure": null,
+            "new_environment_interactions": 0,
+            "new_training_updates": 0,
+            "restored_models": 9,
+            "status": "VERIFIED"
+          }
+        }
+      },
+      "receipt_name": "checkpoint_resume_25_updates"
+    }
+  },
+  "new_environment_interactions": 0,
+  "new_evaluation_episodes": 0,
+  "new_training_updates": 0,
+  "original_CI_logs": [
+    {
+      "command": "python -m pytest -q",
+      "fixture_inclusion_basis": "Full unfiltered tests suite; source contains undisabled25future transitions/update test, and existing XML independently names a passing node.",
+      "job_id": 125623132040,
+      "jobs_api": {
+        "bytes": 2499,
+        "path": "experiments/multigame-002/evidence-api/CI_A_JOBS_API.json",
+        "sha256": "7edb7d3989b535666ad56cb98a797167e8b5a8c1a7a5a06532a30ba5345db1fc"
+      },
+      "label": "A",
+      "log": {
+        "bytes": 44707,
+        "path": "experiments/multigame-002/evidence-api/CI_A_JOB_LOG.txt",
+        "sha256": "b1af97a9bafd1393a56ea3a123e15225a1cec46fd69c041f65e8d356614e7d13"
+      },
+      "per_test_names_emitted_in_log": false,
+      "run_id": 41546462545,
+      "source_commit": "dc71247b2269d41c8d2aeb8c7d489977fac3ad3a",
+      "summary": [
+        {
+          "line": 422,
+          "text": "2026-11-02T23:34:56.5041517Z 474 passed, 2 warnings, 31 subtests passed in 5.69s"
+        }
+      ]
+    },
+    {
+      "command": "python -m pytest -q",
+      "fixture_inclusion_basis": "Full unfiltered tests suite; source contains undisabled25future transitions/update test, and existing XML independently names a passing node.",
+      "job_id": 125624373207,
+      "jobs_api": {
+        "bytes": 2499,
+        "path": "experiments/multigame-002/evidence-api/CI_B_JOBS_API.json",
+        "sha256": "58ab43e588100289316914bce43e7fc266f50336cdceda4c99646ac561119ab7"
+      },
+      "label": "B",
+      "log": {
+        "bytes": 44701,
+        "path": "experiments/multigame-002/evidence-api/CI_B_JOB_LOG.txt",
+        "sha256": "2de247601e40cd40c32790f359e46a690403a817992dd45c1b55943226f2afa3"
+      },
+      "per_test_names_emitted_in_log": false,
+      "run_id": 41546841696,
+      "source_commit": "1c824f17922aa5dfb415e315e7873a1ebfb6db57",
+      "summary": [
+        {
+          "line": 422,
+          "text": "2026-11-02T23:38:08.7716520Z 474 passed, 2 warnings, 31 subtests passed in 9.44s"
+        }
+      ]
+    }
+  ],
+  "overall_scientific_conclusion": "NOT_CONCLUDED; gates2-5/8/10 remain failed regardless engineering receipts",
+  "protocol_sha256": "93591ede5951438f92432fc6601773aaafe28b2ba5840309aa7bd3611170a324",
+  "receipt_schema": {
+    "limitation": "Analyzer validates path/hash integrity, not truth of content; actual independent content review is necessary.",
+    "record": {
+      "receipts": [
+        {
+          "path": "relative beneath evidence_root",
+          "sha256": "64 lowercase hex"
+        }
+      ],
+      "status": "PASS"
+    },
+    "source": "arena/universal/analysis.py:396-416"
+  },
+  "reviewer": "engineering_receipts",
+  "run_id": 41551291622,
+  "schema_version": 1,
+  "scope": "Independent static source, authenticated recorded CSV, metadata, original CI/offline-proof logs and existing fixture review. No scientific module imports, games, gradients or reruns.",
+  "source_A": "dc71247b2269d41c8d2aeb8c7d489977fac3ad3a",
+  "source_files": {
+    "arena/universal/analysis.py": {
+      "frozen_source_sha256": "fe1408401679be6816c4dd3d1310e5b08cb7d7bb6da2a32907c2c54ec1345f3d",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "arena/universal/campaign.py": {
+      "frozen_source_sha256": "2444e20b37574b17942719f2752b94ff1bf8bfe75b885ac2d95282ac7300b636",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "arena/universal/envs.py": {
+      "frozen_source_sha256": "e83f727f24b9814fe4fcb3578a82fc923b52fb24dfcaa4818535de8ed09064a9",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "arena/universal/evaluation.py": {
+      "frozen_source_sha256": "f1fa411f7f7cfb30d2524b32f5eee85fa1e47b734445ea3ba32b4104fa377b7d",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "arena/universal/network.py": {
+      "frozen_source_sha256": "52cd61f21c6fec0c20e81bff9ab7a15c123ee82889c80d2fc404496a8b734a45",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "arena/universal/persistence.py": {
+      "frozen_source_sha256": "c1df0f665bad6af667f94a8164e4dac5a650ecbd35b511c35845a4b43887c75d",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "arena/universal/protocol.py": {
+      "frozen_source_sha256": "f7694f74db4563ee44f002d89eb77dc47e4e20732b0fd178603d5582ccdb4eb4",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "arena/universal/replay.py": {
+      "frozen_source_sha256": "afe5b4e00cacd15d5084069273e6cda604c86c72b5a3165eced78c50af990151",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "arena/universal/trainer.py": {
+      "frozen_source_sha256": "0d312531ac051027970d2bf4d8dd3c001c53f0f9c38dcd92d1c811c38ad44d89",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "tests/test_universal_analysis.py": {
+      "frozen_source_sha256": "ff11739e274786819a76fbc439e6853a9f23b728dfd0c97519b3206122657e4e",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "tests/test_universal_evaluation.py": {
+      "frozen_source_sha256": "4e2263b7c5b355b7dc2e8843e14f39315054512d677896aef8ad522cf08eb63d",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "tests/test_universal_network.py": {
+      "frozen_source_sha256": "9c148bc6af07c245d118df3510845de4eebeee6f7de0bc104c3cec46ec8521da",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "tests/test_universal_persistence.py": {
+      "frozen_source_sha256": "00da8fcaec3abed6fae1eeb26898f3a4e34f773ba49b9cd105a57e69481d1366",
+      "local_CRLF_normalized_matches_A": true
+    },
+    "tests/test_visual_games.py": {
+      "frozen_source_sha256": "4379fffafef1cc4609412cd79a0e18b3ae510d06e1a8d1d5e05ca5f5eff17df2",
+      "local_CRLF_normalized_matches_A": true
+    }
+  },
+  "status": "READ_ONLY_REVIEW_COMPLETE"
+}
