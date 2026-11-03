@@ -1,5 +1,12 @@
 # NOVA Neural Arena 🐍
 
+**Missão multijogos em andamento:** [NNA-MULTIJOGOS-002](https://github.com/Myrroth/NOVA-Neural-Arena/issues/12)
+e [implementação na PR #13](https://github.com/Myrroth/NOVA-Neural-Arena/pull/13).
+O objetivo completo inclui aprendizagem nos cinco jogos, percepção visual,
+memória, previsão e adaptação compartilhadas. Os simuladores e a nova
+infraestrutura estão sendo implementados; ainda não há competência aprendida
+comprovada nos cinco jogos. Consulte [MULTIGAME_002](docs/MULTIGAME_002.md).
+
 **Fechamento NNA-FECHAMENTO-001:** [resultado final](docs/CLOSURE_STATUS.md),
 [recuperação do pacote ATUAL](docs/CURRENT_PACKAGE.md),
 [verificação técnica](docs/FINAL_VERIFICATION.md) e [Pong v2](docs/PONG.md).

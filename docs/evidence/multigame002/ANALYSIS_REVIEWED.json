@@ -1,0 +1,2009 @@
+{
+  "mission": "NNA-MULTIJOGOS-002",
+  "candidate_protocol_sha256": "93591ede5951438f92432fc6601773aaafe28b2ba5840309aa7bd3611170a324",
+  "execution_authorized": false,
+  "matrix": {
+    "status": "PASS",
+    "expected_rows": 1735,
+    "observed_rows": 1735,
+    "unique_valid_rows": 1735,
+    "missing_rows": 0,
+    "steps": 174664,
+    "maximum_steps": 694000,
+    "errors": [],
+    "missing_examples": []
+  },
+  "requirements": {
+    "1": {
+      "status": "PASS",
+      "components": {
+        "learning": {
+          "status": "PASS",
+          "components": {
+            "foods_vs_random": {
+              "status": "PASS",
+              "gain": 2.816666666666667,
+              "minimum_gain": 1.0,
+              "ci95": [
+                1.9333333333333333,
+                3.983333333333333
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "foods_vs_untrained": {
+              "status": "PASS",
+              "gain": 2.816666666666667,
+              "minimum_gain": 0.0,
+              "ci95": [
+                1.9333333333333333,
+                3.983333333333333
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "outcome_telemetry": {
+          "status": "PASS",
+          "required_fields": [
+            "foods",
+            "wall_collision",
+            "body_collision"
+          ],
+          "episodes": 60
+        },
+        "spawn_coverage": {
+          "status": "PASS",
+          "positive_contexts": [
+            "interior",
+            "wall",
+            "corner"
+          ],
+          "stratum_counts": {
+            "interior": 24,
+            "wall": 27,
+            "corner": 9
+          }
+        }
+      }
+    },
+    "2": {
+      "status": "FAIL",
+      "components": {
+        "learning": {
+          "status": "FAIL",
+          "components": {
+            "net_points_vs_random": {
+              "status": "PASS",
+              "gain": 0.85,
+              "minimum_gain": 0.5,
+              "ci95": [
+                0.5333333333333333,
+                1.2833333333333334
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                1.15,
+                0.75,
+                0.6499999999999999
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                -1.85,
+                -2.25,
+                -2.35
+              ],
+              "control_means": [
+                -3.0,
+                -3.0,
+                -3.0
+              ]
+            },
+            "net_points_vs_untrained": {
+              "status": "FAIL",
+              "gain": 0.3,
+              "minimum_gain": 0.0,
+              "ci95": [
+                -0.23374999999999982,
+                0.8833333333333333
+              ],
+              "favorable_models": 2,
+              "model_seed_gains": [
+                0.75,
+                -0.10000000000000009,
+                0.25
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                -1.85,
+                -2.25,
+                -2.35
+              ],
+              "control_means": [
+                -2.6,
+                -2.15,
+                -2.6
+              ]
+            },
+            "interception_vs_random": {
+              "status": "PASS",
+              "gain": 0.1958682948756368,
+              "minimum_gain": 0.1,
+              "ci95": [
+                0.09934762838397886,
+                0.29244703267247013
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                0.25996403955648784,
+                0.22007042253521128,
+                0.10757042253521129
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.4148936170212766,
+                0.375,
+                0.2625
+              ],
+              "control_means": [
+                0.15492957746478872,
+                0.15492957746478872,
+                0.15492957746478872
+              ]
+            },
+            "interception_vs_untrained": {
+              "status": "PASS",
+              "gain": 0.1664304062828186,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.07417077280441729,
+                0.2686572625847101
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                0.25996403955648784,
+                0.13175675675675674,
+                0.10757042253521129
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.4148936170212766,
+                0.375,
+                0.2625
+              ],
+              "control_means": [
+                0.15492957746478872,
+                0.24324324324324326,
+                0.15492957746478872
+              ]
+            }
+          }
+        }
+      }
+    },
+    "3": {
+      "status": "FAIL",
+      "components": {
+        "learning": {
+          "status": "FAIL",
+          "components": {
+            "foods_vs_random": {
+              "status": "FAIL",
+              "gain": 0.36666666666666653,
+              "minimum_gain": 2.0,
+              "ci95": [
+                -0.16666666666666666,
+                0.8999999999999999
+              ],
+              "favorable_models": 2,
+              "model_seed_gains": [
+                -0.10000000000000009,
+                0.5999999999999999,
+                0.5999999999999999
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                1.0,
+                1.7,
+                1.7
+              ],
+              "control_means": [
+                1.1,
+                1.1,
+                1.1
+              ]
+            },
+            "foods_vs_untrained": {
+              "status": "FAIL",
+              "gain": 0.3,
+              "minimum_gain": 0.0,
+              "ci95": [
+                -0.5499999999999999,
+                1.0333333333333334
+              ],
+              "favorable_models": 2,
+              "model_seed_gains": [
+                -0.55,
+                0.44999999999999996,
+                1.0
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                1.0,
+                1.7,
+                1.7
+              ],
+              "control_means": [
+                1.55,
+                1.25,
+                0.7
+              ]
+            },
+            "prey_eaten_vs_random": {
+              "status": "FAIL",
+              "gain": 0.21666666666666667,
+              "minimum_gain": 0.3,
+              "ci95": [
+                0.05000000000000001,
+                0.39999999999999997
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                0.25,
+                0.25,
+                0.15000000000000002
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.3,
+                0.3,
+                0.2
+              ],
+              "control_means": [
+                0.05,
+                0.05,
+                0.05
+              ]
+            },
+            "prey_eaten_vs_untrained": {
+              "status": "FAIL",
+              "gain": 0.06666666666666667,
+              "minimum_gain": 0.0,
+              "ci95": [
+                -0.13333333333333333,
+                0.2333333333333333
+              ],
+              "favorable_models": 2,
+              "model_seed_gains": [
+                0.09999999999999998,
+                -0.04999999999999999,
+                0.15000000000000002
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.3,
+                0.3,
+                0.2
+              ],
+              "control_means": [
+                0.2,
+                0.35,
+                0.05
+              ]
+            },
+            "survival_vs_random": {
+              "status": "FAIL",
+              "gain": 0.0,
+              "minimum_gain": 0.1,
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "favorable_models": 0,
+              "model_seed_gains": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "survival_vs_untrained": {
+              "status": "FAIL",
+              "gain": 0.0,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.0,
+                0.0
+              ],
+              "favorable_models": 0,
+              "model_seed_gains": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "outcome_telemetry": {
+          "status": "PASS",
+          "required_fields": [
+            "foods",
+            "prey_eaten",
+            "eaten",
+            "mass",
+            "large_near_steps",
+            "large_distance_change",
+            "small_near_steps",
+            "small_distance_change"
+          ],
+          "episodes": 60
+        },
+        "opportunity_exposure": {
+          "status": "PASS",
+          "exposure": {
+            "1103": {
+              "large_near_steps": 377.0,
+              "small_near_steps": 324.0
+            },
+            "2207": {
+              "large_near_steps": 301.0,
+              "small_near_steps": 290.0
+            },
+            "3301": {
+              "large_near_steps": 336.0,
+              "small_near_steps": 295.0
+            }
+          },
+          "limitation": "proximity exposure is not an escape-opportunity denominator"
+        },
+        "scenario_audit": {
+          "status": "NOT_EVIDENCED",
+          "reason": "reviewed engineering receipt absent: agar_scenario_audit"
+        }
+      }
+    },
+    "4": {
+      "status": "FAIL",
+      "components": {
+        "learning": {
+          "status": "FAIL",
+          "components": {
+            "pipes_passed_vs_random": {
+              "status": "FAIL",
+              "gain": 0.7333333333333334,
+              "minimum_gain": 1.0,
+              "ci95": [
+                0.24999999999999997,
+                1.4666666666666668
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "pipes_passed_vs_untrained": {
+              "status": "PASS",
+              "gain": 0.7333333333333334,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.23333333333333336,
+                1.4833333333333334
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "outcome_telemetry": {
+          "status": "PASS",
+          "required_fields": [
+            "pipes_passed",
+            "collision",
+            "flaps"
+          ],
+          "episodes": 60
+        },
+        "gap_coverage": {
+          "status": "PASS",
+          "components": {
+            "narrow": {
+              "status": "PASS",
+              "gain": 0.15,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.016666666666666666,
+                0.3666666666666667
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                0.05,
+                0.05,
+                0.35
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.05,
+                0.05,
+                0.35
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "wide": {
+              "status": "PASS",
+              "gain": 0.5833333333333334,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.19999999999999998,
+                1.1500000000000001
+              ],
+              "favorable_models": 3,
+              "model_seed_gains": [
+                0.25,
+                0.35,
+                1.15
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.25,
+                0.35,
+                1.15
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          }
+        }
+      }
+    },
+    "5": {
+      "status": "FAIL",
+      "components": {
+        "learning": {
+          "status": "FAIL",
+          "components": {
+            "progress_normalized_vs_random": {
+              "status": "FAIL",
+              "gain": 0.16580663679256596,
+              "minimum_gain": 0.15,
+              "ci95": [
+                -0.08627748283300248,
+                0.47599397222817286
+              ],
+              "favorable_models": 2,
+              "model_seed_gains": [
+                0.4871766084009235,
+                -0.08990354058505265,
+                0.10014684256182699
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.645163621292505,
+                0.06808347230652886,
+                0.2581338554534085
+              ],
+              "control_means": [
+                0.1579870128915815,
+                0.1579870128915815,
+                0.1579870128915815
+              ]
+            },
+            "progress_normalized_vs_untrained": {
+              "status": "FAIL",
+              "gain": 0.14467748363088925,
+              "minimum_gain": 0.0,
+              "ci95": [
+                -0.03383771994312583,
+                0.37474211500426424
+              ],
+              "favorable_models": 2,
+              "model_seed_gains": [
+                0.39273991247877593,
+                -0.034954936828257704,
+                0.0762474752421495
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.645163621292505,
+                0.06808347230652886,
+                0.2581338554534085
+              ],
+              "control_means": [
+                0.2524237088137291,
+                0.10303840913478657,
+                0.181886380211259
+              ]
+            },
+            "lap_completed_vs_random": {
+              "status": "FAIL",
+              "gain": 0.08333333333333333,
+              "minimum_gain": 0.1,
+              "ci95": [
+                0.0,
+                0.25
+              ],
+              "favorable_models": 1,
+              "model_seed_gains": [
+                0.25,
+                0.0,
+                0.0
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.25,
+                0.0,
+                0.0
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "lap_completed_vs_untrained": {
+              "status": "FAIL",
+              "gain": 0.08333333333333333,
+              "minimum_gain": 0.0,
+              "ci95": [
+                0.0,
+                0.25
+              ],
+              "favorable_models": 1,
+              "model_seed_gains": [
+                0.25,
+                0.0,
+                0.0
+              ],
+              "independent_models": 3,
+              "environment_seeds_per_model": 20,
+              "bootstrap_repetitions": 10000,
+              "bootstrap_seed": 510002,
+              "treatment_means": [
+                0.25,
+                0.0,
+                0.0
+              ],
+              "control_means": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "outcome_telemetry": {
+          "status": "PASS",
+          "required_fields": [
+            "track_length",
+            "distance",
+            "accelerations",
+            "brakes",
+            "turns",
+            "curved_steps",
+            "curved_distance"
+          ],
+          "episodes": 60
+        },
+        "collision_per_distance": {
+          "status": "PASS",
+          "collision_rate_difference_by_model": [
+            -0.025090857628890947,
+            -0.012695421104483972,
+            -0.022142144615369626
+          ]
+        },
+        "curve_throttle_brake_audit": {
+          "status": "NOT_EVIDENCED",
+          "reason": "reviewed engineering receipt absent: racing_control_audit"
+        }
+      }
+    },
+    "6": {
+      "status": "PASS",
+      "receipts": [
+        {
+          "path": "receipts/ENGINEERING_RECEIPTS_REVIEW.json",
+          "sha256": "1e5e1ccae8893eba93fc85802629880d484d816660b4ca6ea2dca8a1c93be2f0"
+        },
+        {
+          "path": "receipts/CHECKPOINT_RECOVERY.json",
+          "sha256": "8283733a70e80d08c2dc8850262ae6fab5ac80de928ad8448c572ff261879d3e"
+        },
+        {
+          "path": "receipts/COMPETENCE_TRANSFER_INDEPENDENT.json",
+          "sha256": "83006e7a67ed936b063ec56f78a4ee91b30cfcf21f9d6e4f6a7ad03342f9a72c"
+        }
+      ],
+      "limitation": "hash verifies receipt integrity; content remains subject to independent review"
+    },
+    "7": {
+      "status": "PASS",
+      "components": {
+        "perception": {
+          "status": "PASS",
+          "components": {
+            "same_state_action_effect": {
+              "status": "PASS",
+              "games_above_threshold": 5,
+              "minimum_fraction": 0.05,
+              "by_game": {
+                "snake": {
+                  "changed_fraction": 0.8390719979688551,
+                  "changed_fraction_by_model": [
+                    0.9121756487025948,
+                    0.7634730538922155,
+                    0.8415672913117547
+                  ]
+                },
+                "pong": {
+                  "changed_fraction": 0.5973103349150223,
+                  "changed_fraction_by_model": [
+                    0.8022922636103151,
+                    0.29432624113475175,
+                    0.6953125
+                  ]
+                },
+                "agar": {
+                  "changed_fraction": 0.5007514116757815,
+                  "changed_fraction_by_model": [
+                    0.5408163265306123,
+                    0.40588235294117647,
+                    0.5555555555555556
+                  ]
+                },
+                "flappy": {
+                  "changed_fraction": 0.5703578602840448,
+                  "changed_fraction_by_model": [
+                    0.1419753086419753,
+                    0.6900369003690037,
+                    0.8790613718411552
+                  ]
+                },
+                "racing": {
+                  "changed_fraction": 0.9207194405003318,
+                  "changed_fraction_by_model": [
+                    0.8230088495575221,
+                    0.9871086556169429,
+                    0.9520408163265306
+                  ]
+                }
+              }
+            },
+            "objective_improvement": {
+              "status": "PASS",
+              "improved_games": 2,
+              "by_game": {
+                "snake": {
+                  "status": "PASS",
+                  "gain": 3.4000000000000004,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    1.4666666666666668,
+                    5.8
+                  ],
+                  "favorable_models": 3,
+                  "model_seed_gains": [
+                    2.6,
+                    4.2,
+                    3.4
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 5,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    2.6,
+                    4.2,
+                    3.4
+                  ],
+                  "control_means": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                "pong": {
+                  "status": "FAIL",
+                  "gain": 0.4000000000000001,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.1333333333333333,
+                    1.2666666666666666
+                  ],
+                  "favorable_models": 2,
+                  "model_seed_gains": [
+                    1.0,
+                    0.20000000000000018,
+                    0.0
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 5,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    -1.6,
+                    -2.4,
+                    -2.6
+                  ],
+                  "control_means": [
+                    -2.6,
+                    -2.6,
+                    -2.6
+                  ]
+                },
+                "agar": {
+                  "status": "FAIL",
+                  "gain": 0.13333333333333333,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.7333333333333334,
+                    1.1333333333333335
+                  ],
+                  "favorable_models": 1,
+                  "model_seed_gains": [
+                    -0.6,
+                    0.0,
+                    1.0
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 5,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    0.6,
+                    1.2,
+                    2.0
+                  ],
+                  "control_means": [
+                    1.2,
+                    1.2,
+                    1.0
+                  ]
+                },
+                "flappy": {
+                  "status": "PASS",
+                  "gain": 1.1333333333333333,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    0.13333333333333333,
+                    2.4
+                  ],
+                  "favorable_models": 3,
+                  "model_seed_gains": [
+                    0.2,
+                    0.8,
+                    2.4
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 5,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    0.2,
+                    0.8,
+                    2.4
+                  ],
+                  "control_means": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                "racing": {
+                  "status": "FAIL",
+                  "gain": 0.18685078764479232,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.2553609711008005,
+                    0.5445088092673078
+                  ],
+                  "favorable_models": 2,
+                  "model_seed_gains": [
+                    0.5305140238934933,
+                    -0.28461714865135257,
+                    0.31465548769223617
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 5,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    0.5899139789753477,
+                    0.057196225093357735,
+                    0.3325135654994206
+                  ],
+                  "control_means": [
+                    0.05939995508185436,
+                    0.3418133737447103,
+                    0.01785807780718447
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "temporal_memory": {
+          "status": "PASS",
+          "components": {
+            "same_state_action_effect": {
+              "status": "PASS",
+              "games_above_threshold": 5,
+              "minimum_fraction": 0.01,
+              "by_game": {
+                "snake": {
+                  "changed_fraction": 0.3722199866380693,
+                  "changed_fraction_by_model": [
+                    0.41329479768786126,
+                    0.38663209449726305,
+                    0.31673306772908366
+                  ]
+                },
+                "pong": {
+                  "changed_fraction": 0.2721378497917732,
+                  "changed_fraction_by_model": [
+                    0.4737777777777778,
+                    0.2039274924471299,
+                    0.13870827915041178
+                  ]
+                },
+                "agar": {
+                  "changed_fraction": 0.4825931111432802,
+                  "changed_fraction_by_model": [
+                    0.5065554231227652,
+                    0.631638418079096,
+                    0.30958549222797926
+                  ]
+                },
+                "flappy": {
+                  "changed_fraction": 0.22084862603690789,
+                  "changed_fraction_by_model": [
+                    0.16689655172413792,
+                    0.3416557161629435,
+                    0.15399361022364216
+                  ]
+                },
+                "racing": {
+                  "changed_fraction": 0.722697888250342,
+                  "changed_fraction_by_model": [
+                    0.4583333333333333,
+                    0.7862218103181958,
+                    0.9235385210994967
+                  ]
+                }
+              }
+            },
+            "objective_improvement": {
+              "status": "PASS",
+              "improved_games": 2,
+              "by_game": {
+                "snake": {
+                  "status": "PASS",
+                  "gain": 2.0166666666666666,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    0.9166666666666666,
+                    3.266666666666667
+                  ],
+                  "favorable_models": 3,
+                  "model_seed_gains": [
+                    1.1,
+                    2.5,
+                    2.4499999999999997
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    2.35,
+                    3.2,
+                    2.9
+                  ],
+                  "control_means": [
+                    1.25,
+                    0.7,
+                    0.45
+                  ]
+                },
+                "pong": {
+                  "status": "FAIL",
+                  "gain": 0.18333333333333326,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.23333333333333348,
+                    0.7833333333333333
+                  ],
+                  "favorable_models": 1,
+                  "model_seed_gains": [
+                    0.75,
+                    -0.1499999999999999,
+                    -0.050000000000000266
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    -1.85,
+                    -2.25,
+                    -2.35
+                  ],
+                  "control_means": [
+                    -2.6,
+                    -2.1,
+                    -2.3
+                  ]
+                },
+                "agar": {
+                  "status": "FAIL",
+                  "gain": 0.21666666666666665,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.15000000000000002,
+                    0.5833333333333334
+                  ],
+                  "favorable_models": 3,
+                  "model_seed_gains": [
+                    0.050000000000000044,
+                    0.19999999999999996,
+                    0.3999999999999999
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    1.0,
+                    1.7,
+                    1.7
+                  ],
+                  "control_means": [
+                    0.95,
+                    1.5,
+                    1.3
+                  ]
+                },
+                "flappy": {
+                  "status": "PASS",
+                  "gain": 0.4833333333333334,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    0.033333333333333326,
+                    1.0999999999999999
+                  ],
+                  "favorable_models": 3,
+                  "model_seed_gains": [
+                    0.3,
+                    0.050000000000000044,
+                    1.1
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    0.3,
+                    0.4,
+                    1.5
+                  ],
+                  "control_means": [
+                    0.0,
+                    0.35,
+                    0.4
+                  ]
+                },
+                "racing": {
+                  "status": "FAIL",
+                  "gain": 0.01671402248439968,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.0424547669667823,
+                    0.10482739264126975
+                  ],
+                  "favorable_models": 1,
+                  "model_seed_gains": [
+                    0.08651003772542121,
+                    -0.030071183851170816,
+                    -0.006296786421051359
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    0.645163621292505,
+                    0.06808347230652886,
+                    0.2581338554534085
+                  ],
+                  "control_means": [
+                    0.5586535835670838,
+                    0.09815465615769968,
+                    0.26443064187445986
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "observation_audit": {
+          "status": "PASS",
+          "receipts": [
+            {
+              "path": "receipts/ENGINEERING_RECEIPTS_REVIEW.json",
+              "sha256": "1e5e1ccae8893eba93fc85802629880d484d816660b4ca6ea2dca8a1c93be2f0"
+            },
+            {
+              "path": "receipts/WORLD_PERCEPTION_INDEPENDENT.json",
+              "sha256": "3d65258f78cf542288509ea4d1f82ec79cef1c974ba1185235af385c94892a71"
+            }
+          ],
+          "limitation": "hash verifies receipt integrity; content remains subject to independent review"
+        }
+      }
+    },
+    "8": {
+      "status": "FAIL",
+      "components": {
+        "prediction": {
+          "status": "FAIL",
+          "components": {
+            "snake": {
+              "status": "PASS",
+              "by_model": {
+                "1103": {
+                  "latent_mse_model": 0.022081311461832,
+                  "latent_mse_copy": 0.0246226276187603,
+                  "reward_mae_model": 0.0857137549622598,
+                  "reward_mae_baseline": 0.055245818940229695,
+                  "terminal_brier_model": 0.0037355005537888872,
+                  "terminal_brier_baseline": 0.007334247098587025,
+                  "support": 3460,
+                  "terminal_events": 13,
+                  "latent_ratio": 0.8967894005353011
+                },
+                "2207": {
+                  "latent_mse_model": 0.032548961372299054,
+                  "latent_mse_copy": 0.040068514423672395,
+                  "reward_mae_model": 0.08948453355414213,
+                  "reward_mae_baseline": 0.0578207917986735,
+                  "terminal_brier_model": 0.0039992986412268885,
+                  "terminal_brier_baseline": 0.007559354684769039,
+                  "support": 3471,
+                  "terminal_events": 13,
+                  "latent_ratio": 0.8123326217722011
+                },
+                "3301": {
+                  "latent_mse_model": 0.03996832447056684,
+                  "latent_mse_copy": 0.04847771127170916,
+                  "reward_mae_model": 0.10476760826177546,
+                  "reward_mae_baseline": 0.05424342493054072,
+                  "terminal_brier_model": 0.0015597648827538743,
+                  "terminal_brier_baseline": 0.0058934851688196704,
+                  "support": 5522,
+                  "terminal_events": 8,
+                  "latent_ratio": 0.824468058043238
+                }
+              }
+            },
+            "pong": {
+              "status": "FAIL",
+              "by_model": {
+                "1103": {
+                  "latent_mse_model": 0.0025306163566980373,
+                  "latent_mse_copy": 0.0025626694879780794,
+                  "reward_mae_model": 0.0450513556106797,
+                  "reward_mae_baseline": 0.037969343604920366,
+                  "terminal_brier_model": 0.005650235694113322,
+                  "terminal_brier_baseline": 0.00589130975308642,
+                  "support": 3375,
+                  "terminal_events": 20,
+                  "latent_ratio": 0.987492288244579
+                },
+                "2207": {
+                  "latent_mse_model": 0.0036282422250015216,
+                  "latent_mse_copy": 0.003919901658312228,
+                  "reward_mae_model": 0.02905575005026742,
+                  "reward_mae_baseline": 0.03713477114801804,
+                  "terminal_brier_model": 0.004631814655668755,
+                  "terminal_brier_baseline": 0.006005862009902654,
+                  "support": 3310,
+                  "terminal_events": 20,
+                  "latent_ratio": 0.9255952167340126
+                },
+                "3301": {
+                  "latent_mse_model": 0.004487741919091134,
+                  "latent_mse_copy": 0.004938060894956835,
+                  "reward_mae_model": 0.04149735963205057,
+                  "reward_mae_baseline": 0.045636589669104874,
+                  "terminal_brier_model": 0.008184042271423766,
+                  "terminal_brier_baseline": 0.008598744938953908,
+                  "support": 2307,
+                  "terminal_events": 20,
+                  "latent_ratio": 0.9088065162732997
+                }
+              }
+            },
+            "agar": {
+              "status": "FAIL",
+              "by_model": {
+                "1103": {
+                  "latent_mse_model": 0.006224889037503469,
+                  "latent_mse_copy": 0.006325343530305969,
+                  "reward_mae_model": 0.055135490122192383,
+                  "reward_mae_baseline": 0.053764005204591826,
+                  "terminal_brier_model": 0.020376121915674752,
+                  "terminal_brier_baseline": 0.02329201789299431,
+                  "support": 839,
+                  "terminal_events": 20,
+                  "latent_ratio": 0.9841187293115066
+                },
+                "2207": {
+                  "latent_mse_model": 0.004638561170606079,
+                  "latent_mse_copy": 0.004738488878103073,
+                  "reward_mae_model": 0.07425100035613541,
+                  "reward_mae_baseline": 0.05528879585685691,
+                  "terminal_brier_model": 0.023287034629078524,
+                  "terminal_brier_baseline": 0.02214146762711864,
+                  "support": 885,
+                  "terminal_events": 20,
+                  "latent_ratio": 0.978911482105874
+                },
+                "3301": {
+                  "latent_mse_model": 0.0033112476320700224,
+                  "latent_mse_copy": 0.003282278929934689,
+                  "reward_mae_model": 0.05066062422316771,
+                  "reward_mae_baseline": 0.0587507181346982,
+                  "terminal_brier_model": 0.025033846317174483,
+                  "terminal_brier_baseline": 0.025258552176165808,
+                  "support": 772,
+                  "terminal_events": 20,
+                  "latent_ratio": 1.008825789262191
+                }
+              }
+            },
+            "flappy": {
+              "status": "PASS",
+              "by_model": {
+                "1103": {
+                  "latent_mse_model": 0.008727791176281934,
+                  "latent_mse_copy": 0.009906390901185284,
+                  "reward_mae_model": 0.06445163421918605,
+                  "reward_mae_baseline": 0.06907868563212881,
+                  "terminal_brier_model": 0.01917945960421296,
+                  "terminal_brier_baseline": 0.026930211685823748,
+                  "support": 725,
+                  "terminal_events": 20,
+                  "latent_ratio": 0.8810263256659565
+                },
+                "2207": {
+                  "latent_mse_model": 0.0064892598848747705,
+                  "latent_mse_copy": 0.007512936230676075,
+                  "reward_mae_model": 0.054869092863234215,
+                  "reward_mae_baseline": 0.0725190066797514,
+                  "terminal_brier_model": 0.013609798025650145,
+                  "terminal_brier_baseline": 0.025763924050591337,
+                  "support": 761,
+                  "terminal_events": 20,
+                  "latent_ratio": 0.8637448376546135
+                },
+                "3301": {
+                  "latent_mse_model": 0.00993092026098069,
+                  "latent_mse_copy": 0.01092758898173085,
+                  "reward_mae_model": 0.053255116759969016,
+                  "reward_mae_baseline": 0.064044086794405,
+                  "terminal_brier_model": 0.008322283359330045,
+                  "terminal_brier_baseline": 0.013188423546325878,
+                  "support": 1565,
+                  "terminal_events": 20,
+                  "latent_ratio": 0.9087933557515361
+                }
+              }
+            },
+            "racing": {
+              "status": "FAIL",
+              "by_model": {
+                "1103": {
+                  "latent_mse_model": 0.0047718395274965915,
+                  "latent_mse_copy": 0.005109911097971428,
+                  "reward_mae_model": 0.03884624468309539,
+                  "reward_mae_baseline": 0.0571912181353758,
+                  "terminal_brier_model": 0.015565861279370945,
+                  "terminal_brier_baseline": 0.018636037878787873,
+                  "support": 1056,
+                  "terminal_events": 20,
+                  "latent_ratio": 0.9338400289177151
+                },
+                "2207": {
+                  "latent_mse_model": 0.00025413475281244676,
+                  "latent_mse_copy": 0.00022705971073371648,
+                  "reward_mae_model": 0.008701034176132863,
+                  "reward_mae_baseline": 0.002586499416523675,
+                  "terminal_brier_model": 0.0006249128774232016,
+                  "terminal_brier_baseline": 0.0006266681904541239,
+                  "support": 6474,
+                  "terminal_events": 4,
+                  "latent_ratio": 1.119241947376928
+                },
+                "3301": {
+                  "latent_mse_model": 0.0005177574298721155,
+                  "latent_mse_copy": 0.0005143769101180195,
+                  "reward_mae_model": 0.008806088273610048,
+                  "reward_mae_baseline": 0.006064400110128788,
+                  "terminal_brier_model": 0.0014821880133390427,
+                  "terminal_brier_baseline": 0.0015591589692218351,
+                  "support": 5166,
+                  "terminal_events": 8,
+                  "latent_ratio": 1.006572067461816
+                }
+              }
+            }
+          }
+        },
+        "causal_control": {
+          "status": "FAIL",
+          "components": {
+            "same_state_action_effect": {
+              "status": "PASS",
+              "games_above_threshold": 5,
+              "minimum_fraction": 0.01,
+              "by_game": {
+                "snake": {
+                  "changed_fraction": 0.09408281261348307,
+                  "changed_fraction_by_model": [
+                    0.13988439306358383,
+                    0.046384327283203686,
+                    0.09597971749366171
+                  ]
+                },
+                "pong": {
+                  "changed_fraction": 0.05662490838557374,
+                  "changed_fraction_by_model": [
+                    0.11733333333333333,
+                    0.028700906344410877,
+                    0.023840485478977026
+                  ]
+                },
+                "agar": {
+                  "changed_fraction": 0.07590525348563,
+                  "changed_fraction_by_model": [
+                    0.06555423122765197,
+                    0.1310734463276836,
+                    0.031088082901554404
+                  ]
+                },
+                "flappy": {
+                  "changed_fraction": 0.0345093650753897,
+                  "changed_fraction_by_model": [
+                    0.031724137931034485,
+                    0.05519053876478318,
+                    0.016613418530351438
+                  ]
+                },
+                "racing": {
+                  "changed_fraction": 0.31232169268460774,
+                  "changed_fraction_by_model": [
+                    0.06439393939393939,
+                    0.5376892184121099,
+                    0.3348819202477739
+                  ]
+                }
+              }
+            },
+            "objective_improvement": {
+              "status": "FAIL",
+              "improved_games": 0,
+              "by_game": {
+                "snake": {
+                  "status": "FAIL",
+                  "gain": 0.20000000000000004,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.8333333333333334,
+                    1.1333333333333333
+                  ],
+                  "favorable_models": 2,
+                  "model_seed_gains": [
+                    0.4500000000000002,
+                    0.25,
+                    -0.10000000000000009
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    2.35,
+                    3.2,
+                    2.9
+                  ],
+                  "control_means": [
+                    1.9,
+                    2.95,
+                    3.0
+                  ]
+                },
+                "pong": {
+                  "status": "FAIL",
+                  "gain": -0.016666666666666757,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.13333333333333344,
+                    0.08333333333333326
+                  ],
+                  "favorable_models": 1,
+                  "model_seed_gains": [
+                    0.0,
+                    -0.10000000000000009,
+                    0.04999999999999982
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    -1.85,
+                    -2.25,
+                    -2.35
+                  ],
+                  "control_means": [
+                    -1.85,
+                    -2.15,
+                    -2.4
+                  ]
+                },
+                "agar": {
+                  "status": "FAIL",
+                  "gain": 0.01666666666666668,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.18333333333333332,
+                    0.18333333333333338
+                  ],
+                  "favorable_models": 2,
+                  "model_seed_gains": [
+                    0.050000000000000044,
+                    -0.050000000000000044,
+                    0.050000000000000044
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    1.0,
+                    1.7,
+                    1.7
+                  ],
+                  "control_means": [
+                    0.95,
+                    1.75,
+                    1.65
+                  ]
+                },
+                "flappy": {
+                  "status": "FAIL",
+                  "gain": 0.050000000000000044,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.21666666666666665,
+                    0.23333333333333336
+                  ],
+                  "favorable_models": 2,
+                  "model_seed_gains": [
+                    0.19999999999999998,
+                    0.10000000000000003,
+                    -0.1499999999999999
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    0.3,
+                    0.4,
+                    1.5
+                  ],
+                  "control_means": [
+                    0.1,
+                    0.3,
+                    1.65
+                  ]
+                },
+                "racing": {
+                  "status": "FAIL",
+                  "gain": -0.0012898890315656737,
+                  "minimum_gain": 0.0,
+                  "ci95": [
+                    -0.041882821215946255,
+                    0.04552064230420367
+                  ],
+                  "favorable_models": 1,
+                  "model_seed_gains": [
+                    -0.022355103823727185,
+                    -0.008659718033832642,
+                    0.027145154762862805
+                  ],
+                  "independent_models": 3,
+                  "environment_seeds_per_model": 20,
+                  "bootstrap_repetitions": 10000,
+                  "bootstrap_seed": 510002,
+                  "treatment_means": [
+                    0.645163621292505,
+                    0.06808347230652886,
+                    0.2581338554534085
+                  ],
+                  "control_means": [
+                    0.6675187251162322,
+                    0.0767431903403615,
+                    0.2309887006905457
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "heldout_provenance": {
+          "status": "PASS",
+          "receipts": [
+            {
+              "path": "receipts/ENGINEERING_RECEIPTS_REVIEW.json",
+              "sha256": "1e5e1ccae8893eba93fc85802629880d484d816660b4ca6ea2dca8a1c93be2f0"
+            },
+            {
+              "path": "receipts/WORLD_PERCEPTION_INDEPENDENT.json",
+              "sha256": "3d65258f78cf542288509ea4d1f82ec79cef1c974ba1185235af385c94892a71"
+            },
+            {
+              "path": "receipts/EXECUTION_LIMITS_INDEPENDENT.json",
+              "sha256": "7bb673e3c1169f6698ec5c6ac96ab5696e1f49de4b86a6ef60af21c7057b50a1"
+            }
+          ],
+          "limitation": "hash verifies receipt integrity; content remains subject to independent review"
+        }
+      }
+    },
+    "9": {
+      "status": "PASS",
+      "receipts": [
+        {
+          "path": "receipts/ENGINEERING_RECEIPTS_REVIEW.json",
+          "sha256": "1e5e1ccae8893eba93fc85802629880d484d816660b4ca6ea2dca8a1c93be2f0"
+        },
+        {
+          "path": "receipts/CI_A_JOB_LOG.txt",
+          "sha256": "b1af97a9bafd1393a56ea3a123e15225a1cec46fd69c041f65e8d356614e7d13"
+        },
+        {
+          "path": "receipts/CI_B_JOB_LOG.txt",
+          "sha256": "2de247601e40cd40c32790f359e46a690403a817992dd45c1b55943226f2afa3"
+        },
+        {
+          "path": "receipts/CHECKPOINT_RECOVERY.json",
+          "sha256": "8283733a70e80d08c2dc8850262ae6fab5ac80de928ad8448c572ff261879d3e"
+        },
+        {
+          "path": "receipts/OFFLINE_PROOF_STATUS.json",
+          "sha256": "13d81cec2f2034f9639911146090844e029232dc8df0977bf5aea89235474b18"
+        }
+      ],
+      "limitation": "hash verifies receipt integrity; content remains subject to independent review"
+    },
+    "10": {
+      "status": "FAIL",
+      "components": {
+        "target_final_transfer": {
+          "status": "FAIL",
+          "gain": -0.5599047611787816,
+          "minimum_gain": 0.05,
+          "ci95": [
+            -0.8663068656607628,
+            -0.29895719121860903
+          ],
+          "favorable_models": 0,
+          "model_seed_gains": [
+            -0.2950617982723396,
+            -0.8772611459200439,
+            -0.5073913393439613
+          ],
+          "independent_models": 3,
+          "environment_seeds_per_model": 20,
+          "bootstrap_repetitions": 10000,
+          "bootstrap_seed": 510002,
+          "treatment_means": [
+            0.645163621292505,
+            0.06808347230652886,
+            0.2581338554534085
+          ],
+          "control_means": [
+            0.9402254195648446,
+            0.9453446182265728,
+            0.7655251947973698
+          ]
+        },
+        "target_training_auc": {
+          "status": "FAIL",
+          "relative_auc_gain_by_model": [
+            -0.1351445569722005,
+            -0.7084364992127195,
+            -0.4473664460888671
+          ],
+          "mean_relative_gain": -0.43031583409126234,
+          "minimum_relative_gain": 0.1,
+          "definition": "step-weighted episode progress, right endpoint; exploratory training policy"
+        },
+        "source_retention": {
+          "status": "FAIL",
+          "components": {
+            "snake": {
+              "status": "FAIL",
+              "retained_gain_by_model": [
+                0.5164835164835165,
+                0.5333333333333333,
+                0.5686274509803921
+              ],
+              "before_gains": [
+                4.55,
+                6.0,
+                5.1
+              ],
+              "after_gains": [
+                2.35,
+                3.2,
+                2.9
+              ],
+              "minimum_fraction": 0.8
+            },
+            "pong": {
+              "status": "FAIL",
+              "retained_gain_by_model": [
+                0.6571428571428571,
+                0.21428571428571427,
+                0.38235294117647056
+              ],
+              "before_gains": [
+                1.75,
+                3.5,
+                1.7
+              ],
+              "after_gains": [
+                1.15,
+                0.75,
+                0.6499999999999999
+              ],
+              "minimum_fraction": 0.8
+            },
+            "agar": {
+              "status": "FAIL",
+              "retained_gain_by_model": [
+                -0.08333333333333343,
+                0.857142857142857,
+                0.923076923076923
+              ],
+              "before_gains": [
+                1.1999999999999997,
+                0.7,
+                0.6499999999999999
+              ],
+              "after_gains": [
+                -0.10000000000000009,
+                0.5999999999999999,
+                0.5999999999999999
+              ],
+              "minimum_fraction": 0.8
+            },
+            "flappy": {
+              "status": "FAIL",
+              "retained_gain_by_model": [
+                0.3333333333333333,
+                1.6,
+                1.4285714285714286
+              ],
+              "before_gains": [
+                0.9,
+                0.25,
+                1.05
+              ],
+              "after_gains": [
+                0.3,
+                0.4,
+                1.5
+              ],
+              "minimum_fraction": 0.8
+            }
+          }
+        },
+        "holdout_and_equal_budget": {
+          "status": "PASS",
+          "receipts": [
+            {
+              "path": "receipts/ENGINEERING_RECEIPTS_REVIEW.json",
+              "sha256": "1e5e1ccae8893eba93fc85802629880d484d816660b4ca6ea2dca8a1c93be2f0"
+            },
+            {
+              "path": "receipts/EXECUTION_LIMITS_INDEPENDENT.json",
+              "sha256": "7bb673e3c1169f6698ec5c6ac96ab5696e1f49de4b86a6ef60af21c7057b50a1"
+            }
+          ],
+          "limitation": "hash verifies receipt integrity; content remains subject to independent review"
+        }
+      }
+    },
+    "11": {
+      "status": "PASS",
+      "components": {
+        "matrix": {
+          "status": "PASS",
+          "expected_rows": 1735,
+          "observed_rows": 1735,
+          "unique_valid_rows": 1735,
+          "missing_rows": 0,
+          "steps": 174664,
+          "maximum_steps": 694000,
+          "errors": [],
+          "missing_examples": []
+        },
+        "separation_and_limits": {
+          "status": "PASS",
+          "receipts": [
+            {
+              "path": "receipts/ENGINEERING_RECEIPTS_REVIEW.json",
+              "sha256": "1e5e1ccae8893eba93fc85802629880d484d816660b4ca6ea2dca8a1c93be2f0"
+            },
+            {
+              "path": "receipts/EXECUTION_LIMITS_INDEPENDENT.json",
+              "sha256": "7bb673e3c1169f6698ec5c6ac96ab5696e1f49de4b86a6ef60af21c7057b50a1"
+            }
+          ],
+          "limitation": "hash verifies receipt integrity; content remains subject to independent review"
+        }
+      }
+    },
+    "12": {
+      "status": "NOT_EVIDENCED",
+      "reason": "reviewed engineering receipt absent: demonstration_recovery_delivery"
+    },
+    "13": {
+      "status": "NOT_EVIDENCED",
+      "reason": "reviewed engineering receipt absent: coordinated_acceptance"
+    }
+  },
+  "after_adaptation_descriptive_metrics": {
+    "snake": {
+      "foods": {
+        "support": 60,
+        "missing": 0,
+        "mean": 2.816666666666667,
+        "sum": 169.0
+      },
+      "wall_collision": {
+        "support": 60,
+        "missing": 0,
+        "mean": 0.26666666666666666,
+        "sum": 16.0
+      },
+      "body_collision": {
+        "support": 60,
+        "missing": 0,
+        "mean": 0.3,
+        "sum": 18.0
+      }
+    },
+    "pong": {
+      "points": {
+        "support": 60,
+        "missing": 0,
+        "mean": 0.75,
+        "sum": 45.0
+      },
+      "conceded": {
+        "support": 60,
+        "missing": 0,
+        "mean": 2.9,
+        "sum": 174.0
+      },
+      "hits": {
+        "support": 60,
+        "missing": 0,
+        "mean": 1.6,
+        "sum": 96.0
+      },
+      "incoming": {
+        "support": 60,
+        "missing": 0,
+        "mean": 4.5,
+        "sum": 270.0
+      }
+    },
+    "agar": {
+      "foods": {
+        "support": 60,
+        "missing": 0,
+        "mean": 1.4666666666666666,
+        "sum": 88.0
+      },
+      "prey_eaten": {
+        "support": 60,
+        "missing": 0,
+        "mean": 0.26666666666666666,
+        "sum": 16.0
+      },
+      "eaten": {
+        "support": 60,
+        "missing": 0,
+        "mean": 1.0,
+        "sum": 60.0
+      },
+      "mass": {
+        "support": 60,
+        "missing": 0,
+        "mean": 11.607925751983695,
+        "sum": 696.4755451190217
+      },
+      "large_near_steps": {
+        "support": 60,
+        "missing": 0,
+        "mean": 16.9,
+        "sum": 1014.0
+      },
+      "large_distance_change": {
+        "support": 60,
+        "missing": 0,
+        "mean": 1.5938814917690316,
+        "sum": 95.6328895061419
+      },
+      "small_near_steps": {
+        "support": 60,
+        "missing": 0,
+        "mean": 15.15,
+        "sum": 909.0
+      },
+      "small_distance_change": {
+        "support": 60,
+        "missing": 0,
+        "mean": -1.3679047547633827,
+        "sum": -82.07428528580296
+      }
+    },
+    "flappy": {
+      "pipes_passed": {
+        "support": 60,
+        "missing": 0,
+        "mean": 0.7333333333333333,
+        "sum": 44.0
+      },
+      "collision": {
+        "support": 60,
+        "missing": 0,
+        "mean": 1.0,
+        "sum": 60.0
+      },
+      "flaps": {
+        "support": 60,
+        "missing": 0,
+        "mean": 8.766666666666667,
+        "sum": 526.0
+      }
+    },
+    "racing": {
+      "distance": {
+        "support": 60,
+        "missing": 0,
+        "mean": 35.58993085744252,
+        "sum": 2135.395851446551
+      },
+      "speed": {
+        "support": 60,
+        "missing": 0,
+        "mean": 0.6577666666666668,
+        "sum": 39.46600000000001
+      },
+      "collision": {
+        "support": 60,
+        "missing": 0,
+        "mean": 0.45,
+        "sum": 27.0
+      },
+      "accelerations": {
+        "support": 60,
+        "missing": 0,
+        "mean": 18.066666666666666,
+        "sum": 1084.0
+      },
+      "brakes": {
+        "support": 60,
+        "missing": 0,
+        "mean": 133.06666666666666,
+        "sum": 7984.0
+      },
+      "turns": {
+        "support": 60,
+        "missing": 0,
+        "mean": 23.983333333333334,
+        "sum": 1439.0
+      },
+      "curved_steps": {
+        "support": 60,
+        "missing": 0,
+        "mean": 75.85,
+        "sum": 4551.0
+      },
+      "curved_distance": {
+        "support": 60,
+        "missing": 0,
+        "mean": 16.021777190729583,
+        "sum": 961.3066314437749
+      },
+      "track_length": {
+        "support": 60,
+        "missing": 0,
+        "mean": 105.0290642868816,
+        "sum": 6301.743857212897
+      },
+      "lap_completed": {
+        "support": 60,
+        "missing": 0,
+        "mean": 0.08333333333333333,
+        "sum": 5.0
+      },
+      "progress_normalized": {
+        "support": 60,
+        "missing": 0,
+        "mean": 0.3237936496841474,
+        "sum": 19.427618981048845
+      }
+    }
+  },
+  "overall": "NOT_CONCLUDED",
+  "scientific_execution_performed_by_analyzer": false,
+  "limitations": [
+    "Three independent trained agents only; hierarchical intervals are exploratory and uncertain.",
+    "Random baseline is shared across model replicas, not three independent random campaigns.",
+    "Only the five versioned prepared local simulators are in scope.",
+    "Candidate metric/receipt definitions need Chat1 recertification before scientific execution.",
+    "Hashed engineering receipts require independent content review; analysis cannot issue mission acceptance.",
+    "Missing telemetry, incomplete final matrix, unsupported opportunities and absent receipts never count as PASS."
+  ]
+}

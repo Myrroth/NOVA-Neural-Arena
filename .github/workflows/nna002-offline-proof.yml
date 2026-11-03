@@ -1,0 +1,62 @@
+name: NNA002 offline recovery (zero new interactions)
+on:
+  pull_request:
+    types: [labeled]
+    branches: [chore/nna-closure-final]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: nna002-offline-recovery-once
+  cancel-in-progress: false
+jobs:
+  prove:
+    if: >-
+      github.event.label.name == 'nna-mg002-offline-proof' &&
+      github.event.pull_request.number == 13 &&
+      github.event.pull_request.head.repo.full_name == 'Myrroth/NOVA-Neural-Arena'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Preserve isolated verifier; refuse job rerun
+        run: |
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          cp scripts/nna002_offline_proof.py "$RUNNER_TEMP/nna002_offline_proof.py"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: dc71247b2269d41c8d2aeb8c7d489977fac3ad3a
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.11.17'
+      - name: Restore original pinned CPU runtime
+        run: |
+          python -m pip install 'torch==2.10.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -c requirements-ci.txt -e .
+          python -m pip check
+      - name: Download only the existing immutable scientific artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api repos/Myrroth/NOVA-Neural-Arena/actions/artifacts/13195542205/zip > "$RUNNER_TEMP/nna002-recorded.zip"
+      - name: Recover snapshots and reproduce recorded decisions without advancing games
+        run: >-
+          python "$RUNNER_TEMP/nna002_offline_proof.py"
+          --archive "$RUNNER_TEMP/nna002-recorded.zip"
+          --source-root "$GITHUB_WORKSPACE"
+          --output "$RUNNER_TEMP/offline-proof"
+      - name: Preserve proof or its failure without any scientific retry
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: nna002-offline-proof-${{ github.run_id }}
+          path: ${{ runner.temp }}/offline-proof
+          if-no-files-found: warn
+          retention-days: 7

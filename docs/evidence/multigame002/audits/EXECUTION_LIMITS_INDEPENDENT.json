@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "status": "PASS_LIMITS",
+  "scope": "Independent local audit of execution identity, authorization-chain consistency, legacy separation and stdout resource limits only; not an overall scientific acceptance.",
+  "reviewer": "code_review_final",
+  "created_at_utc": "2026-11-03T04:45:29.425957+00:00",
+  "network_requests_during_audit": 0,
+  "scientific_code_executed": false,
+  "new_episodes": 0,
+  "new_gradient_updates": 0,
+  "run_id": 41551291622,
+  "attempt": 1,
+  "job_id": 125639244275,
+  "conclusion": "success",
+  "terminal_utc": "2026-11-03T01:22:07Z",
+  "source_A": "dc71247b2269d41c8d2aeb8c7d489977fac3ad3a",
+  "workflow_B": "1c824f17922aa5dfb415e315e7873a1ebfb6db57",
+  "protocol_sha256_recalculated_from_static_A_AST": "93591ede5951438f92432fc6601773aaafe28b2ba5840309aa7bd3611170a324",
+  "static_protocol_source_sha256": "f7694f74db4563ee44f002d89eb77dc47e4e20732b0fd178603d5582ccdb4eb4",
+  "static_protocol_method": "Read git object with git show, interpret only literal AST constants/containers/arithmetic and evaluation regimes; no import or execution of arena modules.",
+  "checks": {
+    "terminal_handle": true,
+    "single_job_success": true,
+    "A_B_protocol_identity": true,
+    "snapshot_canonical_protocol_matches_A": true,
+    "authorization_chain_file_hashes": true,
+    "owner_approval_exact_type": true,
+    "human_and_technical_references": true,
+    "consent_chronology": true,
+    "reservation_identity": true,
+    "single_gate_confirmation_in_log": true,
+    "checkout_B_then_A_then_campaign": true,
+    "B_only_workflow_change": true,
+    "legacy_source_unchanged": true,
+    "train_permit_identity": true,
+    "train_real_success": true,
+    "evaluation_permit_identity": true,
+    "evaluation_real_success": true,
+    "distinct_training_and_inference_invocations": true,
+    "expected_summary_model_count": true,
+    "expected_summary_episode_count": true,
+    "training_steps_exact": true,
+    "training_had_no_final_eval_steps": true,
+    "eval_froze_update_counts": true,
+    "step_total_arithmetic": true,
+    "evaluation_steps_within_limit": true,
+    "total_steps_within_limit": true,
+    "q_updates_within_limit": true,
+    "world_updates_within_limit": true,
+    "combined_updates_within_limit": true,
+    "rss_both_processes_within_limit": true,
+    "cumulative_timing_monotonic": true,
+    "cpu_below_internal_stop_and_cap": true,
+    "wall_below_internal_stop_and_cap": true,
+    "artifact_origin_agreement": true
+  },
+  "observed_stdout": {
+    "train": {
+      "line": 464,
+      "utc": "2026-11-03T01:18:56.5372347Z",
+      "value": {
+        "budget": {
+          "cpu_elapsed_seconds": 7731.069431016001,
+          "elapsed_seconds": 3886.187042538,
+          "evaluation_steps": 0,
+          "peak_rss_bytes": 690126848,
+          "q_updates": 67437,
+          "total_steps": 1080000,
+          "training_steps": 1080000,
+          "world_updates": 33723
+        },
+        "failure": null,
+        "model_count": 9,
+        "permit": {
+          "approved": true,
+          "authorization_type": "new-explicit-multigame-002",
+          "budgets": {
+            "automatic_retry": false,
+            "campaign_attempts": 1,
+            "combined_updates": 101250,
+            "cpu_minutes": 300,
+            "evaluation_episode_steps": 400,
+            "evaluation_steps": 694000,
+            "paid_resources": false,
+            "q_updates": 67500,
+            "rss_bytes": 3221225472,
+            "total_steps": 1800000,
+            "training_steps": 1080000,
+            "world_updates": 33750
+          },
+          "human_approval_reference": "https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6591517615",
+          "planning_approval_reference": "https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6591597326",
+          "protocol_sha256": "93591ede5951438f92432fc6601773aaafe28b2ba5840309aa7bd3611170a324",
+          "reservation_id": "https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6591852632",
+          "source_revision": "dc71247b2269d41c8d2aeb8c7d489977fac3ad3a",
+          "workflow_head": "1c824f17922aa5dfb415e315e7873a1ebfb6db57",
+          "workflow_run_attempt": 1,
+          "workflow_run_id": "41551291622"
+        },
+        "scientific_conclusion": "NOT_EVALUATED",
+        "status": "SUCCESS",
+        "test_only": false
+      }
+    },
+    "evaluation": {
+      "line": 465,
+      "utc": "2026-11-03T01:21:57.0107970Z",
+      "value": {
+        "budget": {
+          "cpu_elapsed_seconds": 8068.386583141001,
+          "elapsed_seconds": 4063.175021507999,
+          "evaluation_steps": 174664,
+          "peak_rss_bytes": 429043712,
+          "q_updates": 67437,
+          "total_steps": 1254664,
+          "training_steps": 1080000,
+          "world_updates": 33723
+        },
+        "completed_episodes": 1735,
+        "failure": null,
+        "inference_runtime_note": "inference compatibility is not an exact cross-platform resume claim",
+        "permit": {
+          "approved": true,
+          "authorization_type": "new-explicit-multigame-002",
+          "budgets": {
+            "automatic_retry": false,
+            "campaign_attempts": 1,
+            "combined_updates": 101250,
+            "cpu_minutes": 300,
+            "evaluation_episode_steps": 400,
+            "evaluation_steps": 694000,
+            "paid_resources": false,
+            "q_updates": 67500,
+            "rss_bytes": 3221225472,
+            "total_steps": 1800000,
+            "training_steps": 1080000,
+            "world_updates": 33750
+          },
+          "human_approval_reference": "https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6591517615",
+          "planning_approval_reference": "https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6591597326",
+          "protocol_sha256": "93591ede5951438f92432fc6601773aaafe28b2ba5840309aa7bd3611170a324",
+          "reservation_id": "https://github.com/Myrroth/NOVA-Neural-Arena/issues/12#issuecomment-6591852632",
+          "source_revision": "dc71247b2269d41c8d2aeb8c7d489977fac3ad3a",
+          "workflow_head": "1c824f17922aa5dfb415e315e7873a1ebfb6db57",
+          "workflow_run_attempt": 1,
+          "workflow_run_id": "41551291622"
+        },
+        "scientific_conclusion": "REQUIRES_INDEPENDENT_ANALYSIS",
+        "status": "SUCCESS",
+        "test_only": false
+      }
+    }
+  },
+  "recalculated": {
+    "expected_training_steps": 1080000,
+    "expected_q_updates_including_each_stage_warmup": 67437,
+    "expected_world_updates_including_each_stage_warmup": 33723,
+    "expected_evaluation_episodes_from_static_protocol_not_cell_coverage": 1735,
+    "combined_updates": 101160,
+    "total_steps": 1254664,
+    "cumulative_cpu_seconds": 8068.386583141001,
+    "cumulative_cpu_minutes": 134.4731097190167,
+    "cumulative_wall_seconds": 4063.175021507999,
+    "cumulative_wall_minutes": 67.71958369179998,
+    "evaluation_cpu_increment_seconds": 337.3171521250006,
+    "evaluation_wall_increment_seconds": 176.9879789699994,
+    "maximum_observed_process_peak_rss_bytes": 690126848
+  },
+  "limits": {
+    "training_steps": 1080000,
+    "evaluation_steps": 694000,
+    "total_steps": 1800000,
+    "q_updates": 67500,
+    "world_updates": 33750,
+    "combined_updates": 101250,
+    "evaluation_episode_steps": 400,
+    "cpu_minutes": 300,
+    "rss_bytes": 3221225472,
+    "campaign_attempts": 1,
+    "automatic_retry": false,
+    "paid_resources": false
+  },
+  "source_comparison": {
+    "A_to_B_changed_files": [
+      ".github/workflows/nna-multigame-once.yml"
+    ],
+    "legacy_changed_files": [],
+    "legacy_base": "bce5db99f38466119a0818e36312b1f82072615d",
+    "legacy_job_step": 5,
+    "scientific_campaign_job_step": 8,
+    "artifact_upload_job_step": 9
+  },
+  "artifact_origin_only": {
+    "id": 13195542205,
+    "name": "nna-mg002-once-41551291622-attempt-1",
+    "size_in_bytes": 50240431,
+    "digest": "sha256:f396acfcbc8de35e67cbe79be4b6b986d7b536019bca2a62a3effa60ccefa129",
+    "expired": false,
+    "created_at": "2026-11-03T01:22:03Z",
+    "expires_at": "2026-11-10T01:21:57Z",
+    "workflow_run": {
+      "id": 41551291622,
+      "repository_id": 1442003120,
+      "head_repository_id": 1442003120,
+      "head_branch": "feat/nna-multigame-002",
+      "head_sha": "1c824f17922aa5dfb415e315e7873a1ebfb6db57"
+    }
+  },
+  "evidence_files": [
+    {
+      "path": "experiments/multigame-002/RUN_HANDLE.json",
+      "sha256": "ac2d9e01eec985a045a871f39e3abdf72e7cb246160c47d3de996b9e141b5c36",
+      "bytes": 1543
+    },
+    {
+      "path": "experiments/multigame-002/OWNER_ATTESTATION_API.json",
+      "sha256": "3157a6d7a8acc9ff458cd006e789e00ad9a3226080e119a0197680913c040c5c",
+      "bytes": 4915
+    },
+    {
+      "path": "experiments/multigame-002/HUMAN_APPROVAL_002.json",
+      "sha256": "3f20bf08acc9c4f4d4f975c4649e60de020bfa6f5dd9216ef173eb5fbbcf9682",
+      "bytes": 1229
+    },
+    {
+      "path": "experiments/multigame-002/PROTOCOL_FIXED_FOR_REVIEW.json",
+      "sha256": "f95e0ae4c7f0f0974173b1510a021579958e3d872fb5f107ecc20df758162be4",
+      "bytes": 310532
+    },
+    {
+      "path": "experiments/multigame-002/evidence-api/SCIENTIFIC_RUN_TERMINAL.json",
+      "sha256": "02c0e35824b7fa8bb9832c1dedb458b3d5df8d974cdd79ead92cba8569abfe53",
+      "bytes": 14802
+    },
+    {
+      "path": "experiments/multigame-002/evidence-api/SCIENTIFIC_JOBS_TERMINAL.json",
+      "sha256": "ad591c88fce90185e0ca82d15a0b85541cdbcdd77404c004b1f9e06f8ac8ee3a",
+      "bytes": 2617
+    },
+    {
+      "path": "experiments/multigame-002/evidence-api/SCIENTIFIC_ARTIFACT_ORIGIN.json",
+      "sha256": "9ac25f1da6792c6310387493bb49e989e7169f80d465ca86471d3b488ddbc2a7",
+      "bytes": 768
+    },
+    {
+      "path": "experiments/multigame-002/evidence-api/AUTHORIZATION_CHAIN_SHA256.json",
+      "sha256": "1d7bb625844e0f80d85dd4aef25e5c4f53d4c206879d767f3bc34c7cab8acbb6",
+      "bytes": 789
+    },
+    {
+      "path": "experiments/multigame-002/evidence-api/SCIENTIFIC_RESERVATION_API.json",
+      "sha256": "b3f01f23233c3e71c5f4755d1c6d78129f8aadf9a2072df5a41b19547a81577c",
+      "bytes": 5196
+    },
+    {
+      "path": "experiments/multigame-002/evidence-api/HUMAN_CONSENT_API.json",
+      "sha256": "69ec235e34e8bb5217effe60e15cf0fd07ed0aceb03219da4dec59775118ca0f",
+      "bytes": 5829
+    },
+    {
+      "path": "experiments/multigame-002/evidence-api/CHAT1_RECERTIFICATION_API.json",
+      "sha256": "99337119a3cbddef29c33a8941dfb23499cc024e018985a95132c3d41fd87b8f",
+      "bytes": 15444
+    },
+    {
+      "path": "experiments/multigame-002/evidence-api/SCIENTIFIC_JOB_LOG.txt",
+      "sha256": "b92b30e83d7a14bd8984ff8a34ca981a62a16ca01e5c76006582d783508526b1",
+      "bytes": 53707
+    }
+  ],
+  "limitations": [
+    "No ZIP was opened or authenticated by this reviewer: checkpoint file count, internal statuses/manifests and row-level evaluation matrix coverage remain pending.",
+    "The stdout model_count and completed_episodes are summary observations, not independent counts of checkpoint files or unique evaluation cells.",
+    "Per-episode 400-step bound, final-seed exclusion from training, evaluation inference-only behavior and detailed replay/checkpoint separation require internal artifact inspection; aggregate unchanged update counters are confirmed here.",
+    "Uniqueness is supported by attempt=1, one job, one gate confirmation and one reservation snapshot; this audit did not enumerate the complete remote issue/event history.",
+    "Authorization provenance is limited to the saved API snapshots and trusted local human-reply record; no fresh API verification was performed.",
+    "PASS_LIMITS establishes only the compared execution limits and evidence consistency; it makes no competence claim, no general 13-criterion PASS and no criterion-13 acceptance."
+  ]
+}
