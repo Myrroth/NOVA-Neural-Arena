@@ -1,0 +1,1626 @@
+{
+  "kind": "TEST_ONLY_SYNTHETIC_PROFILE_NOT_LEARNING_EVIDENCE",
+  "measurement_profile_sha256": "1382888291c577030ad391af99a8ce0506eab72dc7702019b39ce9d9630851c8",
+  "measurement": {
+    "schema_version": 1,
+    "kind": "SYNTHETIC_COST_PROFILE_ONLY",
+    "status": "TEST_ONLY_SYNTHETIC_PROFILE_NOT_LEARNING_EVIDENCE",
+    "actual_measurements": true,
+    "injected_backend_fixture": false,
+    "config": {
+      "updates": 100,
+      "forwards": 100,
+      "context_length": 16,
+      "threads": 2
+    },
+    "synthetic_seed": 830003,
+    "source": {
+      "git_sha": "ba11a598af230f14281cce3532f931aa781234ae",
+      "tracked_or_untracked_dirty": true,
+      "git_status": [
+        "M .github/workflows/nna-learning-v2-checks.yml",
+        " M arena/continual/network.py",
+        " M arena/continual/persistence.py",
+        " M arena/continual/trainer.py",
+        " M tests/test_continual_trainer.py",
+        "?? arena/continual/analysis.py",
+        "?? arena/continual/campaign.py",
+        "?? arena/continual/evaluation.py",
+        "?? arena/continual/policy.py",
+        "?? arena/continual/protocol.py",
+        "?? docs/evidence/learning-v2/",
+        "?? docs/learning-v2-validation.md",
+        "?? scripts/profile_continual_synthetic.py",
+        "?? tests/test_continual_analysis.py",
+        "?? tests/test_continual_campaign.py",
+        "?? tests/test_continual_evaluation.py",
+        "?? tests/test_continual_policy.py",
+        "?? tests/test_continual_protocol.py",
+        "?? tests/test_continual_sequence.py",
+        "?? tests/test_profile_continual_synthetic.py"
+      ],
+      "source_files_sha256": {
+        "scripts/profile_continual_synthetic.py": "e2717b5a469c2ebe9d81bd492763ecd65d4ee56eb2c5a7863a9de90db30798b1",
+        "arena/continual/__init__.py": "b6a6a2de828c6b3555f38e273bf6ed43c06cd5d65f0ae464bb84f924be9b8d66",
+        "arena/continual/trainer.py": "761db3fefec9da6f49096aa3f59c2999b53c7161bef83735617f704b5a051749",
+        "arena/continual/network.py": "c09da099f99a45a80ce7a99cc6da4ee7924d2e583e382cd640969a5b1b97ed6b",
+        "arena/continual/replay.py": "33fe8b11e4b66422b4da5edb6ee05a48a31800f03a9afe53549ef8076872e6bb",
+        "arena/continual/objectives.py": "362fb41c3d187dcab1631536dbd7d2601256187b4d55692cbd644a5908e3735d",
+        "arena/continual/calibration.py": "dfb1e93857fe5a5542be3f2340b0e128480eb7af08f3cc85e2bc91c569090355",
+        "arena/continual/policy.py": "b515055b1c5388746d4cd3c3f31764d312e20d1464d12c05f925e27391b9a36c",
+        "arena/continual/evaluation.py": "f1bc3eeeecce2d5ca44fb1d30bc509378771a98630278d2c122a1feb23f04502",
+        "arena/universal/network.py": "52cd61f21c6fec0c20e81bff9ab7a15c123ee82889c80d2fc404496a8b734a45",
+        "arena/universal/replay.py": "afe5b4e00cacd15d5084069273e6cda604c86c72b5a3165eced78c50af990151",
+        "arena/universal/envs.py": "e83f727f24b9814fe4fcb3578a82fc923b52fb24dfcaa4818535de8ed09064a9",
+        "arena/universal/evaluation.py": "f1fa411f7f7cfb30d2524b32f5eee85fa1e47b734445ea3ba32b4104fa377b7d",
+        "arena/universal/campaign.py": "2444e20b37574b17942719f2752b94ff1bf8bfe75b885ac2d95282ac7300b636",
+        "pyproject.toml": "24db4eb567251db0dff4f06627dc978a4ca1c9544df08c2da201ff1af9517595",
+        "requirements-ci.txt": "7db8414c19b0db53b3353dafd3d0d5e298d67e1047c6b0f741d5e99dba5e801b"
+      },
+      "hash_convention": "raw local file bytes; source may be dirty and must be fixed separately for science"
+    },
+    "runtime": {
+      "python": "3.11.0",
+      "system": "Windows",
+      "machine": "AMD64",
+      "torch": "2.10.0+cpu",
+      "numpy": "2.3.5",
+      "gymnasium": "1.4.0",
+      "device": "cpu",
+      "intraop_threads": 2,
+      "interop_threads": 2,
+      "deterministic_algorithms": true,
+      "cuda_initialized": false,
+      "ml_runtime_loaded_by_profile": true
+    },
+    "operations": {
+      "q_update": {
+        "attempted": 50,
+        "completed": 50,
+        "wall_seconds": [
+          0.5582827000180259,
+          0.2224625000380911,
+          0.24727200000779703,
+          0.26174529996933416,
+          0.2773406999767758,
+          0.27534160000504926,
+          0.25169359997380525,
+          0.2559569999575615,
+          0.2588975999969989,
+          0.27134239999577403,
+          0.2440070000011474,
+          0.26792179996846244,
+          0.24669990001711994,
+          0.25721959996735677,
+          0.24459850002313033,
+          0.231901100021787,
+          0.2755749999778345,
+          0.2637671999982558,
+          0.24416419997578487,
+          0.23765999998431653,
+          0.2509165000519715,
+          0.24241419997997582,
+          0.28000400000019,
+          0.21982260001823306,
+          0.1986427999800071,
+          0.24227139999857172,
+          0.22759989998303354,
+          0.2545932999928482,
+          0.25818980002077296,
+          0.2675269999890588,
+          0.2504897000035271,
+          0.20172730000922456,
+          0.22123429999919608,
+          0.2566392000298947,
+          0.2619663999648765,
+          0.22523669997463003,
+          0.23570509999990463,
+          0.2621571000199765,
+          0.23415059997932985,
+          0.23004009999567643,
+          0.24929789995076135,
+          0.22616520000156015,
+          0.22086890001082793,
+          0.22915969998575747,
+          0.2559309999924153,
+          0.20443199999863282,
+          0.26284889999078587,
+          0.23278679995564744,
+          0.2234642999828793,
+          0.26612690003821626
+        ],
+        "process_cpu_seconds": [
+          0.765625,
+          0.421875,
+          0.421875,
+          0.5,
+          0.53125,
+          0.421875,
+          0.453125,
+          0.4375,
+          0.484375,
+          0.46875,
+          0.453125,
+          0.515625,
+          0.453125,
+          0.484375,
+          0.4375,
+          0.4375,
+          0.453125,
+          0.5,
+          0.484375,
+          0.390625,
+          0.40625,
+          0.46875,
+          0.53125,
+          0.421875,
+          0.375,
+          0.46875,
+          0.390625,
+          0.421875,
+          0.484375,
+          0.53125,
+          0.421875,
+          0.390625,
+          0.40625,
+          0.515625,
+          0.4375,
+          0.375,
+          0.421875,
+          0.53125,
+          0.46875,
+          0.390625,
+          0.46875,
+          0.390625,
+          0.390625,
+          0.375,
+          0.515625,
+          0.359375,
+          0.5,
+          0.453125,
+          0.453125,
+          0.421875
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 200,
+            "items": 38400
+          },
+          "online.memory": {
+            "calls": 2400,
+            "items": 38400
+          },
+          "online.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.q_head": {
+            "calls": 2400,
+            "items": 38400
+          },
+          "target.encoder": {
+            "calls": 100,
+            "items": 19200
+          },
+          "target.memory": {
+            "calls": 1200,
+            "items": 19200
+          },
+          "target.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.q_head": {
+            "calls": 1200,
+            "items": 19200
+          },
+          "source_teacher.encoder": {
+            "calls": 100,
+            "items": 19200
+          },
+          "source_teacher.memory": {
+            "calls": 1200,
+            "items": 19200
+          },
+          "source_teacher.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.q_head": {
+            "calls": 1200,
+            "items": 19200
+          },
+          "frozen_inference.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.q_head": {
+            "calls": 0,
+            "items": 0
+          }
+        },
+        "wall_summary": {
+          "count": 50,
+          "total_seconds": 12.586259299772792,
+          "p50_seconds": 0.2482849499792792,
+          "p95_seconds": 0.2765461349772522,
+          "maximum_seconds": 0.5582827000180259
+        },
+        "process_cpu_summary": {
+          "count": 50,
+          "total_seconds": 22.703125,
+          "p50_seconds": 0.453125,
+          "p95_seconds": 0.53125,
+          "maximum_seconds": 0.765625
+        }
+      },
+      "world_update": {
+        "attempted": 50,
+        "completed": 50,
+        "wall_seconds": [
+          0.1950614999514073,
+          0.1676968999672681,
+          0.12651780003216118,
+          0.16551640001125634,
+          0.15161970001645386,
+          0.19015350000699982,
+          0.15312999999150634,
+          0.1553692999877967,
+          0.16663449996849522,
+          0.14381520001916215,
+          0.18162180000217631,
+          0.13111600000411272,
+          0.1570054999901913,
+          0.14030289999209344,
+          0.14163760002702475,
+          0.15760320000117645,
+          0.18144140002550557,
+          0.15260440000565723,
+          0.1169091000338085,
+          0.12706880003679544,
+          0.14390409999759868,
+          0.1411147000035271,
+          0.16283049999037758,
+          0.12085990002378821,
+          0.12666800001170486,
+          0.11090129998046905,
+          0.13393069995800033,
+          0.1549982000142336,
+          0.17421600001398474,
+          0.1439263999927789,
+          0.15319929999532178,
+          0.1363116999855265,
+          0.16309370001545176,
+          0.1334463999955915,
+          0.15184609999414533,
+          0.1516523999744095,
+          0.1699716000002809,
+          0.1519920999999158,
+          0.16883350000716746,
+          0.13135260000126436,
+          0.15754370001377538,
+          0.12521269998978823,
+          0.11373189999721944,
+          0.1552582000149414,
+          0.13231480005197227,
+          0.12386260001221672,
+          0.17345309996744618,
+          0.15553350001573563,
+          0.13215660001151264,
+          0.13175449997652322
+        ],
+        "process_cpu_seconds": [
+          0.28125,
+          0.296875,
+          0.21875,
+          0.3125,
+          0.265625,
+          0.328125,
+          0.25,
+          0.3125,
+          0.3125,
+          0.265625,
+          0.328125,
+          0.234375,
+          0.28125,
+          0.25,
+          0.21875,
+          0.28125,
+          0.3125,
+          0.234375,
+          0.25,
+          0.234375,
+          0.25,
+          0.265625,
+          0.25,
+          0.21875,
+          0.25,
+          0.1875,
+          0.265625,
+          0.296875,
+          0.3125,
+          0.265625,
+          0.296875,
+          0.25,
+          0.28125,
+          0.25,
+          0.25,
+          0.296875,
+          0.296875,
+          0.265625,
+          0.25,
+          0.28125,
+          0.265625,
+          0.21875,
+          0.1875,
+          0.25,
+          0.234375,
+          0.234375,
+          0.3125,
+          0.3125,
+          0.203125,
+          0.28125
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 200,
+            "items": 57600
+          },
+          "online.memory": {
+            "calls": 2400,
+            "items": 57600
+          },
+          "online.transition": {
+            "calls": 100,
+            "items": 19200
+          },
+          "online.q_head": {
+            "calls": 2400,
+            "items": 57600
+          },
+          "target.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.q_head": {
+            "calls": 0,
+            "items": 0
+          }
+        },
+        "wall_summary": {
+          "count": 50,
+          "total_seconds": 7.428696300077718,
+          "p50_seconds": 0.1517492499842774,
+          "p95_seconds": 0.1815406200126745,
+          "maximum_seconds": 0.1950614999514073
+        },
+        "process_cpu_summary": {
+          "count": 50,
+          "total_seconds": 13.25,
+          "p50_seconds": 0.265625,
+          "p95_seconds": 0.3125,
+          "maximum_seconds": 0.328125
+        }
+      },
+      "actor_uncached_prefix8": {
+        "attempted": 20,
+        "completed": 20,
+        "wall_seconds": [
+          0.1636228000279516,
+          0.012502499972470105,
+          0.011877600045409054,
+          0.013221099972724915,
+          0.00960819999454543,
+          0.011063800018746406,
+          0.012203200021758676,
+          0.008269299985840917,
+          0.013576299999840558,
+          0.006098999991081655,
+          0.013872399984393269,
+          0.006549799989443272,
+          0.010917300009168684,
+          0.0109091000049375,
+          0.012165099964477122,
+          0.00824359996477142,
+          0.013870199967641383,
+          0.010390900017227978,
+          0.011301400023512542,
+          0.012032300001010299
+        ],
+        "process_cpu_seconds": [
+          0.15625,
+          0.015625,
+          0.0,
+          0.03125,
+          0.03125,
+          0.0,
+          0.03125,
+          0.015625,
+          0.03125,
+          0.0,
+          0.03125,
+          0.0,
+          0.03125,
+          0.03125,
+          0.015625,
+          0.0,
+          0.0,
+          0.0,
+          0.03125,
+          0.015625
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 40,
+            "items": 160
+          },
+          "online.memory": {
+            "calls": 160,
+            "items": 160
+          },
+          "online.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.q_head": {
+            "calls": 160,
+            "items": 160
+          },
+          "target.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.q_head": {
+            "calls": 0,
+            "items": 0
+          }
+        },
+        "wall_summary": {
+          "count": 20,
+          "total_seconds": 0.3722958999569528,
+          "p50_seconds": 0.011589500034460798,
+          "p95_seconds": 0.02135991998657129,
+          "maximum_seconds": 0.1636228000279516
+        },
+        "process_cpu_summary": {
+          "count": 20,
+          "total_seconds": 0.46875,
+          "p50_seconds": 0.015625,
+          "p95_seconds": 0.03750000000000009,
+          "maximum_seconds": 0.15625
+        }
+      },
+      "actor_uncached_prefix16": {
+        "attempted": 20,
+        "completed": 20,
+        "wall_seconds": [
+          0.016578199982177466,
+          0.016779900004621595,
+          0.01611690002027899,
+          0.013921900012064725,
+          0.01629030000185594,
+          0.011643700010608882,
+          0.01556119997985661,
+          0.019398999982513487,
+          0.015588200010824949,
+          0.013775100000202656,
+          0.020049799990374595,
+          0.015427099948283285,
+          0.01390479999827221,
+          0.015943100035656244,
+          0.01735669997287914,
+          0.017861499974969774,
+          0.01869619998615235,
+          0.013395800022408366,
+          0.012588799989316612,
+          0.015504800016060472
+        ],
+        "process_cpu_seconds": [
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.015625,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.0625,
+          0.03125,
+          0.03125,
+          0.0,
+          0.03125
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 40,
+            "items": 320
+          },
+          "online.memory": {
+            "calls": 320,
+            "items": 320
+          },
+          "online.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.q_head": {
+            "calls": 320,
+            "items": 320
+          },
+          "target.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.q_head": {
+            "calls": 0,
+            "items": 0
+          }
+        },
+        "wall_summary": {
+          "count": 20,
+          "total_seconds": 0.31638299993937835,
+          "p50_seconds": 0.015765650023240596,
+          "p95_seconds": 0.019431539982906542,
+          "maximum_seconds": 0.020049799990374595
+        },
+        "process_cpu_summary": {
+          "count": 20,
+          "total_seconds": 0.609375,
+          "p50_seconds": 0.03125,
+          "p95_seconds": 0.03281250000000002,
+          "maximum_seconds": 0.0625
+        }
+      },
+      "plan_values_all10": {
+        "attempted": 20,
+        "completed": 20,
+        "wall_seconds": [
+          0.009028399945236742,
+          0.0009076999849639833,
+          0.0021884000161662698,
+          0.0021049000206403434,
+          0.0011890999739989638,
+          0.0030011999770067632,
+          0.0012801999691873789,
+          0.001258100033737719,
+          0.0019573000026866794,
+          0.001242399972397834,
+          0.001069399993866682,
+          0.002413199981674552,
+          0.0019045000080950558,
+          0.0028289000038057566,
+          0.002005100017413497,
+          0.002813900006003678,
+          0.002868599956855178,
+          0.0026571000344119966,
+          0.0035966000286862254,
+          0.0015793000347912312
+        ],
+        "process_cpu_seconds": [
+          0.0,
+          0.0,
+          0.015625,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.03125,
+          0.0,
+          0.03125,
+          0.0
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.transition": {
+            "calls": 20,
+            "items": 200
+          },
+          "online.q_head": {
+            "calls": 20,
+            "items": 200
+          },
+          "target.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.q_head": {
+            "calls": 0,
+            "items": 0
+          }
+        },
+        "wall_summary": {
+          "count": 20,
+          "total_seconds": 0.04789429996162653,
+          "p50_seconds": 0.00205500001902692,
+          "p95_seconds": 0.0038681900245137553,
+          "maximum_seconds": 0.009028399945236742
+        },
+        "process_cpu_summary": {
+          "count": 20,
+          "total_seconds": 0.078125,
+          "p50_seconds": 0.0,
+          "p95_seconds": 0.03125,
+          "maximum_seconds": 0.03125
+        }
+      },
+      "frozen_control_step": {
+        "attempted": 20,
+        "completed": 20,
+        "wall_seconds": [
+          0.01183059997856617,
+          0.004489900020416826,
+          0.006417799973860383,
+          0.0030197000014595687,
+          0.007379600021522492,
+          0.009316899988334626,
+          0.0072191000217571855,
+          0.007053999986965209,
+          0.008428099972661585,
+          0.0039520999998785555,
+          0.004032300028484315,
+          0.0048275000299327075,
+          0.00547149998601526,
+          0.005265999992843717,
+          0.005490200011990964,
+          0.004830299993045628,
+          0.005604800011496991,
+          0.006709099980071187,
+          0.006958599959034473,
+          0.004470000043511391
+        ],
+        "process_cpu_seconds": [
+          0.03125,
+          0.03125,
+          0.0,
+          0.0,
+          0.03125,
+          0.03125,
+          0.0,
+          0.03125,
+          0.0,
+          0.0,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.015625,
+          0.03125,
+          0.0,
+          0.0,
+          0.03125,
+          0.0,
+          0.0
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.encoder": {
+            "calls": 20,
+            "items": 20
+          },
+          "frozen_inference.memory": {
+            "calls": 20,
+            "items": 20
+          },
+          "frozen_inference.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.q_head": {
+            "calls": 20,
+            "items": 20
+          }
+        },
+        "wall_summary": {
+          "count": 20,
+          "total_seconds": 0.12276810000184923,
+          "p50_seconds": 0.005547500011743978,
+          "p95_seconds": 0.009442584987846205,
+          "maximum_seconds": 0.01183059997856617
+        },
+        "process_cpu_summary": {
+          "count": 20,
+          "total_seconds": 0.328125,
+          "p50_seconds": 0.0234375,
+          "p95_seconds": 0.03125,
+          "maximum_seconds": 0.03125
+        }
+      },
+      "shared_after_audit_step": {
+        "attempted": 20,
+        "completed": 20,
+        "wall_seconds": [
+          0.0351465999847278,
+          0.027750900015234947,
+          0.02736390003701672,
+          0.03923299995949492,
+          0.029706299945246428,
+          0.029432400013320148,
+          0.03337280004052445,
+          0.03175379999447614,
+          0.032587100053206086,
+          0.02893720002612099,
+          0.03165700001409277,
+          0.026240000035613775,
+          0.026031299959868193,
+          0.028394200024195015,
+          0.029614600003696978,
+          0.03359540004748851,
+          0.026567399967461824,
+          0.030010699992999434,
+          0.031655300001148134,
+          0.027542099996935576
+        ],
+        "process_cpu_seconds": [
+          0.0625,
+          0.046875,
+          0.0625,
+          0.046875,
+          0.0625,
+          0.0625,
+          0.046875,
+          0.0625,
+          0.0625,
+          0.046875,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.0625,
+          0.0625,
+          0.0625,
+          0.0625,
+          0.0625,
+          0.0625
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "frozen_inference.encoder": {
+            "calls": 80,
+            "items": 80
+          },
+          "frozen_inference.memory": {
+            "calls": 80,
+            "items": 80
+          },
+          "frozen_inference.transition": {
+            "calls": 80,
+            "items": 620
+          },
+          "frozen_inference.q_head": {
+            "calls": 140,
+            "items": 680
+          }
+        },
+        "wall_summary": {
+          "count": 20,
+          "total_seconds": 0.6065920001128688,
+          "p50_seconds": 0.029660449974471703,
+          "p95_seconds": 0.03535091998346616,
+          "maximum_seconds": 0.03923299995949492
+        },
+        "process_cpu_summary": {
+          "count": 20,
+          "total_seconds": 1.0625,
+          "p50_seconds": 0.0625,
+          "p95_seconds": 0.0625,
+          "maximum_seconds": 0.0625
+        }
+      }
+    },
+    "failure": null,
+    "new_game_episodes": 0,
+    "new_environment_interactions": 0,
+    "official_models_loaded": false,
+    "scientific_conclusion": "NOT_ASSESSED",
+    "historical_G1_measurements_reused": false,
+    "scientific_budget_projection": null,
+    "limits": {
+      "synthetic_updates": 100,
+      "q_updates": 50,
+      "world_updates": 50,
+      "standalone_forward_operations": 100,
+      "cpu_threads": 2,
+      "wall_seconds": 120.0,
+      "process_cpu_seconds": 240.0,
+      "process_peak_rss_bytes": 3221225472
+    },
+    "counting_scope": "At most 100 standalone operations TOTAL, round-robin over five kernels; these are separate from the NN forwards necessarily executed inside <=100 updates. Nested encoder/GRU/transition/Q-head calls and batch items are reported separately; instrumentation overhead is included.",
+    "forward_scope": "Uncached actor prefixes8/16, ten-action planning, actual frozen controller step, and actual same-history shared audit with three conservatively forced raw plans. New frozen inference weights are separate from optimizer weights. No plan timing or cold gate is evidence of calibration PASS.",
+    "forward_round_robin": [
+      "actor_uncached_prefix8",
+      "actor_uncached_prefix16",
+      "plan_values_all10",
+      "frozen_control_step",
+      "shared_after_audit_step"
+    ],
+    "limitations": [
+      "Random RGB/rewards are not gameplay or learned skills.",
+      "Synthetic timings do not guarantee scientific runtime, RSS or competence.",
+      "Full-capacity replay, environment physics, evaluation, checkpoint IO and remote hardware are not measured.",
+      "Resource limits are cooperative checks after setup, around operations and during finalization; they cannot preempt blocked C imports/kernels or IO. The outer CI/process timeout is the hard watchdog.",
+      "Plan imports no ML runtime and creates no neural network. --run is explicit opt-in."
+    ],
+    "synthetic_state_before": {
+      "global_environment_training_steps": 0,
+      "fit_environment_steps": 0,
+      "calibration_environment_steps": 0,
+      "forbidden_environment_calls": 0,
+      "q_updates": 0,
+      "world_updates": 0,
+      "learner_config": {
+        "hidden_size": 64,
+        "latent_size": 64,
+        "context_length": 16,
+        "unroll": 8,
+        "n_step": 3,
+        "batch_size": 16,
+        "calibration_batch_size": 32,
+        "replay_capacity": 40000,
+        "capacity_per_game": 10000,
+        "calibration_capacity": 8000,
+        "calibration_every_episodes": 10,
+        "warmup_steps": 128,
+        "q_interval": 16,
+        "world_interval": 32,
+        "learning_rate": 0.0003,
+        "world_learning_rate": 0.001,
+        "gamma": 0.98,
+        "target_tau": 0.01,
+        "source_distillation_weight": 1.0,
+        "adaptation_target_fraction": 0.5,
+        "planning_fraction": 0.2,
+        "epsilon_end": 0.05,
+        "episode_steps": 400,
+        "threads": 2,
+        "max_training_steps": 1080000
+      },
+      "teacher_is_frozen": true,
+      "teacher_parameters_unchanged": true,
+      "teacher_source": "own newly initialized network; not an officially trained model",
+      "inference_network_source": "separate newly initialized frozen network; never optimized or loaded",
+      "inference_parameters_unchanged": true,
+      "inference_is_frozen": true,
+      "inference_setup_kernel_counts": {
+        "online.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "online.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "online.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "online.q_head": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.q_head": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.q_head": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.q_head": {
+          "calls": 0,
+          "items": 0
+        }
+      },
+      "inference_operations": {
+        "frozen_control_step": 0,
+        "shared_after_audit_step": 0
+      },
+      "inference_fixture": {
+        "observation_phase": 8,
+        "hidden": "zero construction state restored inside each measured call",
+        "neural_warmup_forwards": 0,
+        "calibration": "cold copied state; no validation or gate PASS claimed",
+        "control_step": "one real act with cold gate; standalone plan_values_all10 separately measures potential lookahead cost",
+        "shared_audit_step": "two real forks, three real acts, three explicit ten-action raw plans, chosen-action forecast, continuous GRU next target and audit arithmetic",
+        "shared_audit_cost_scope": "conservative hypothetical planning cost even with cold gate off; no game stepping, output row serialization or episode-boundary fingerprint IO"
+      },
+      "replay": {
+        "fit": {
+          "transitions": 2640,
+          "episodes": 80,
+          "games": {
+            "snake": 528,
+            "pong": 528,
+            "agar": 528,
+            "flappy": 528,
+            "racing": 528
+          },
+          "stored_frame_bytes": 8355840
+        },
+        "protected_source": {
+          "transitions": 2112,
+          "episodes": 64,
+          "games": {
+            "snake": 528,
+            "pong": 528,
+            "agar": 528,
+            "flappy": 528
+          },
+          "stored_frame_bytes": 6684672
+        },
+        "calibration": {
+          "transitions": 1056,
+          "episodes": 32,
+          "games": {
+            "racing": 1056
+          },
+          "stored_frame_bytes": 3342336
+        }
+      },
+      "synthetic_episode_length": 33,
+      "instrumented_kernel_counts": {
+        "online.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "online.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "online.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "online.q_head": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.q_head": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.q_head": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.q_head": {
+          "calls": 0,
+          "items": 0
+        }
+      }
+    },
+    "synthetic_state_after": {
+      "global_environment_training_steps": 0,
+      "fit_environment_steps": 0,
+      "calibration_environment_steps": 0,
+      "forbidden_environment_calls": 0,
+      "q_updates": 50,
+      "world_updates": 50,
+      "learner_config": {
+        "hidden_size": 64,
+        "latent_size": 64,
+        "context_length": 16,
+        "unroll": 8,
+        "n_step": 3,
+        "batch_size": 16,
+        "calibration_batch_size": 32,
+        "replay_capacity": 40000,
+        "capacity_per_game": 10000,
+        "calibration_capacity": 8000,
+        "calibration_every_episodes": 10,
+        "warmup_steps": 128,
+        "q_interval": 16,
+        "world_interval": 32,
+        "learning_rate": 0.0003,
+        "world_learning_rate": 0.001,
+        "gamma": 0.98,
+        "target_tau": 0.01,
+        "source_distillation_weight": 1.0,
+        "adaptation_target_fraction": 0.5,
+        "planning_fraction": 0.2,
+        "epsilon_end": 0.05,
+        "episode_steps": 400,
+        "threads": 2,
+        "max_training_steps": 1080000
+      },
+      "teacher_is_frozen": true,
+      "teacher_parameters_unchanged": true,
+      "teacher_source": "own newly initialized network; not an officially trained model",
+      "inference_network_source": "separate newly initialized frozen network; never optimized or loaded",
+      "inference_parameters_unchanged": true,
+      "inference_is_frozen": true,
+      "inference_setup_kernel_counts": {
+        "online.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "online.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "online.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "online.q_head": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.q_head": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.q_head": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.encoder": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.memory": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "frozen_inference.q_head": {
+          "calls": 0,
+          "items": 0
+        }
+      },
+      "inference_operations": {
+        "frozen_control_step": 20,
+        "shared_after_audit_step": 20
+      },
+      "inference_fixture": {
+        "observation_phase": 8,
+        "hidden": "zero construction state restored inside each measured call",
+        "neural_warmup_forwards": 0,
+        "calibration": "cold copied state; no validation or gate PASS claimed",
+        "control_step": "one real act with cold gate; standalone plan_values_all10 separately measures potential lookahead cost",
+        "shared_audit_step": "two real forks, three real acts, three explicit ten-action raw plans, chosen-action forecast, continuous GRU next target and audit arithmetic",
+        "shared_audit_cost_scope": "conservative hypothetical planning cost even with cold gate off; no game stepping, output row serialization or episode-boundary fingerprint IO"
+      },
+      "replay": {
+        "fit": {
+          "transitions": 2640,
+          "episodes": 80,
+          "games": {
+            "snake": 528,
+            "pong": 528,
+            "agar": 528,
+            "flappy": 528,
+            "racing": 528
+          },
+          "stored_frame_bytes": 8355840
+        },
+        "protected_source": {
+          "transitions": 2112,
+          "episodes": 64,
+          "games": {
+            "snake": 528,
+            "pong": 528,
+            "agar": 528,
+            "flappy": 528
+          },
+          "stored_frame_bytes": 6684672
+        },
+        "calibration": {
+          "transitions": 1056,
+          "episodes": 32,
+          "games": {
+            "racing": 1056
+          },
+          "stored_frame_bytes": 3342336
+        }
+      },
+      "synthetic_episode_length": 33,
+      "instrumented_kernel_counts": {
+        "online.encoder": {
+          "calls": 480,
+          "items": 96480
+        },
+        "online.memory": {
+          "calls": 5280,
+          "items": 96480
+        },
+        "online.transition": {
+          "calls": 120,
+          "items": 19400
+        },
+        "online.q_head": {
+          "calls": 5300,
+          "items": 96680
+        },
+        "target.encoder": {
+          "calls": 100,
+          "items": 19200
+        },
+        "target.memory": {
+          "calls": 1200,
+          "items": 19200
+        },
+        "target.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "target.q_head": {
+          "calls": 1200,
+          "items": 19200
+        },
+        "source_teacher.encoder": {
+          "calls": 100,
+          "items": 19200
+        },
+        "source_teacher.memory": {
+          "calls": 1200,
+          "items": 19200
+        },
+        "source_teacher.transition": {
+          "calls": 0,
+          "items": 0
+        },
+        "source_teacher.q_head": {
+          "calls": 1200,
+          "items": 19200
+        },
+        "frozen_inference.encoder": {
+          "calls": 100,
+          "items": 100
+        },
+        "frozen_inference.memory": {
+          "calls": 100,
+          "items": 100
+        },
+        "frozen_inference.transition": {
+          "calls": 80,
+          "items": 620
+        },
+        "frozen_inference.q_head": {
+          "calls": 160,
+          "items": 700
+        }
+      }
+    },
+    "source_after": {
+      "git_sha": "ba11a598af230f14281cce3532f931aa781234ae",
+      "tracked_or_untracked_dirty": true,
+      "git_status": [
+        "M .github/workflows/nna-learning-v2-checks.yml",
+        " M arena/continual/network.py",
+        " M arena/continual/persistence.py",
+        " M arena/continual/trainer.py",
+        " M tests/test_continual_trainer.py",
+        "?? arena/continual/analysis.py",
+        "?? arena/continual/campaign.py",
+        "?? arena/continual/evaluation.py",
+        "?? arena/continual/policy.py",
+        "?? arena/continual/protocol.py",
+        "?? docs/evidence/learning-v2/",
+        "?? docs/learning-v2-validation.md",
+        "?? scripts/profile_continual_synthetic.py",
+        "?? tests/test_continual_analysis.py",
+        "?? tests/test_continual_campaign.py",
+        "?? tests/test_continual_evaluation.py",
+        "?? tests/test_continual_policy.py",
+        "?? tests/test_continual_protocol.py",
+        "?? tests/test_continual_sequence.py",
+        "?? tests/test_profile_continual_synthetic.py"
+      ],
+      "source_files_sha256": {
+        "scripts/profile_continual_synthetic.py": "e2717b5a469c2ebe9d81bd492763ecd65d4ee56eb2c5a7863a9de90db30798b1",
+        "arena/continual/__init__.py": "b6a6a2de828c6b3555f38e273bf6ed43c06cd5d65f0ae464bb84f924be9b8d66",
+        "arena/continual/trainer.py": "761db3fefec9da6f49096aa3f59c2999b53c7161bef83735617f704b5a051749",
+        "arena/continual/network.py": "c09da099f99a45a80ce7a99cc6da4ee7924d2e583e382cd640969a5b1b97ed6b",
+        "arena/continual/replay.py": "33fe8b11e4b66422b4da5edb6ee05a48a31800f03a9afe53549ef8076872e6bb",
+        "arena/continual/objectives.py": "362fb41c3d187dcab1631536dbd7d2601256187b4d55692cbd644a5908e3735d",
+        "arena/continual/calibration.py": "dfb1e93857fe5a5542be3f2340b0e128480eb7af08f3cc85e2bc91c569090355",
+        "arena/continual/policy.py": "b515055b1c5388746d4cd3c3f31764d312e20d1464d12c05f925e27391b9a36c",
+        "arena/continual/evaluation.py": "f1bc3eeeecce2d5ca44fb1d30bc509378771a98630278d2c122a1feb23f04502",
+        "arena/universal/network.py": "52cd61f21c6fec0c20e81bff9ab7a15c123ee82889c80d2fc404496a8b734a45",
+        "arena/universal/replay.py": "afe5b4e00cacd15d5084069273e6cda604c86c72b5a3165eced78c50af990151",
+        "arena/universal/envs.py": "e83f727f24b9814fe4fcb3578a82fc923b52fb24dfcaa4818535de8ed09064a9",
+        "arena/universal/evaluation.py": "f1fa411f7f7cfb30d2524b32f5eee85fa1e47b734445ea3ba32b4104fa377b7d",
+        "arena/universal/campaign.py": "2444e20b37574b17942719f2752b94ff1bf8bfe75b885ac2d95282ac7300b636",
+        "pyproject.toml": "24db4eb567251db0dff4f06627dc978a4ca1c9544df08c2da201ff1af9517595",
+        "requirements-ci.txt": "7db8414c19b0db53b3353dafd3d0d5e298d67e1047c6b0f741d5e99dba5e801b"
+      },
+      "hash_convention": "raw local file bytes; source may be dirty and must be fixed separately for science"
+    },
+    "elapsed_wall_seconds": 36.90906180004822,
+    "elapsed_process_cpu_seconds": 50.203125,
+    "process_peak_rss_bytes": 343138304,
+    "memory_scope": "OS process peak RSS helper, not current RSS; setup/import/data allocation and cleanup/provenance finalization are included in timing and peak. Receipt/manifest sealing is bounded only by the outer process watchdog."
+  },
+  "projection": {
+    "scope": "optimizer-only mean-times extrapolation on measured Windows host; actor/environment/evaluation/IO excluded; Linux cost still unmeasured",
+    "wall_minutes": 366.76366762076213,
+    "process_cpu_minutes": 659.8828125,
+    "candidate_ceiling_minutes": 300,
+    "disposition": "300_MINUTES_NOT_VALIDATED_NO_CAMPAIGN_PERMIT",
+    "not_a_runtime_guarantee": true
+  },
+  "profiling_disposition": "Two bounded engineering profiles total; first exposed inefficient per-frame CNN calls, second measures one causally equivalent vectorization. No real game, official model or scientific seed was used. No further automatic local profiling."
+}

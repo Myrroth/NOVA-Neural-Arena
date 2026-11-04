@@ -189,6 +189,9 @@ class ContinualTrainer:
         self.episode_counters = {}
         self.training_curve = []
         self.loss_history = []
+        self.transition_statistics = {}
+        self.update_attempts = {"q": 0, "world": 0}
+        self.skipped_updates = {"q": 0, "world": 0}
         self.last_update = {}
 
     @property
@@ -246,6 +249,8 @@ class ContinualTrainer:
             )
             self.source_replay = copy.deepcopy(self.replay)
         self.stage, self.stage_budget, self.stage_steps = stage, budget, 0
+        self.update_attempts = {"q": 0, "world": 0}
+        self.skipped_updates = {"q": 0, "world": 0}
         self.last_q_due = self.last_world_due = self.next_actor = 0
         self.games = SOURCE_GAMES if stage == "pretrain" else (TARGET_GAME,)
         self.episode_counters = {g: 0 for g in self.games}
@@ -342,6 +347,21 @@ class ContinualTrainer:
                 prev_action=actor["previous_action"],
                 prev_reward=actor["previous_reward"],
             )
+            stats = self.transition_statistics.setdefault(
+                game,
+                {
+                    "support": 0,
+                    "fit_support": 0,
+                    "calibration_support": 0,
+                    "clipped_reward_sum": 0.0,
+                    "terminations": 0,
+                },
+            )
+            stats["support"] += 1
+            stats["fit_support"] += int(not actor["calibration_episode"])
+            stats["calibration_support"] += int(actor["calibration_episode"])
+            stats["clipped_reward_sum"] += float(np.clip(reward, -1, 1))
+            stats["terminations"] += int(term)
             self.calibration_steps += int(actor["calibration_episode"])
             self.fit_steps += int(not actor["calibration_episode"])
             actor.update(
@@ -396,6 +416,25 @@ class ContinualTrainer:
             **{k: v for k, v in info.items() if k not in ("action_mask", "steps")},
         }
 
+    def training_baselines(self):
+        """Frozen pre-evaluation baselines; never inferred from final episodes.
+
+        Support includes collected fit and reserved training-calibration episodes,
+        whose separate counts remain explicit. Only fit data enter gradients.
+        """
+        return {
+            game: {
+                "source": "training",
+                "support": s["support"],
+                "fit_support": s["fit_support"],
+                "calibration_support": s["calibration_support"],
+                "reward_mean": s["clipped_reward_sum"] / s["support"],
+                "terminal_rate": s["terminations"] / s["support"],
+            }
+            for game, s in self.transition_statistics.items()
+            if s["support"]
+        }
+
     def _due_updates(self):
         if (
             self.stage_steps < self.config.warmup_steps
@@ -406,15 +445,19 @@ class ContinualTrainer:
         world_due = self.stage_steps // self.config.world_interval
         if q_due > self.last_q_due:
             self.last_q_due = q_due
+            self.update_attempts["q"] += 1
             try:
                 self.learn_batch(world=False)
             except InsufficientContext:
+                self.skipped_updates["q"] += 1
                 pass  # no valid context yet; never invent a hidden state
         if world_due > self.last_world_due:
             self.last_world_due = world_due
+            self.update_attempts["world"] += 1
             try:
                 self.learn_batch(world=True)
             except InsufficientContext:
+                self.skipped_updates["world"] += 1
                 pass
 
     def _batch(self, replay=None, *, calibration=False, source=False):
@@ -657,6 +700,9 @@ class ContinualTrainer:
             "episode_counters": self.episode_counters,
             "training_curve": self.training_curve,
             "loss_history": self.loss_history,
+            "transition_statistics": self.transition_statistics,
+            "update_attempts": self.update_attempts,
+            "skipped_updates": self.skipped_updates,
             "last_update": self.last_update,
             "source_teacher_present": self.source_teacher is not None,
             "environments": {g: a["env"].snapshot() for g, a in self.actors.items()},
@@ -734,6 +780,19 @@ class ContinualTrainer:
         )
         if any(type(metadata.get(k)) is not int or metadata[k] < 0 for k in counters):
             raise ValueError("snapshot counters must be nonnegative integers")
+        for name in ("update_attempts", "skipped_updates"):
+            values = metadata.get(name)
+            if (
+                not isinstance(values, dict)
+                or set(values) != {"q", "world"}
+                or any(type(v) is not int or v < 0 for v in values.values())
+            ):
+                raise ValueError("invalid snapshot update opportunity counters")
+        if any(
+            metadata["skipped_updates"][k] > metadata["update_attempts"][k]
+            for k in ("q", "world")
+        ):
+            raise ValueError("snapshot skipped updates exceed attempted updates")
         stage = metadata.get("stage")
         expected_games = (
             SOURCE_GAMES
@@ -841,6 +900,9 @@ class ContinualTrainer:
             "episode_counters",
             "training_curve",
             "loss_history",
+            "transition_statistics",
+            "update_attempts",
+            "skipped_updates",
             "last_update",
         ):
             setattr(obj, k, copy.deepcopy(metadata[k]))

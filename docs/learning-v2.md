@@ -20,6 +20,8 @@ Esses são mecanismos verificáveis e hipóteses de melhoria. Não estabelecem q
 
 O contexto periódico é um limite novo e explícito: não conserva informação anterior aos16quadros do bloco. O replay só sorteia âncoras cujo reset de contexto ainda está presente; se o buffer não puder fornecer contexto completo, não inventa estado inicial nem muda silenciosamente os pesos dos jogos.
 
+O encoder processa os quadros independentes do lote de uma vez; a GRU continua sequencial e respeita os resets. O encoder atual não contém BatchNorm nem dropout. Testes confrontam saídas e gradientes com o laço original e verificam que quadros futuros não alteram estados anteriores. Isso reduz trabalho repetido sem fornecer observações futuras ao controle.
+
 A cada10episódios, um episódio inteiro é reservado para calibração. As sementes de ajuste são pares, as de calibração ímpares, em uma nova família acima de2.000.000. Isso garante separação dos fluxos; adaptação e controle do zero usam o mesmo fluxo ambiental do alvo. As sementes finais002 não são usadas nesta implementação ou nos testes novos.
 
 A calibração verifica erro de próximo estado contra cópia, recompensa contra média e término contra taxa observada. Cada ação legal precisa de suporte mínimo de8transições distintas. Não há ID do jogo na rede ou no gate; os nomes só organizam dados/estágios. Uma boa calibração é estimativa local em dados de treinamento, não garantia em qualquer estado novo ou prova de benefício causal. Mudanças nos pesos do controle invalidam a revisão; mudanças no mundo desligam a confiança antes da atualização. Nenhuma calibração fonte autoriza o primeiro uso no alvo ainda desconhecido.
@@ -33,6 +35,14 @@ Os testes novos usam tensores, pixels artificiais e atores sintéticos. Incluem 
 Não há controlador vencedor por jogo, ações de especialista, head específico, modificação de recompensa dos modelos antigos ou limiar científico relaxado. O decoder herdado está congelado e não é apresentado como reconstrução aprendida. A mistura, a destilação e o retorno3passos precisam ser avaliados por experimento novo com controles e dados finais não usados no diagnóstico002.
 
 A autorização singular002 foi consumida. Sua decisão de7PASS/6FAIL e o pacote no Drive continuam válidos. A CI desta branch executa somente verificações de engenharia. Não há permissão implícita para uma campanha, repetição, gasto pago ou merge. Um teste científico da nova versão exige protocolo/versão/fontes/budget próprios e autorização nova, sem reaproveitar a aprovação002.
+
+## Avaliação preparada e custo ainda pendente
+
+O [plano finito003](learning-v2-validation.md) descreve três réplicas e1.735episódios finais, com as margens científicas anteriores. O avaliador copia o histórico do controlador para contrafactuais, registra a mistura realmente usada e faz previsões antes da interação. A carga para inferência autentica o snapshot inteiro sem restaurar replay, atores ou otimizadores. O analisador exige a nova linhagem e cobertura de todas as transições.
+
+O runner candidato mantém reserva local exclusiva, contadores por interação e preservação de falhas, inclusive quando um registro não pode ser exportado. Contabiliza oportunidades, tentativas, atualizações e skips; a comparação entre adaptação e scratch usa o mesmo orçamento ambiental e publica diferenças de custo. Sua execução de produção continua bloqueada até certificar o transporte da reserva remota e resolver as pendências do protocolo.
+
+Foram feitos dois perfis finitos em tensores aleatórios, sem partidas, modelos históricos ou sementes finais. O primeiro identificou repetição do encoder; o segundo mediu a correção equivalente. Os [dados no Windows](evidence/learning-v2/synthetic-cost-context16-vectorized-windows.json) ainda não demonstram encaixe em300minutos: só a extrapolação dos otimizadores seria de cerca de367minutos de execução e660minutos de CPU neste computador. Isso não estima o desempenho do runner Linux. Uma etiqueta de engenharia distinta permite medir a fonte fixada no Linux uma vez, com100atualizações e100operações sintéticas, limite interno120segundos e watchdog externo180segundos. Essa medição não autoriza campanha ou nova tentativa automática.
 
 ## Fundamentação
 

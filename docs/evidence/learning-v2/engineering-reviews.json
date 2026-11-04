@@ -1,0 +1,38 @@
+{
+  "kind": "ENGINEERING_REVIEW_ONLY_NOT_LEARNING_EVIDENCE",
+  "historical_source_preserved": "38b4ffb62bec74eead91e80eadc199fcdd7c9471",
+  "new_human_request": "Concerta isso aí; Corrigir o aprendizado do projeto",
+  "reviewers": [
+    {
+      "name": "v2_evaluation",
+      "scope": "protocol; evaluator; causal batched encoder equivalence",
+      "tests_reported": "protocol19; evaluator23 before root budget-hook test; sequence27",
+      "not_claimed": "Chat1 approval or scientific competence"
+    },
+    {
+      "name": "concrete_bug_triage",
+      "scope": "frozen controller/fork21 tests; profiler resource/provenance failure review29 fake/plan tests; final inference-profile extension partially handed off after tool usage limit",
+      "not_claimed": "independent completed validation of root-final profiler extension"
+    },
+    {
+      "name": "v2_analysis",
+      "scope": "offline fabricated-data analysis58 tests; read-only runner integration review and fakecampaign16 tests",
+      "findings": "Physical accounting preceded by journal IO; unguarded finalization; missing explicit warmup/replay opportunity count. Root fixed and added four fake fault scenarios; campaign20 tests passed."
+    }
+  ],
+  "engineering_profiles": {
+    "baseline": "synthetic-cost-context16-before-vectorization.json",
+    "after_one_causal_optimization": "synthetic-cost-context16-vectorized-windows.json",
+    "real_game_episodes": 0,
+    "official_models_loaded": false,
+    "final_scientific_seeds_executed": false,
+    "local_profiles_automatic_repetition": false
+  },
+  "current_limitations": [
+    "003 candidate not frozen or authorized",
+    "300-minute feasibility not established on Linux",
+    "Remote production reservation transport not certified; runner blocks real path",
+    "Original six scientific FAIL remain; no new scientific results"
+  ],
+  "next_step": "Run complete engineering CI, then apply distinct synthetic cost label once to measure same reviewed source on Linux. No scientific label, merge or extensive game training."
+}

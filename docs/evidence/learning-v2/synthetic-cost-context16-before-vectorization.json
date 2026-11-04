@@ -1,0 +1,986 @@
+{
+  "kind": "TEST_ONLY_SYNTHETIC_PROFILE_NOT_LEARNING_EVIDENCE",
+  "measurement_profile_sha256": "1b7e0871580f4c4595234998745d24a7532a3019b7b0afb9862eb08f7a818d66",
+  "measurement": {
+    "schema_version": 1,
+    "kind": "SYNTHETIC_COST_PROFILE_ONLY",
+    "status": "TEST_ONLY_SYNTHETIC_PROFILE_NOT_LEARNING_EVIDENCE",
+    "actual_measurements": true,
+    "injected_backend_fixture": false,
+    "config": {
+      "updates": 100,
+      "forwards": 100,
+      "context_length": 16,
+      "threads": 2
+    },
+    "synthetic_seed": 830003,
+    "source": {
+      "git_sha": "ba11a598af230f14281cce3532f931aa781234ae",
+      "tracked_or_untracked_dirty": true,
+      "git_status": [
+        "M arena/continual/persistence.py",
+        " M arena/continual/trainer.py",
+        " M tests/test_continual_trainer.py",
+        "?? arena/continual/analysis.py",
+        "?? arena/continual/campaign.py",
+        "?? arena/continual/evaluation.py",
+        "?? arena/continual/policy.py",
+        "?? arena/continual/protocol.py",
+        "?? docs/learning-v2-validation.md",
+        "?? scripts/profile_continual_synthetic.py",
+        "?? tests/test_continual_analysis.py",
+        "?? tests/test_continual_campaign.py",
+        "?? tests/test_continual_evaluation.py",
+        "?? tests/test_continual_policy.py",
+        "?? tests/test_continual_protocol.py",
+        "?? tests/test_profile_continual_synthetic.py"
+      ],
+      "source_files_sha256": {
+        "scripts/profile_continual_synthetic.py": "205e13cc2970c5c86b9c62aeef8c1789fea120a8b67b2efcb793679ffe3549a5",
+        "arena/continual/__init__.py": "b6a6a2de828c6b3555f38e273bf6ed43c06cd5d65f0ae464bb84f924be9b8d66",
+        "arena/continual/trainer.py": "761db3fefec9da6f49096aa3f59c2999b53c7161bef83735617f704b5a051749",
+        "arena/continual/network.py": "98174cc5fc60da286177d7c7639fa66c01b3e8331ebc99f3f5d50364208752fa",
+        "arena/continual/replay.py": "33fe8b11e4b66422b4da5edb6ee05a48a31800f03a9afe53549ef8076872e6bb",
+        "arena/continual/objectives.py": "362fb41c3d187dcab1631536dbd7d2601256187b4d55692cbd644a5908e3735d",
+        "arena/continual/calibration.py": "dfb1e93857fe5a5542be3f2340b0e128480eb7af08f3cc85e2bc91c569090355",
+        "arena/universal/network.py": "52cd61f21c6fec0c20e81bff9ab7a15c123ee82889c80d2fc404496a8b734a45",
+        "arena/universal/replay.py": "afe5b4e00cacd15d5084069273e6cda604c86c72b5a3165eced78c50af990151",
+        "arena/universal/envs.py": "e83f727f24b9814fe4fcb3578a82fc923b52fb24dfcaa4818535de8ed09064a9",
+        "arena/universal/campaign.py": "2444e20b37574b17942719f2752b94ff1bf8bfe75b885ac2d95282ac7300b636",
+        "pyproject.toml": "24db4eb567251db0dff4f06627dc978a4ca1c9544df08c2da201ff1af9517595",
+        "requirements-ci.txt": "7db8414c19b0db53b3353dafd3d0d5e298d67e1047c6b0f741d5e99dba5e801b"
+      },
+      "hash_convention": "raw local file bytes; source may be dirty and must be fixed separately for science"
+    },
+    "runtime": {
+      "python": "3.11.0",
+      "system": "Windows",
+      "machine": "AMD64",
+      "torch": "2.10.0+cpu",
+      "numpy": "2.3.5",
+      "gymnasium": "1.4.0",
+      "device": "cpu",
+      "intraop_threads": 2,
+      "interop_threads": 2,
+      "deterministic_algorithms": true,
+      "cuda_initialized": false,
+      "ml_runtime_loaded_by_profile": true
+    },
+    "operations": {
+      "q_update": {
+        "attempted": 50,
+        "completed": 50,
+        "wall_seconds": [
+          0.6130147000076249,
+          0.4665203999611549,
+          0.43385159998433664,
+          0.5093703000457026,
+          0.4466355000040494,
+          0.4348022000049241,
+          0.4690790000022389,
+          0.4793528000009246,
+          0.4397230999893509,
+          0.40392699994845316,
+          0.4434968000277877,
+          0.4872777999844402,
+          0.4525687000132166,
+          0.4419072000309825,
+          0.45706179999979213,
+          0.4653375999769196,
+          0.47639010002603754,
+          0.42779310001060367,
+          0.47294870001496747,
+          0.5143699999898672,
+          0.44772500003455207,
+          0.4271844000322744,
+          0.453077599988319,
+          0.46019180002622306,
+          0.4192689000046812,
+          0.47288750001462176,
+          0.5028688000165857,
+          0.6903080000192858,
+          0.43123720004223287,
+          0.41160440002568066,
+          0.46589930000482127,
+          0.45274129998870194,
+          0.4651046000071801,
+          0.6967173000448383,
+          0.5938378000282682,
+          0.45546179998200387,
+          0.4584465000079945,
+          0.5462340000085533,
+          0.442897200002335,
+          0.3899898999952711,
+          0.5928740000235848,
+          0.49736829998437315,
+          0.40376349998405203,
+          0.4980142000131309,
+          0.4731727999751456,
+          0.4439147000084631,
+          0.4175573000102304,
+          0.4665171999949962,
+          0.5379167000064626,
+          0.41570650000358
+        ],
+        "process_cpu_seconds": [
+          0.921875,
+          0.875,
+          0.8125,
+          0.859375,
+          0.796875,
+          0.84375,
+          0.859375,
+          0.875,
+          0.84375,
+          0.734375,
+          0.859375,
+          0.90625,
+          0.8125,
+          0.875,
+          0.78125,
+          0.796875,
+          0.921875,
+          0.75,
+          0.9375,
+          0.90625,
+          0.84375,
+          0.765625,
+          0.796875,
+          0.78125,
+          0.796875,
+          0.875,
+          0.890625,
+          1.140625,
+          0.859375,
+          0.78125,
+          0.90625,
+          0.828125,
+          0.8125,
+          0.890625,
+          0.984375,
+          0.859375,
+          0.90625,
+          0.890625,
+          0.765625,
+          0.734375,
+          1.03125,
+          0.90625,
+          0.71875,
+          0.90625,
+          0.921875,
+          0.8125,
+          0.78125,
+          0.9375,
+          0.875,
+          0.8125
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 2400,
+            "items": 38400
+          },
+          "online.memory": {
+            "calls": 2400,
+            "items": 38400
+          },
+          "online.q_head": {
+            "calls": 2400,
+            "items": 38400
+          },
+          "online.transition": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.encoder": {
+            "calls": 1200,
+            "items": 19200
+          },
+          "target.memory": {
+            "calls": 1200,
+            "items": 19200
+          },
+          "target.q_head": {
+            "calls": 1200,
+            "items": 19200
+          },
+          "source_teacher.encoder": {
+            "calls": 1200,
+            "items": 19200
+          },
+          "source_teacher.memory": {
+            "calls": 1200,
+            "items": 19200
+          },
+          "source_teacher.q_head": {
+            "calls": 1200,
+            "items": 19200
+          }
+        },
+        "wall_summary": {
+          "count": 50,
+          "total_seconds": 23.765916900301818,
+          "p50_seconds": 0.45931915001710877,
+          "p95_seconds": 0.6043850950169144,
+          "maximum_seconds": 0.6967173000448383
+        },
+        "process_cpu_summary": {
+          "count": 50,
+          "total_seconds": 42.78125,
+          "p50_seconds": 0.859375,
+          "p95_seconds": 0.9632812499999999,
+          "maximum_seconds": 1.140625
+        }
+      },
+      "world_update": {
+        "attempted": 50,
+        "completed": 50,
+        "wall_seconds": [
+          0.2486345000215806,
+          0.20447920000879094,
+          0.21987829997669905,
+          0.2503479999722913,
+          0.21631170000182465,
+          0.2061589999939315,
+          0.26269800000591204,
+          0.23167960002319887,
+          0.20953309995820746,
+          0.21333330002380535,
+          0.23377669998444617,
+          0.2409608000307344,
+          0.22616759996162727,
+          0.2026167000294663,
+          0.23613190004834905,
+          0.22690810001222417,
+          0.2322518999571912,
+          0.2059492000262253,
+          0.23427930002799258,
+          0.23054959997534752,
+          0.2187123000039719,
+          0.24608399998396635,
+          0.27731999999377877,
+          0.22266969998599961,
+          0.22148559999186546,
+          0.21330840000882745,
+          0.26943550002761185,
+          0.25180780002847314,
+          0.23618449998321012,
+          0.24391830002423376,
+          0.2570253000012599,
+          0.2788271000026725,
+          0.2069966000271961,
+          0.27459029998863116,
+          0.2840144000365399,
+          0.23766109999269247,
+          0.3197801999631338,
+          0.23493320000125095,
+          0.21544060000451282,
+          0.22814180003479123,
+          0.2810983000090346,
+          0.3320734999724664,
+          0.21750569995492697,
+          0.3158087999909185,
+          0.24338270002044737,
+          0.20430019998457283,
+          0.26829699997324497,
+          0.23079260002123192,
+          0.2111289000022225,
+          0.22785800002748147
+        ],
+        "process_cpu_seconds": [
+          0.40625,
+          0.390625,
+          0.390625,
+          0.5,
+          0.4375,
+          0.40625,
+          0.46875,
+          0.421875,
+          0.390625,
+          0.421875,
+          0.46875,
+          0.46875,
+          0.4375,
+          0.359375,
+          0.453125,
+          0.421875,
+          0.390625,
+          0.40625,
+          0.453125,
+          0.4375,
+          0.40625,
+          0.46875,
+          0.546875,
+          0.4375,
+          0.453125,
+          0.40625,
+          0.453125,
+          0.453125,
+          0.40625,
+          0.421875,
+          0.46875,
+          0.421875,
+          0.40625,
+          0.453125,
+          0.484375,
+          0.4375,
+          0.46875,
+          0.40625,
+          0.421875,
+          0.40625,
+          0.53125,
+          0.5,
+          0.421875,
+          0.484375,
+          0.5,
+          0.40625,
+          0.515625,
+          0.453125,
+          0.421875,
+          0.40625
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 2400,
+            "items": 57600
+          },
+          "online.memory": {
+            "calls": 2400,
+            "items": 57600
+          },
+          "online.q_head": {
+            "calls": 2400,
+            "items": 57600
+          },
+          "online.transition": {
+            "calls": 100,
+            "items": 19200
+          },
+          "target.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "target.q_head": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "source_teacher.q_head": {
+            "calls": 0,
+            "items": 0
+          }
+        },
+        "wall_summary": {
+          "count": 50,
+          "total_seconds": 12.003228900081012,
+          "p50_seconds": 0.23301429997081868,
+          "p95_seconds": 0.301501320011448,
+          "maximum_seconds": 0.3320734999724664
+        },
+        "process_cpu_summary": {
+          "count": 50,
+          "total_seconds": 22.0,
+          "p50_seconds": 0.4375,
+          "p95_seconds": 0.50859375,
+          "maximum_seconds": 0.546875
+        }
+      },
+      "actor_uncached_prefix8": {
+        "attempted": 34,
+        "completed": 34,
+        "wall_seconds": [
+          0.0484005999751389,
+          0.01817179995123297,
+          0.01527690002694726,
+          0.01580140000442043,
+          0.01735259999986738,
+          0.015092300018295646,
+          0.01357589999679476,
+          0.01411970000481233,
+          0.013954200025182217,
+          0.013359999982640147,
+          0.01242630003252998,
+          0.01288260001456365,
+          0.01376870000967756,
+          0.012776399962604046,
+          0.013280700019095093,
+          0.0147628000122495,
+          0.01802100002532825,
+          0.014697199978400022,
+          0.014127500005997717,
+          0.014558800030499697,
+          0.018534399976488203,
+          0.019168300030287355,
+          0.015440099989064038,
+          0.015102900040801615,
+          0.015071299974806607,
+          0.01615850004600361,
+          0.013843099994119257,
+          0.013959000003524125,
+          0.014186199987307191,
+          0.016570699983276427,
+          0.016177899960894138,
+          0.014121400017756969,
+          0.015779599954839796,
+          0.014667300041764975
+        ],
+        "process_cpu_seconds": [
+          0.0625,
+          0.03125,
+          0.015625,
+          0.03125,
+          0.015625,
+          0.046875,
+          0.03125,
+          0.0,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.015625,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.015625,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125,
+          0.03125
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 272,
+            "items": 272
+          },
+          "online.memory": {
+            "calls": 272,
+            "items": 272
+          },
+          "online.q_head": {
+            "calls": 272,
+            "items": 272
+          },
+          "online.transition": {
+            "calls": 0,
+            "items": 0
+          }
+        },
+        "wall_summary": {
+          "count": 34,
+          "total_seconds": 0.5451881000772119,
+          "p50_seconds": 0.01472999999532476,
+          "p95_seconds": 0.018756264995317906,
+          "maximum_seconds": 0.0484005999751389
+        },
+        "process_cpu_summary": {
+          "count": 34,
+          "total_seconds": 1.015625,
+          "p50_seconds": 0.03125,
+          "p95_seconds": 0.03671874999999997,
+          "maximum_seconds": 0.0625
+        }
+      },
+      "actor_uncached_prefix16": {
+        "attempted": 33,
+        "completed": 33,
+        "wall_seconds": [
+          0.031864099961239845,
+          0.02960100001655519,
+          0.029693200020119548,
+          0.03429149999283254,
+          0.025222100026439875,
+          0.026471399993170053,
+          0.025768999999854714,
+          0.025838800007477403,
+          0.026467599964234978,
+          0.02775939996354282,
+          0.027275600004941225,
+          0.025225399993360043,
+          0.02523470000596717,
+          0.02534280001418665,
+          0.026945099991280586,
+          0.03015050000976771,
+          0.030946699960622936,
+          0.027658100007101893,
+          0.029848699981812388,
+          0.029299299989361316,
+          0.03357940004207194,
+          0.02875640004640445,
+          0.03025439998600632,
+          0.029290800041053444,
+          0.029680399980861694,
+          0.028050499968230724,
+          0.028818199993111193,
+          0.028940999996848404,
+          0.0315909999771975,
+          0.044232500018551946,
+          0.02746170002501458,
+          0.026640299998689443,
+          0.026438400032930076
+        ],
+        "process_cpu_seconds": [
+          0.0625,
+          0.0625,
+          0.0625,
+          0.078125,
+          0.03125,
+          0.03125,
+          0.046875,
+          0.0625,
+          0.015625,
+          0.046875,
+          0.0625,
+          0.03125,
+          0.0625,
+          0.03125,
+          0.03125,
+          0.015625,
+          0.046875,
+          0.03125,
+          0.0625,
+          0.03125,
+          0.0625,
+          0.0625,
+          0.0625,
+          0.0625,
+          0.0625,
+          0.0625,
+          0.046875,
+          0.0625,
+          0.0625,
+          0.078125,
+          0.0625,
+          0.046875,
+          0.0625
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 528,
+            "items": 528
+          },
+          "online.memory": {
+            "calls": 528,
+            "items": 528
+          },
+          "online.q_head": {
+            "calls": 528,
+            "items": 528
+          },
+          "online.transition": {
+            "calls": 0,
+            "items": 0
+          }
+        },
+        "wall_summary": {
+          "count": 33,
+          "total_seconds": 0.9546400000108406,
+          "p50_seconds": 0.02875640004640445,
+          "p95_seconds": 0.03386424002237618,
+          "maximum_seconds": 0.044232500018551946
+        },
+        "process_cpu_summary": {
+          "count": 33,
+          "total_seconds": 1.703125,
+          "p50_seconds": 0.0625,
+          "p95_seconds": 0.06874999999999998,
+          "maximum_seconds": 0.078125
+        }
+      },
+      "plan_values_all10": {
+        "attempted": 33,
+        "completed": 33,
+        "wall_seconds": [
+          0.0023725000210106373,
+          0.0019528999691829085,
+          0.0016740999999456108,
+          0.0021886000176891685,
+          0.00146540004061535,
+          0.0018769999733194709,
+          0.001512099988758564,
+          0.0015989000094123185,
+          0.0010618999949656427,
+          0.0016021000337786973,
+          0.0014986000023782253,
+          0.0011024000123143196,
+          0.0014467000146396458,
+          0.0014817999908700585,
+          0.0015789999742992222,
+          0.0017036999925039709,
+          0.001379600027576089,
+          0.001707300019916147,
+          0.0016462999628856778,
+          0.00162540003657341,
+          0.0019672999624162912,
+          0.0016151000163517892,
+          0.0016836000140756369,
+          0.001505599997472018,
+          0.0015616000164300203,
+          0.0015331999748013914,
+          0.001686599978711456,
+          0.00138669996522367,
+          0.0018354000058025122,
+          0.002294300007633865,
+          0.0012969999806955457,
+          0.0012221999932080507,
+          0.0013926000101491809
+        ],
+        "process_cpu_seconds": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.015625,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.03125,
+          0.0,
+          0.03125,
+          0.015625,
+          0.03125,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "instrumented_kernel_counts": {
+          "online.encoder": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.memory": {
+            "calls": 0,
+            "items": 0
+          },
+          "online.q_head": {
+            "calls": 33,
+            "items": 330
+          },
+          "online.transition": {
+            "calls": 33,
+            "items": 330
+          }
+        },
+        "wall_summary": {
+          "count": 33,
+          "total_seconds": 0.05345750000560656,
+          "p50_seconds": 0.0015989000094123185,
+          "p95_seconds": 0.002230880013667047,
+          "maximum_seconds": 0.0023725000210106373
+        },
+        "process_cpu_summary": {
+          "count": 33,
+          "total_seconds": 0.125,
+          "p50_seconds": 0.0,
+          "p95_seconds": 0.03125,
+          "maximum_seconds": 0.03125
+        }
+      }
+    },
+    "failure": null,
+    "new_game_episodes": 0,
+    "new_environment_interactions": 0,
+    "official_models_loaded": false,
+    "scientific_conclusion": "NOT_ASSESSED",
+    "historical_G1_measurements_reused": false,
+    "scientific_budget_projection": null,
+    "limits": {
+      "synthetic_updates": 100,
+      "q_updates": 50,
+      "world_updates": 50,
+      "standalone_forward_operations": 100,
+      "cpu_threads": 2,
+      "wall_seconds": 120.0,
+      "process_cpu_seconds": 240.0,
+      "process_peak_rss_bytes": 3221225472
+    },
+    "counting_scope": "Standalone actor/planner profile calls <=100 are separate from the NN forwards necessarily executed inside <=100 updates. Nested encoder/GRU/transition/Q-head calls and batch items are reported separately; instrumentation overhead is included.",
+    "forward_scope": "Uncached actor reconstruction with prefix8 and prefix16; separate explicit ten-action planning kernel. The planning kernel timing is not a claim that calibration admitted it.",
+    "limitations": [
+      "Random RGB/rewards are not gameplay or learned skills.",
+      "Synthetic timings do not guarantee scientific runtime, RSS or competence.",
+      "Full-capacity replay, environment physics, evaluation, checkpoint IO and remote hardware are not measured.",
+      "Resource limits are cooperative checks after setup, around operations and during finalization; they cannot preempt blocked C imports/kernels or IO. The outer CI/process timeout is the hard watchdog.",
+      "Plan imports no ML runtime and creates no neural network. --run is explicit opt-in."
+    ],
+    "synthetic_state_before": {
+      "global_environment_training_steps": 0,
+      "fit_environment_steps": 0,
+      "calibration_environment_steps": 0,
+      "forbidden_environment_calls": 0,
+      "q_updates": 0,
+      "world_updates": 0,
+      "learner_config": {
+        "hidden_size": 64,
+        "latent_size": 64,
+        "context_length": 16,
+        "unroll": 8,
+        "n_step": 3,
+        "batch_size": 16,
+        "calibration_batch_size": 32,
+        "replay_capacity": 40000,
+        "capacity_per_game": 10000,
+        "calibration_capacity": 8000,
+        "calibration_every_episodes": 10,
+        "warmup_steps": 128,
+        "q_interval": 16,
+        "world_interval": 32,
+        "learning_rate": 0.0003,
+        "world_learning_rate": 0.001,
+        "gamma": 0.98,
+        "target_tau": 0.01,
+        "source_distillation_weight": 1.0,
+        "adaptation_target_fraction": 0.5,
+        "planning_fraction": 0.2,
+        "epsilon_end": 0.05,
+        "episode_steps": 400,
+        "threads": 2,
+        "max_training_steps": 1080000
+      },
+      "teacher_is_frozen": true,
+      "teacher_parameters_unchanged": true,
+      "teacher_source": "own newly initialized network; not an officially trained model",
+      "replay": {
+        "fit": {
+          "transitions": 2640,
+          "episodes": 80,
+          "games": {
+            "snake": 528,
+            "pong": 528,
+            "agar": 528,
+            "flappy": 528,
+            "racing": 528
+          },
+          "stored_frame_bytes": 8355840
+        },
+        "protected_source": {
+          "transitions": 2112,
+          "episodes": 64,
+          "games": {
+            "snake": 528,
+            "pong": 528,
+            "agar": 528,
+            "flappy": 528
+          },
+          "stored_frame_bytes": 6684672
+        },
+        "calibration": {
+          "transitions": 1056,
+          "episodes": 32,
+          "games": {
+            "racing": 1056
+          },
+          "stored_frame_bytes": 3342336
+        }
+      },
+      "synthetic_episode_length": 33,
+      "instrumented_kernel_counts": {}
+    },
+    "synthetic_state_after": {
+      "global_environment_training_steps": 0,
+      "fit_environment_steps": 0,
+      "calibration_environment_steps": 0,
+      "forbidden_environment_calls": 0,
+      "q_updates": 50,
+      "world_updates": 50,
+      "learner_config": {
+        "hidden_size": 64,
+        "latent_size": 64,
+        "context_length": 16,
+        "unroll": 8,
+        "n_step": 3,
+        "batch_size": 16,
+        "calibration_batch_size": 32,
+        "replay_capacity": 40000,
+        "capacity_per_game": 10000,
+        "calibration_capacity": 8000,
+        "calibration_every_episodes": 10,
+        "warmup_steps": 128,
+        "q_interval": 16,
+        "world_interval": 32,
+        "learning_rate": 0.0003,
+        "world_learning_rate": 0.001,
+        "gamma": 0.98,
+        "target_tau": 0.01,
+        "source_distillation_weight": 1.0,
+        "adaptation_target_fraction": 0.5,
+        "planning_fraction": 0.2,
+        "epsilon_end": 0.05,
+        "episode_steps": 400,
+        "threads": 2,
+        "max_training_steps": 1080000
+      },
+      "teacher_is_frozen": true,
+      "teacher_parameters_unchanged": true,
+      "teacher_source": "own newly initialized network; not an officially trained model",
+      "replay": {
+        "fit": {
+          "transitions": 2640,
+          "episodes": 80,
+          "games": {
+            "snake": 528,
+            "pong": 528,
+            "agar": 528,
+            "flappy": 528,
+            "racing": 528
+          },
+          "stored_frame_bytes": 8355840
+        },
+        "protected_source": {
+          "transitions": 2112,
+          "episodes": 64,
+          "games": {
+            "snake": 528,
+            "pong": 528,
+            "agar": 528,
+            "flappy": 528
+          },
+          "stored_frame_bytes": 6684672
+        },
+        "calibration": {
+          "transitions": 1056,
+          "episodes": 32,
+          "games": {
+            "racing": 1056
+          },
+          "stored_frame_bytes": 3342336
+        }
+      },
+      "synthetic_episode_length": 33,
+      "instrumented_kernel_counts": {
+        "online.encoder": {
+          "calls": 5600,
+          "items": 96800
+        },
+        "online.memory": {
+          "calls": 5600,
+          "items": 96800
+        },
+        "online.q_head": {
+          "calls": 5633,
+          "items": 97130
+        },
+        "online.transition": {
+          "calls": 133,
+          "items": 19530
+        },
+        "target.encoder": {
+          "calls": 1200,
+          "items": 19200
+        },
+        "target.memory": {
+          "calls": 1200,
+          "items": 19200
+        },
+        "target.q_head": {
+          "calls": 1200,
+          "items": 19200
+        },
+        "source_teacher.encoder": {
+          "calls": 1200,
+          "items": 19200
+        },
+        "source_teacher.memory": {
+          "calls": 1200,
+          "items": 19200
+        },
+        "source_teacher.q_head": {
+          "calls": 1200,
+          "items": 19200
+        }
+      }
+    },
+    "source_after": {
+      "git_sha": "ba11a598af230f14281cce3532f931aa781234ae",
+      "tracked_or_untracked_dirty": true,
+      "git_status": [
+        "M arena/continual/persistence.py",
+        " M arena/continual/trainer.py",
+        " M tests/test_continual_trainer.py",
+        "?? arena/continual/analysis.py",
+        "?? arena/continual/campaign.py",
+        "?? arena/continual/evaluation.py",
+        "?? arena/continual/policy.py",
+        "?? arena/continual/protocol.py",
+        "?? docs/learning-v2-validation.md",
+        "?? scripts/profile_continual_synthetic.py",
+        "?? tests/test_continual_analysis.py",
+        "?? tests/test_continual_campaign.py",
+        "?? tests/test_continual_evaluation.py",
+        "?? tests/test_continual_policy.py",
+        "?? tests/test_continual_protocol.py",
+        "?? tests/test_profile_continual_synthetic.py"
+      ],
+      "source_files_sha256": {
+        "scripts/profile_continual_synthetic.py": "205e13cc2970c5c86b9c62aeef8c1789fea120a8b67b2efcb793679ffe3549a5",
+        "arena/continual/__init__.py": "b6a6a2de828c6b3555f38e273bf6ed43c06cd5d65f0ae464bb84f924be9b8d66",
+        "arena/continual/trainer.py": "761db3fefec9da6f49096aa3f59c2999b53c7161bef83735617f704b5a051749",
+        "arena/continual/network.py": "98174cc5fc60da286177d7c7639fa66c01b3e8331ebc99f3f5d50364208752fa",
+        "arena/continual/replay.py": "33fe8b11e4b66422b4da5edb6ee05a48a31800f03a9afe53549ef8076872e6bb",
+        "arena/continual/objectives.py": "362fb41c3d187dcab1631536dbd7d2601256187b4d55692cbd644a5908e3735d",
+        "arena/continual/calibration.py": "dfb1e93857fe5a5542be3f2340b0e128480eb7af08f3cc85e2bc91c569090355",
+        "arena/universal/network.py": "52cd61f21c6fec0c20e81bff9ab7a15c123ee82889c80d2fc404496a8b734a45",
+        "arena/universal/replay.py": "afe5b4e00cacd15d5084069273e6cda604c86c72b5a3165eced78c50af990151",
+        "arena/universal/envs.py": "e83f727f24b9814fe4fcb3578a82fc923b52fb24dfcaa4818535de8ed09064a9",
+        "arena/universal/campaign.py": "2444e20b37574b17942719f2752b94ff1bf8bfe75b885ac2d95282ac7300b636",
+        "pyproject.toml": "24db4eb567251db0dff4f06627dc978a4ca1c9544df08c2da201ff1af9517595",
+        "requirements-ci.txt": "7db8414c19b0db53b3353dafd3d0d5e298d67e1047c6b0f741d5e99dba5e801b"
+      },
+      "hash_convention": "raw local file bytes; source may be dirty and must be fixed separately for science"
+    },
+    "elapsed_wall_seconds": 47.289650699996855,
+    "elapsed_process_cpu_seconds": 76.59375,
+    "process_peak_rss_bytes": 326815744,
+    "memory_scope": "OS process peak RSS helper, not current RSS; setup/import/data allocation and cleanup/provenance finalization are included in timing and peak. Receipt/manifest sealing is bounded only by the outer process watchdog."
+  },
+  "projection": {
+    "scope": "optimizer-only mean-times extrapolation on measured Windows machine; excludes actor/environment/evaluation/IO and is not Linux feasibility proof",
+    "q_update_ceiling": 67500,
+    "world_update_ceiling": 33750,
+    "wall_minutes": 669.7694553827023,
+    "process_cpu_minutes": 1210.078125,
+    "candidate_ceiling_minutes": 300,
+    "disposition": "NOT_FEASIBLE_ON_MEASURED_HOST_BEFORE_OPTIMIZATION",
+    "not_a_runtime_guarantee": true
+  },
+  "next_engineering_change": "Vectorize independent frame CNN encoder over batch*time while preserving causal recurrent loop and objective; one new bounded profile permitted after equivalence checks."
+}

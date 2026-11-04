@@ -117,9 +117,34 @@ def ready(fake_games):
     return obj
 
 
+def test_insufficient_context_skips_are_counted_without_repeating_slot(
+    fake_games, monkeypatch
+):
+    from arena.continual.replay import InsufficientContext
+
+    obj = ContinualTrainer(831190, compact(q_interval=4, world_interval=8))
+    obj.configure_stage("pretrain", 24)
+    obj.collect(24, learn=False)
+
+    def unavailable(*args, **kwargs):
+        raise InsufficientContext("synthetic unavailable context")
+
+    monkeypatch.setattr(obj, "learn_batch", unavailable)
+    obj._due_updates()
+    obj._due_updates()
+    assert obj.update_attempts == obj.skipped_updates == {"q": 1, "world": 1}
+    assert obj.q_updates == obj.world_updates == 0
+
+
 def test_reserved_episodes_never_enter_fit_or_protected_replay(fake_games):
     t = ready(fake_games)
     assert t.fit_steps == 16 and t.calibration_steps == 8 and t.global_steps == 24
+    baselines = t.training_baselines()
+    assert set(baselines) == {"snake", "pong", "agar", "flappy"}
+    assert all(
+        b["support"] == 6 and b["fit_support"] == 4 and b["calibration_support"] == 2
+        for b in baselines.values()
+    )
     fit = {f.tobytes() for e in t.replay._episodes for f in e.frames}
     validation = {f.tobytes() for e in t.calibration_replay._episodes for f in e.frames}
     assert not fit.intersection(validation)
@@ -290,6 +315,46 @@ def test_complete_snapshot_reproduces_25_synthetic_future_updates(fake_games, tm
         )
         assert restored.snapshot_payload()[0] == meta
         assert restored.calibration.state_dict() == calibration
+
+
+def test_inference_load_cannot_restore_replay_or_actors(
+    fake_games, tmp_path, monkeypatch
+):
+    from arena.continual.persistence import load_frozen_controller
+    from arena.universal.replay import SequenceReplay
+
+    t = ready(fake_games)
+    source = "a" * 40
+    protocol = "b" * 64
+    receipt = save_checkpoint(
+        t, tmp_path / "inference", source_revision=source, protocol_sha256=protocol
+    )
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("inference restored replay/physical actors")
+
+    monkeypatch.setattr(SequenceReplay, "load", forbidden)
+    monkeypatch.setattr("arena.continual.trainer.make_game", forbidden)
+    rng = torch.random.get_rng_state().clone()
+    controller = load_frozen_controller(
+        tmp_path / "inference",
+        expected_manifest_sha256=receipt["manifest_sha256"],
+        expected_source_revision=source,
+        expected_protocol_sha256=protocol,
+        expected_model_seed=t.model_seed,
+        expected_stage="pretrain",
+    )
+    assert torch.equal(rng, torch.random.get_rng_state())
+    assert fingerprint(controller.network) == fingerprint(t.online)
+    with pytest.raises(ValueError, match="slot"):
+        load_frozen_controller(
+            tmp_path / "inference",
+            expected_manifest_sha256=receipt["manifest_sha256"],
+            expected_source_revision=source,
+            expected_protocol_sha256=protocol,
+            expected_model_seed=t.model_seed,
+            expected_stage="adaptation",
+        )
 
 
 def test_finite_stage_caps_and_zero_collection_do_not_repeat(fake_games):

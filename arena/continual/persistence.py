@@ -422,3 +422,86 @@ def load_checkpoint(
     # Loading is read-only; also catch a changed replay file during consumption.
     _manifest(root, expected_manifest_sha256)
     return restored
+
+
+def load_frozen_controller(
+    directory,
+    *,
+    expected_manifest_sha256: str,
+    expected_source_revision: str,
+    expected_protocol_sha256: str,
+    expected_model_seed: int,
+    expected_stage: str,
+):
+    """Load only inference weights/calibration, never replay, actors or optimizers.
+
+    The whole immutable checkpoint is authenticated, but experiences are not
+    deserialized. Exact-runtime reproduction remains an explicit contract.
+    """
+    from .calibration import GateCalibration
+    from .network import ContinualQNetwork
+    from .policy import FrozenPolicyController
+    from .trainer import ContinualConfig
+
+    source = _source(expected_source_revision)
+    protocol = validate_sha256(expected_protocol_sha256)
+    root = _plain_path(directory, directory=True)
+    hashes = _manifest(root, expected_manifest_sha256)
+    if not {"metadata.json", "state.pt", "observations.npz"} <= set(hashes):
+        raise ValueError("required inference checkpoint members missing")
+    metadata = _json(
+        read_verified_bytes(
+            root / "metadata.json",
+            expected_sha256=hashes["metadata.json"],
+            max_bytes=MAX_METADATA_BYTES,
+        )
+    )
+    if (
+        metadata.get("schema_version") != SCHEMA_VERSION
+        or metadata.get("source_revision") != source
+        or metadata.get("protocol_sha256") != protocol
+        or metadata.get("action_names") != list(ACTION_NAMES)
+        or metadata.get("observation_shape") != [32, 32, 3]
+        or metadata.get("architecture") != _architecture_version()
+        or metadata.get("versions") != _runtime()
+        or type(expected_model_seed) is not int
+        or metadata.get("model_seed") != expected_model_seed
+        or expected_stage not in ("pretrain", "adaptation", "from_scratch")
+        or metadata.get("stage") != expected_stage
+    ):
+        raise ValueError("inference source/protocol/runtime/slot mismatch")
+    config = ContinualConfig(**metadata["config"])
+    raw = read_verified_bytes(
+        root / "state.pt", expected_sha256=hashes["state.pt"], max_bytes=MAX_STATE_BYTES
+    )
+    _bounded_zip(raw, MAX_STATE_BYTES, members=100_000)
+    tensors = torch.load(BytesIO(raw), map_location="cpu", weights_only=True)
+    _check_tensors(tensors)
+    with torch.random.fork_rng(devices=[]):
+        network = ContinualQNetwork(
+            hidden_size=config.hidden_size, latent_size=config.latent_size
+        )
+    state = tensors.get("online")
+    expected = network.state_dict()
+    if not isinstance(state, dict) or set(state) != set(expected):
+        raise ValueError("inference weight catalog differs from architecture")
+    for name, reference in expected.items():
+        value = state[name]
+        if (
+            not isinstance(value, torch.Tensor)
+            or value.shape != reference.shape
+            or value.dtype != reference.dtype
+            or not bool(torch.isfinite(value).all())
+        ):
+            raise ValueError("invalid inference tensor")
+    network.load_state_dict(state, strict=True)
+    network.eval().requires_grad_(False)
+    controller = FrozenPolicyController(
+        network,
+        calibration=GateCalibration.from_state_dict(metadata["calibration"]),
+        policy_revision=metadata["policy_revision"],
+        context_length=config.context_length,
+        gamma=config.gamma,
+    )
+    _manifest(root, expected_manifest_sha256)
+    return controller
