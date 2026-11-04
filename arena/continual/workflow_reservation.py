@@ -20,6 +20,8 @@ import os
 from pathlib import Path
 import re
 import sys
+import tempfile
+from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from . import workflow_guard as guard
@@ -53,9 +55,91 @@ def receipt_bytes(value):
 class ReservationRejected(guard.GateRejected):
     """No confirmed reservation/permit was obtained; do not start science."""
 
+    def __init__(self, message, *, diagnostic=None):
+        self.diagnostic = (
+            _safe_diagnostic(diagnostic) if diagnostic is not None else None
+        )
+        if self.diagnostic is not None:
+            status = self.diagnostic["http_status"]
+            message += (
+                f" [category={self.diagnostic['category']}; "
+                f"http_status={status if status is not None else 'unavailable'}]"
+            )
+        super().__init__(message)
+
 
 class ReservationUncertain(ReservationRejected):
     """The single POST was attempted; its outcome must not be retried."""
+
+
+class ReservationTransportError(ReservationRejected):
+    """Only a fixed category and numeric status may cross the HTTP boundary."""
+
+    def __init__(self, category, http_status=None):
+        super().__init__(
+            "reservation API request failed; no automatic retry",
+            diagnostic={"category": category, "http_status": http_status},
+        )
+
+
+_ERROR_CATEGORIES = frozenset(
+    {
+        "http_error",
+        "timeout",
+        "redirect",
+        "unexpected_status",
+        "invalid_json",
+        "response_too_large",
+        "network_error",
+        "transport_error",
+        "validation_rejected",
+        "invalid_post_response",
+        "output_io_error",
+        "internal_error",
+    }
+)
+
+
+def _safe_diagnostic(value):
+    """Never preserve exception messages, URLs, bodies, headers or credentials."""
+    value = value if isinstance(value, Mapping) else {}
+    category = value.get("category")
+    if not isinstance(category, str) or category not in _ERROR_CATEGORIES:
+        category = "transport_error"
+    status = value.get("http_status")
+    return {
+        "category": category,
+        "http_status": status if type(status) is int and 100 <= status <= 599 else None,
+    }
+
+
+def _error_diagnostic(error, *, request=False):
+    if isinstance(error, ReservationRejected) and error.diagnostic is not None:
+        return _safe_diagnostic(error.diagnostic)
+    if isinstance(error, HTTPError):
+        status = error.code
+        redirect = type(status) is int and 300 <= status <= 399
+        return _safe_diagnostic(
+            {
+                "category": "redirect" if redirect else "http_error",
+                "http_status": status,
+            }
+        )
+    if isinstance(error, TimeoutError) or (
+        isinstance(error, URLError) and isinstance(error.reason, TimeoutError)
+    ):
+        return _safe_diagnostic({"category": "timeout"})
+    if isinstance(error, URLError):
+        return _safe_diagnostic({"category": "network_error"})
+    if isinstance(error, ReservationRejected):
+        return _safe_diagnostic({"category": "validation_rejected"})
+    if isinstance(error, OSError):
+        return _safe_diagnostic(
+            {"category": "network_error" if request else "output_io_error"}
+        )
+    return _safe_diagnostic(
+        {"category": "transport_error" if request else "internal_error"}
+    )
 
 
 def _object(value, name):
@@ -104,10 +188,11 @@ def _owner(comment, name):
 def _get(api, path):
     try:
         return api("GET", path)
-    except Exception:
+    except Exception as exc:
         # A transport exception may contain credentials or response details.
         raise ReservationRejected(
-            "GitHub GET failed; no reservation was posted"
+            "GitHub GET failed; no reservation was posted",
+            diagnostic=_error_diagnostic(exc, request=True),
         ) from None
 
 
@@ -200,6 +285,7 @@ def reserve(
     api,
     *,
     expected_workflow40,
+    before_post=None,
 ):
     """Verify all gates, POST once, then return ``{'receipt', 'permit'}``.
 
@@ -208,6 +294,9 @@ def reserve(
     other immutable source/head/protocol combinations do not match this attempt.
     Duplicate matching approvals, malformed marked approvals, or any durable
     reservation consume/deny the attempt rather than selecting a convenient one.
+    ``before_post`` is an optional persistence callback after validation and
+    before the sole POST. Its failure prevents the API call. No filesystem is
+    used here unless the caller explicitly supplies that callback.
     """
     _sha(expected_source40, 40, "expected_source40")
     _sha(expected_protocol64, 64, "expected_protocol64")
@@ -222,6 +311,8 @@ def reserve(
         )
     if not callable(api):
         raise ReservationRejected("an explicit API callable is required")
+    if before_post is not None and not callable(before_post):
+        raise ReservationRejected("before_post must be callable when provided")
     event = _object(event, "event")
     pr = _object(event.get("pull_request"), "pull_request")
     head = _object(pr.get("head"), "head")
@@ -280,11 +371,37 @@ def reserve(
             "recertification first line must literally bind this source and protocol"
         )
     reservation_text = gated["reservation_text"]
+    if before_post is not None:
+        attempt = {
+            "schema_version": 1,
+            "mission": guard.MISSION,
+            "repository": guard.REPOSITORY,
+            "pr_number": guard.PR_NUMBER,
+            "source_revision": expected_source40,
+            "workflow_revision": expected_workflow40,
+            "protocol_sha256": expected_protocol64,
+            "workflow_run_id": run_id,
+            "workflow_run_attempt": 1,
+            "phase": "reservation_post",
+            "status": "ATTEMPTED",
+            "post_outcome": "UNCONFIRMED",
+            "automatic_retry": False,
+        }
+        try:
+            # A durable checkpoint is required BEFORE crossing the POST
+            # boundary. It records intent, never proves remote delivery.
+            before_post(attempt)
+        except Exception:
+            raise ReservationRejected(
+                "attempt checkpoint failed; no reservation POST was called",
+                diagnostic={"category": "output_io_error"},
+            ) from None
     try:
         posted = api("POST", COMMENT_PATH, {"body": reservation_text})
-    except Exception:
+    except Exception as exc:
         raise ReservationUncertain(
-            "reservation POST unconfirmed; the campaign may be consumed; NEVER retry"
+            "reservation POST unconfirmed; the campaign may be consumed; NEVER retry",
+            diagnostic=_error_diagnostic(exc, request=True),
         ) from None
     try:
         reservation_id = _location(posted, "posted reservation")
@@ -294,7 +411,8 @@ def reserve(
             )
     except (ReservationRejected, AttributeError, TypeError):
         raise ReservationUncertain(
-            "reservation POST response is ambiguous; the campaign may be consumed; NEVER retry"
+            "reservation POST response is ambiguous; the campaign may be consumed; NEVER retry",
+            diagnostic={"category": "invalid_post_response"},
         ) from None
     reservation_url = COMMENT_WEB_URL + reservation_id
     permit = copy.deepcopy(gated["permit"])
@@ -538,24 +656,38 @@ def _github_api(token):
                 "User-Agent": "NNA-CONTINUAL-003-reservation",
             },
         )
+        observed_status = None
         try:
             with opener.open(request, timeout=30) as response:
-                if response.geturl() != request.full_url or response.status != (
-                    201 if method == "POST" else 200
-                ):
-                    raise ReservationRejected(
-                        "unexpected reservation API status or endpoint"
+                observed_status = response.status
+                if response.geturl() != request.full_url:
+                    raise ReservationTransportError("redirect", observed_status)
+                if observed_status != (201 if method == "POST" else 200):
+                    raise ReservationTransportError(
+                        "unexpected_status", observed_status
                     )
                 raw = response.read(MAX_RESPONSE_BYTES + 1)
                 if len(raw) > MAX_RESPONSE_BYTES:
-                    raise ReservationRejected(
-                        "reservation API response exceeds the finite size bound"
+                    raise ReservationTransportError(
+                        "response_too_large", observed_status
                     )
-                return json.loads(raw)
-        except Exception:
-            # Suppress raw HTTP errors/URLs/headers, which can contain secrets.
-            raise ReservationRejected(
-                "reservation API request failed; no automatic retry"
+                try:
+                    return json.loads(raw)
+                except (ValueError, UnicodeError, RecursionError):
+                    raise ReservationTransportError(
+                        "invalid_json", observed_status
+                    ) from None
+        except ReservationTransportError:
+            raise
+        except Exception as exc:
+            diagnostic = _error_diagnostic(exc, request=True)
+            if diagnostic["http_status"] is None:
+                diagnostic["http_status"] = _safe_diagnostic(
+                    {"http_status": observed_status}
+                )["http_status"]
+            # Do not expose the raw exception, its request URL, body or headers.
+            raise ReservationTransportError(
+                diagnostic["category"], diagnostic["http_status"]
             ) from None
 
     return api
@@ -576,6 +708,78 @@ def _exclusive_output(path):
     return output
 
 
+def _write_diagnostic(output, name, value):
+    """Write new state via a flushed temporary file in the owned output dir."""
+    target = output / name
+    if target.exists():
+        raise FileExistsError("diagnostic state already exists")
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb", prefix=name + ".", suffix=".partial", dir=output, delete=False
+        ) as handle:
+            temporary = Path(handle.name)
+            handle.write(receipt_bytes(value))
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, target)
+    finally:
+        if temporary is not None and temporary.exists():
+            try:
+                temporary.unlink()
+            except OSError:
+                pass  # A cleanup error must not erase the original IO failure.
+
+
+def _public_context(args):
+    def sha(value, length):
+        return (
+            value
+            if isinstance(value, str) and re.fullmatch(rf"[0-9a-f]{{{length}}}", value)
+            else None
+        )
+
+    run = os.environ.get("GITHUB_RUN_ID")
+    return {
+        "schema_version": 1,
+        "mission": guard.MISSION,
+        "repository": guard.REPOSITORY,
+        "pr_number": guard.PR_NUMBER,
+        "source_revision": sha(args.expected_source, 40),
+        "workflow_revision": sha(args.expected_workflow, 40),
+        "protocol_sha256": sha(args.expected_protocol, 64),
+        "workflow_run_id": (
+            run if isinstance(run, str) and re.fullmatch(r"[1-9][0-9]*", run) else None
+        ),
+        "workflow_run_attempt": (
+            1 if os.environ.get("GITHUB_RUN_ATTEMPT") == "1" else None
+        ),
+        "automatic_retry": False,
+    }
+
+
+def _write_stopped(output, context, state, error):
+    if output is None:
+        return
+    summary = {
+        **context,
+        **state,
+        "status": "STOPPED",
+        "requires_manual_inspection": state["post_boundary_entered"],
+        "error": _error_diagnostic(error),
+    }
+    try:
+        _write_diagnostic(output, "AUTHORIZATION_STATUS.json", summary)
+    except Exception:
+        # Do not replace the first error with an output error or print either
+        # exception's potentially sensitive message. ATTEMPTED remains intact
+        # after any POST boundary that could have been crossed.
+        print(
+            "diagnostic summary persistence failed; original failure retained",
+            file=sys.stderr,
+        )
+
+
 def main(argv=None):
     """Future workflow CLI. Never invoke as an engineering preflight."""
     parser = argparse.ArgumentParser(
@@ -588,6 +792,13 @@ def main(argv=None):
         "--output", required=True, help="new directory outside any Git working tree"
     )
     args = parser.parse_args(argv)
+    output = None
+    context = _public_context(args)
+    state = {
+        "phase": "protocol_validation",
+        "post_boundary_entered": False,
+        "reservation_confirmed": False,
+    }
     try:
         from .protocol import protocol_config, protocol_sha256
 
@@ -602,12 +813,22 @@ def main(argv=None):
                 "candidate/unresolved or mismatched protocol cannot reserve production"
             )
         # Claim the output directory before any remote mutation; never overwrite.
+        state["phase"] = "output_claim"
         output = _exclusive_output(args.output)
+        state["phase"] = "event_input"
         event_path = os.environ.get("GITHUB_EVENT_PATH")
         if not event_path:
             raise ReservationRejected("GITHUB_EVENT_PATH is required")
         with Path(event_path).open(encoding="utf-8") as handle:
             event = json.load(handle)
+
+        def checkpoint(attempt):
+            state["phase"] = "attempt_checkpoint"
+            _write_diagnostic(output, "ATTEMPTED.json", attempt)
+            state["post_boundary_entered"] = True
+            state["phase"] = "reservation_post"
+
+        state["phase"] = "approval_validation"
         result = reserve(
             event,
             args.expected_source,
@@ -616,7 +837,10 @@ def main(argv=None):
             os.environ.get("GITHUB_RUN_ATTEMPT"),
             _github_api(os.environ.get("GH_TOKEN")),
             expected_workflow40=args.expected_workflow,
+            before_post=checkpoint,
         )
+        state["reservation_confirmed"] = True
+        state["phase"] = "receipt_persistence"
         for name in ("receipt", "permit"):
             with (output / f"{name}.json").open(
                 "x", encoding="utf-8", newline="\n"
@@ -635,14 +859,30 @@ def main(argv=None):
                 handle.write(
                     "reservation_id=" + result["permit"]["reservation_id"] + "\n"
                 )
+        state["phase"] = "status_persistence"
+        _write_diagnostic(
+            output,
+            "AUTHORIZATION_STATUS.json",
+            {
+                **context,
+                **state,
+                "phase": "complete",
+                "status": "CONFIRMED",
+                "requires_manual_inspection": False,
+                "error": None,
+            },
+        )
+        state["phase"] = "complete"
     except ReservationRejected as exc:
         print(str(exc), file=sys.stderr)
+        _write_stopped(output, context, state, exc)
         return 1
-    except Exception:
+    except Exception as exc:
         print(
             "reservation stopped; inspect the issue before any action; NEVER retry a POST",
             file=sys.stderr,
         )
+        _write_stopped(output, context, state, exc)
         return 1
     print(
         "Reservation confirmed; receipt and permit saved. Scientific execution remains a separate workflow step."

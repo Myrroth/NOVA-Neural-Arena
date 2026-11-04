@@ -1,0 +1,32 @@
+name: Reservation diagnostics (offline API fixtures only)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [fix/nna-learning-v2]
+permissions:
+  contents: read
+concurrency:
+  group: reservation-diagnostics-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  offline-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Preserve the fixed learner, protocol and execution workflow
+        run: git diff --exit-code 7a31455ee362ed2eb891ec55f1190e2bb48c5131 HEAD -- arena/continual/network.py arena/continual/trainer.py arena/continual/protocol.py arena/continual/policy.py arena/continual/evaluation.py arena/continual/calibration.py arena/continual/objectives.py arena/continual/replay.py .github/workflows/nna-continual003-once.yml
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.11.17'
+      - name: Install the fixed test runner only
+        run: python -m pip install 'pytest==9.0.2'
+      - name: Test invented API responses with no ML runtime or live requests
+        run: python -m pytest -q tests/test_continual_workflow_guard.py tests/test_continual_workflow_reservation.py
+# No issue write token, campaign label, remote POST, game or neural update.
