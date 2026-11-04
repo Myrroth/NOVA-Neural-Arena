@@ -2,10 +2,12 @@
 
 import copy
 import hashlib
+from io import BytesIO
 import json
 from pathlib import Path
 import subprocess
 import sys
+from urllib.error import HTTPError, URLError
 
 import pytest
 
@@ -417,6 +419,8 @@ def test_cli_fake_exchange_emits_exact_hash_and_consumed_output(
     monkeypatch.setenv("GITHUB_OUTPUT", str(outputs))
     assert r.main(args) == 0 and api.posts == 1
     assert sorted(p.name for p in output.iterdir()) == [
+        "ATTEMPTED.json",
+        "AUTHORIZATION_STATUS.json",
         "SHA256SUMS",
         "permit.json",
         "receipt.json",
@@ -430,6 +434,10 @@ def test_cli_fake_exchange_emits_exact_hash_and_consumed_output(
         "receipt_sha256=" + digest,
         "reservation_id=" + r.COMMENT_WEB_URL + "9000",
     ]
+    assert (
+        json.loads((output / "AUTHORIZATION_STATUS.json").read_text())["status"]
+        == "CONFIRMED"
+    )
     assert r.main(args) == 1 and api.posts == 1
     assert "private-test-token" not in str(capsys.readouterr())
 
@@ -470,7 +478,249 @@ def test_cli_lost_post_never_writes_usable_permit(monkeypatch, tmp_path, capsys)
     output, args = configure_cli(monkeypatch, tmp_path, api)
     assert r.main(args) == 1 and api.posts == 1
     assert not (output / "permit.json").exists()
+    attempted = json.loads((output / "ATTEMPTED.json").read_text())
+    stopped = json.loads((output / "AUTHORIZATION_STATUS.json").read_text())
+    assert (
+        attempted["status"] == "ATTEMPTED"
+        and attempted["post_outcome"] == "UNCONFIRMED"
+    )
+    assert stopped["status"] == "STOPPED" and stopped["phase"] == "reservation_post"
+    assert stopped["post_boundary_entered"] and stopped["requires_manual_inspection"]
+    assert stopped["error"] == {"category": "timeout", "http_status": None}
+    text = "".join(p.read_text() for p in output.iterdir())
+    assert (
+        "private-test-token" not in text
+        and api.approval["human_approval_reference"] not in text
+    )
     assert "NEVER retry" in str(capsys.readouterr())
+
+
+def test_attempt_checkpoint_is_durable_before_the_post_boundary(monkeypatch, tmp_path):
+    class CheckpointAPI(FakeAPI):
+        def __call__(self, method, path, payload=None):
+            if method == "POST":
+                checkpoint = json.loads((output / "ATTEMPTED.json").read_text())
+                assert checkpoint["source_revision"] == A
+                assert checkpoint["workflow_revision"] == B
+                assert checkpoint["protocol_sha256"] == P
+                assert checkpoint["workflow_run_id"] == RUN
+                assert checkpoint["status"] == "ATTEMPTED"
+                assert self.posts == 0
+            return super().__call__(method, path, payload)
+
+    api = CheckpointAPI()
+    output, args = configure_cli(monkeypatch, tmp_path, api)
+    assert r.main(args) == 0 and api.posts == 1
+
+
+def test_checkpoint_disk_failure_prevents_post_and_preserves_stopped_summary(
+    monkeypatch, tmp_path, capsys
+):
+    api = FakeAPI()
+    output, args = configure_cli(monkeypatch, tmp_path, api)
+    write = r._write_diagnostic
+
+    def failed_checkpoint(directory, name, value):
+        if name == "ATTEMPTED.json":
+            raise OSError("private-test-token disk detail")
+        return write(directory, name, value)
+
+    monkeypatch.setattr(r, "_write_diagnostic", failed_checkpoint)
+    assert r.main(args) == 1 and api.posts == 0
+    status = json.loads((output / "AUTHORIZATION_STATUS.json").read_text())
+    assert status["status"] == "STOPPED" and status["phase"] == "attempt_checkpoint"
+    assert (
+        status["post_boundary_entered"] is status["requires_manual_inspection"] is False
+    )
+    assert status["error"] == {"category": "output_io_error", "http_status": None}
+    assert not (output / "permit.json").exists()
+    assert "private-test-token" not in str(capsys.readouterr())
+
+
+def test_secondary_summary_write_failure_does_not_hide_first_timeout(
+    monkeypatch, tmp_path, capsys
+):
+    api = FakeAPI()
+    api.post_mode = "lost"
+    output, args = configure_cli(monkeypatch, tmp_path, api)
+    write = r._write_diagnostic
+
+    def broken_summary(directory, name, value):
+        if name == "AUTHORIZATION_STATUS.json":
+            raise OSError("private-test-token secondary detail")
+        return write(directory, name, value)
+
+    monkeypatch.setattr(r, "_write_diagnostic", broken_summary)
+    assert r.main(args) == 1 and api.posts == 1
+    assert (output / "ATTEMPTED.json").is_file()
+    assert not (output / "permit.json").exists()
+    stderr = capsys.readouterr().err
+    assert "category=timeout" in stderr
+    assert "original failure retained" in stderr and "private-test-token" not in stderr
+
+
+def test_confirmed_reservation_followed_by_summary_error_still_fails_closed(
+    monkeypatch, tmp_path, capsys
+):
+    api = FakeAPI()
+    output, args = configure_cli(monkeypatch, tmp_path, api)
+    write = r._write_diagnostic
+
+    def fail_confirmation_summary(directory, name, value):
+        if name == "AUTHORIZATION_STATUS.json" and value["status"] == "CONFIRMED":
+            raise OSError("private-test-token summary failure")
+        return write(directory, name, value)
+
+    monkeypatch.setattr(r, "_write_diagnostic", fail_confirmation_summary)
+    assert r.main(args) == 1 and api.posts == 1
+    status = json.loads((output / "AUTHORIZATION_STATUS.json").read_text())
+    assert status["status"] == "STOPPED" and status["reservation_confirmed"]
+    assert status["phase"] == "status_persistence"
+    assert status["requires_manual_inspection"]
+    assert status["error"] == {"category": "output_io_error", "http_status": None}
+    assert "private-test-token" not in str(capsys.readouterr())
+
+
+def fake_transport(monkeypatch, outcome):
+    calls = []
+
+    class Response:
+        status = 201
+
+        def __init__(self, request):
+            self.request = request
+            if outcome == "wrong_status":
+                self.status = 200
+            if outcome == "unsafe_status":
+                self.status = "403-private-test-token"
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def geturl(self):
+            return (
+                "https://private-test-token.example/"
+                if outcome == "changed_endpoint"
+                else self.request.full_url
+            )
+
+        def read(self, limit):
+            if outcome == "non_json":
+                return b"private-test-token response body"
+            if outcome == "large_response":
+                return b"x" * limit
+            return b'{"created":true}'
+
+    class Opener:
+        def open(self, request, timeout):
+            calls.append(request)
+            assert timeout == 30
+            assert request.get_header("Authorization") == "Bearer private-test-token"
+            if outcome in ("forbidden", "redirect"):
+                raise HTTPError(
+                    "https://private-test-token.example/",
+                    403 if outcome == "forbidden" else 302,
+                    "private-test-token message",
+                    {"Location": "https://private-test-token.example/"},
+                    BytesIO(b"private-test-token body"),
+                )
+            if outcome == "timeout":
+                raise TimeoutError("private-test-token timeout detail")
+            if outcome == "url_timeout":
+                raise URLError(TimeoutError("private-test-token timeout reason"))
+            if outcome == "network":
+                raise URLError("private-test-token network reason")
+            if outcome == "unknown":
+                raise RuntimeError("private-test-token internal detail")
+            return Response(request)
+
+    monkeypatch.setattr(r, "build_opener", lambda handler: Opener())
+    return r._github_api("private-test-token"), calls
+
+
+def test_transport_post_201_uses_one_json_request(monkeypatch):
+    transport, calls = fake_transport(monkeypatch, "created")
+    assert transport("POST", r.COMMENT_PATH, {"body": "public fixture"}) == {
+        "created": True
+    }
+    assert len(calls) == 1
+    assert (
+        calls[0].method == "POST"
+        and calls[0].full_url == "https://api.github.com" + r.COMMENT_PATH
+    )
+    assert json.loads(calls[0].data) == {"body": "public fixture"}
+
+
+@pytest.mark.parametrize(
+    "outcome,category,status",
+    [
+        ("forbidden", "http_error", 403),
+        ("redirect", "redirect", 302),
+        ("timeout", "timeout", None),
+        ("url_timeout", "timeout", None),
+        ("network", "network_error", None),
+        ("unknown", "transport_error", None),
+        ("non_json", "invalid_json", 201),
+        ("wrong_status", "unexpected_status", 200),
+        ("unsafe_status", "unexpected_status", None),
+        ("changed_endpoint", "redirect", 201),
+        ("large_response", "response_too_large", 201),
+    ],
+)
+def test_transport_failures_keep_only_safe_category_and_status(
+    monkeypatch, outcome, category, status
+):
+    transport, calls = fake_transport(monkeypatch, outcome)
+    with pytest.raises(r.ReservationTransportError) as failure:
+        transport("POST", r.COMMENT_PATH, {"body": "public fixture"})
+    assert len(calls) == 1
+    assert failure.value.diagnostic == {"category": category, "http_status": status}
+    assert "private-test-token" not in str(failure.value)
+
+
+def test_transport_diagnostics_survive_reserve_and_cli_without_private_metadata(
+    monkeypatch, tmp_path, capsys
+):
+    transport, calls = fake_transport(monkeypatch, "forbidden")
+    api = FakeAPI()
+    output, args = configure_cli(monkeypatch, tmp_path, api)
+
+    def combined(method, path, payload=None):
+        return (
+            transport(method, path, payload)
+            if method == "POST"
+            else api(method, path, payload)
+        )
+
+    monkeypatch.setattr(r, "_github_api", lambda token: combined)
+    assert r.main(args) == 1 and len(calls) == 1
+    state = json.loads((output / "AUTHORIZATION_STATUS.json").read_text())
+    assert state["error"] == {"category": "http_error", "http_status": 403}
+    assert state["phase"] == "reservation_post" and state["post_boundary_entered"]
+    assert not (output / "permit.json").exists()
+    content = "".join(p.read_text() for p in output.iterdir()) + capsys.readouterr().err
+    assert "private-test-token" not in content
+    assert api.approval["human_approval_reference"] not in content
+
+
+def test_transport_diagnostics_survive_get_wrapper(monkeypatch):
+    transport, calls = fake_transport(monkeypatch, "forbidden")
+    with pytest.raises(r.ReservationRejected) as failure:
+        r._get(transport, r.PR_PATH)
+    assert len(calls) == 1
+    assert failure.value.diagnostic == {"category": "http_error", "http_status": 403}
+    assert "private-test-token" not in str(failure.value)
+
+
+def test_diagnostic_status_cannot_embed_arbitrary_data():
+    failure = r.ReservationTransportError(
+        "private-test-token", {"secret": "private-test-token"}
+    )
+    assert failure.diagnostic == {"category": "transport_error", "http_status": None}
+    assert "private-test-token" not in str(failure)
 
 
 def test_fixed_https_transport_refuses_redirects_unlisted_paths_and_redacts_failure(
