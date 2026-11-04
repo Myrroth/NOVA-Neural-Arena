@@ -1,6 +1,8 @@
 # Validação proposta da linhagem corrigida — NNA-CONTINUAL-003
 
-**Estado: CANDIDATE_NOT_AUTHORIZED. Não congelado. Execução não autorizada.**
+**Estado: FROZEN_APPROVAL_REQUIRED. Conteúdo fixado antes dos dados para revisão; execução não autorizada.**
+
+O congelamento identifica um plano exato. Não significa que o Planejamento ou o usuário aprovaram a execução. A fonteA e o fluxoB serão vinculados ao hashP nos registros externos reais, depois que seus commits existirem.
 
 Este é um plano finito para avaliar o código de `arena/continual/`, desenvolvido na PR #14. Ele não inicia treinamento ou partidas, não concede autorização por existir em JSON e não reaproveita a autorização consumida da campanha 002. Os códigos, modelos, protocolos e resultados 001/002 permanecem separados. Os critérios abaixo não foram aprovados empiricamente pela versão corrigida: competência, retenção, transferência e benefício do mundo/memória/visão continuam **NOT_EVALUATED**.
 
@@ -11,7 +13,7 @@ A proposta usa os mesmos cinco simuladores locais: Snake, Pong, Agar, Flappy e R
 São três réplicas independentes, com sementes de modelo **4103, 5207 e 6301**. Em cada réplica:
 
 1. Treinar uma política compartilhada em Snake, Pong, Agar e Flappy, com **60.000 passos por jogo**, totalizando **240.000 passos-fonte**. Racing fica fora desta fase.
-2. Preservar o checkpoint final dessa fase, o replay-fonte protegido e uma cópia congelada da própria política para destilação. Avaliar o checkpoint final-fonte nos cinco jogos, sem usá-lo para selecionar modelos ou modificar o plano.
+2. Preservar o checkpoint final dessa fase, o replay-fonte protegido e uma cópia congelada da própria política para destilação. Esse checkpoint será avaliado nos cinco jogos na matriz única depois que todo o treinamento terminar, sem seleção de modelos ou modificação do plano.
 3. Adaptar essa política a Racing por **60.000 passos**, mantendo os mecanismos de retenção previstos no código.
 4. Treinar outro agente do zero em Racing por **60.000 passos**, com a mesma configuração e o fluxo ambiental alvo pareado com a adaptação.
 5. Preservar os checkpoints finais exatos e executar a matriz abaixo uma única vez. Não escolher checkpoint por desempenho no teste.
@@ -97,18 +99,22 @@ Outras exigências continuam conjuntivas:
 
 Falha, dado ausente, saída incompleta ou limite atingido não se transformam em PASS. Não há escolha de vencedor entre critérios, exclusão posterior de jogo ou redução das margens para aprovar o projeto.
 
-## Orçamento candidato e pendências antes de congelar
+## Orçamento fixado para revisão e pendências antes de executar
 
-O teto de CPU proposto é **300 minutos**, com parada interna aos **285 minutos** e memória máxima de **3 GiB**, contabilizando de forma cumulativa tanto tempo de processo quanto tempo de execução. Esses valores são **candidatos ainda sem aceite de viabilidade**. Não se presume que o perfil antigo represente esta arquitetura, os dois otimizadores, os forks de avaliação, a calibração ou os registros adicionais.
+A proposta revisada limita a execução a **360 minutos decorridos e720 minutos de CPU acumulada**, com parada interna aos **330 minutos decorridos ou660 minutos de CPU**, o que ocorrer primeiro, e memória de **3 GiB** em um processo com até duas threads. Tempo de CPU e tempo decorrido são medidas diferentes: duas threads podem consumir dois segundos de CPU por segundo decorrido. Esta proposta ainda exige consentimento novo; não amplia a autorização002.
 
-Antes do congelamento, falta:
+O [perfil sintético Linux e sua avaliação independente](evidence/learning-v2/linux-cost-assessment.json), fonte635cf438 e run41752386162, mediu100atualizações e100operações de inferência. A composição conservadora dos componentes produziu188,51minutos decorridos/374,17minutos de CPU; usarP95 por componente e reserva ilustrativa de30% produz254,01/539,20. Isso rejeita uma alegação de encaixe no antigo teto300CPU e sustenta margem estimada para a proposta revisada. Física, IO, replay em capacidade completa e variação de host continuam sem medição integral; a projeção não garante conclusão dentro do limite. A parada preserva resultado incompleto, sem retentativa.
 
-1. Medir o perfil **sintético** da nova versão, projetar os custos de treino, matriz e registros, incluir sobrecargas e verificar o encaixe nos limites gratuitos de CPU/memória. Se a projeção não couber, rever o desenho antes de qualquer autorização; não iniciar esperando ultrapassar o teto.
+A execução proposta usa somente runner Ubuntu padrão no repositório público, com timeout externo de360minutos. Os [limites oficiais do GitHub](https://docs.github.com/en/actions/reference/limits) permitem até seis horas por job; os [runners padrão em repositórios públicos](https://docs.github.com/en/actions/reference/runners/github-hosted-runners) têm uso gratuito. Não se autoriza runner maior, cobrança de armazenamento extra, recurso pago ou gasto para contornar um limite.
+
+Antes da execução, ainda são obrigatórios:
+
+1. Vincular a medição sintética Linux e a avaliação independente à fonte final, demonstrando que as partes medidas do aprendiz não mudaram. Publicar as hipóteses e os custos ainda não medidos, com os limites separados de execução e CPU e suas margens.
 2. Receber revisão técnica/científica independente, incluindo separação dos dados, retenção, semântica das fronteiras da GRU, contadores de updates e critérios históricos. A solicitação mais recente ao Chat 1 não é resposta nem recertificação; nenhuma aprovação dele está registrada neste candidato.
 3. Fixar fonte e fluxo de execução novos por commits/hashes imutáveis. Verificar reserva única, concorrência global sem cancelamento, limites cumulativos, preservação de artefatos, ausência de retries e ausência de seleção por teste.
 4. Preparar a solicitação de **consentimento humano novo e específico** para o protocolo final congelado, fonte, fluxo, custos e limites. Esse consentimento precisa ser recebido antes da execução; o arquivo do plano, aprovações de engenharia ou autorizações antigas não o fornecem.
 
-`protocol_sha256()` identifica o conteúdo candidato para revisão. Calcular esse hash não congela o protocolo e não autoriza a campanha. `python -m arena.continual.protocol` somente descreve o plano, usando a biblioteca padrão; não importa Torch/Gym nem cria modelos ou ambientes.
+`protocol_sha256()` identifica o conteúdo fixado para revisão. Calcular esse hash não constitui consentimento nem autoriza a campanha. `python -m arena.continual.protocol` somente descreve o plano, usando a biblioteca padrão; não importa Torch/Gym nem cria modelos ou ambientes.
 
 ## Encerramento definitivo da tentativa autorizada futura
 

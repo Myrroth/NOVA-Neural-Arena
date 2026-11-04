@@ -1,4 +1,4 @@
-"""Reviewable NNA-CONTINUAL-003 candidate; importing/planning grants no permit.
+"""Fixed NNA-CONTINUAL-003 content for review; importing/planning grants no permit.
 
 Only standard-library imports are allowed here. Models, environments and the
 runner are deliberately absent. Historical 001/002 protocols remain unchanged.
@@ -13,8 +13,8 @@ import json
 
 
 MISSION = "NNA-CONTINUAL-003"
-VERSION = "continual003-candidate-v0.1"
-STATUS = "CANDIDATE_NOT_AUTHORIZED"
+VERSION = "continual003-v0.2-fixed-for-approval"
+STATUS = "FROZEN_APPROVAL_REQUIRED"
 SOURCE_GAMES = ("snake", "pong", "agar", "flappy")
 TARGET_GAME = "racing"
 GAMES = SOURCE_GAMES + (TARGET_GAME,)
@@ -31,9 +31,13 @@ MAX_EVALUATION_STEPS = 694_000
 MAX_TOTAL_STEPS = 1_800_000
 MAX_Q_UPDATES = 67_500
 MAX_WORLD_UPDATES = 33_750
-# Candidate ceilings only: measured feasibility is unresolved, not accepted.
-MAX_MINUTES = 300
-INTERNAL_STOP_MINUTES = 285
+# Revised finite proposal after the single measured Linux cost assessment.
+# CPU is cumulative process time; two threads can consume two CPU seconds per
+# wall second. These are separate ceilings, never a runtime guarantee/permit.
+MAX_WALL_MINUTES = MAX_MINUTES = 360
+MAX_CPU_MINUTES = 720
+INTERNAL_STOP_MINUTES = 330
+INTERNAL_STOP_CPU_MINUTES = 660
 MAX_RSS_BYTES = 3 * 1024**3
 TRAINING_SEED_NAMESPACE = "NNA-learning-corrections-v2"
 
@@ -180,8 +184,10 @@ _CONFIG = {
     "mission": MISSION,
     "version": VERSION,
     "status": STATUS,
-    "frozen": False,
+    "frozen": True,
     "execution_authorized": False,
+    "freeze_meaning": "fixed pre-data content for exact A/B/P review; neither human consent nor Chat1 acceptance",
+    "source_binding": "A and workflow-only descendant B are bound externally by the real Planning review and owner attestation after their commits exist; no self-referential source hash inside P",
     "development_pr": "https://github.com/Myrroth/NOVA-Neural-Arena/pull/14",
     "historical_delivery": "38b4ffb62bec74eead91e80eadc199fcdd7c9471",
     "historical_threshold_source": "arena/universal/protocol.py (NNA-MULTIJOGOS-002)",
@@ -352,10 +358,16 @@ _CONFIG = {
         "q_updates": MAX_Q_UPDATES,
         "world_updates": MAX_WORLD_UPDATES,
         "combined_updates": MAX_Q_UPDATES + MAX_WORLD_UPDATES,
-        "cpu_minutes": MAX_MINUTES,
+        "wall_minutes": MAX_WALL_MINUTES,
+        "cpu_minutes": MAX_CPU_MINUTES,
         "internal_stop_minutes": INTERNAL_STOP_MINUTES,
+        "internal_stop_wall_minutes": INTERNAL_STOP_MINUTES,
+        "internal_stop_cpu_minutes": INTERNAL_STOP_CPU_MINUTES,
         "rss_bytes": MAX_RSS_BYTES,
-        "cpu_cost_status": "CANDIDATE_UNMEASURED_NOT_ACCEPTED",
+        "cpu_cost_status": "MEASURED_LINUX_MODEL_REVIEWED_NOT_GUARANTEED_OR_AUTHORIZED",
+        "cost_assessment": "docs/evidence/learning-v2/linux-cost-assessment.json",
+        "measured_source": "635cf438d4334c5676341b893b4f2b1c898985da",
+        "measured_run_id": 41752386162,
         "time_accounting": "cumulative training+evaluation process CPU and runner wall time; both bounded",
         "paid_resources": False,
         "campaign_attempts": 1,
@@ -409,18 +421,13 @@ _CONFIG = {
     },
     "review_status": {
         "chat1_recertification": "NOT_RECEIVED; latest request has no reviewed response",
-        "independent_review": "PENDING",
-        "measured_cost_acceptance": "PENDING",
+        "independent_review": "Engineering and offline analysis/cost/transport reviews completed; not scientific competence or Chat1 approval",
+        "measured_cost_acceptance": "Independent modeled-cost review; human consent remains absent",
         "runner_source": None,
         "workflow_source": None,
         "human_consent": None,
     },
-    "unresolved_before_freeze": [
-        "Measure synthetic v2 training/evaluation/profile overhead, extrapolate the exact matrix, and verify fit inside candidate CPU/RSS/free-resource ceilings; adjust and review before any freeze.",
-        "Receive independent technical/scientific review including heldout separation, retention, world-target boundary semantics and all unchanged competence margins; no Chat1 approval is currently recorded.",
-        "Bind immutable new runner source and workflow commits/hashes, and review single-reservation, no-retry, no-selection and cumulative-stop enforcement.",
-        "Prepare a distinct explicit human-consent request for the final frozen 003 source/protocol/workflow/budget; consent is still required after freeze and old consumed 002 consent cannot transfer.",
-    ],
+    "unresolved_before_freeze": [],
     "required_before_execution": [
         "All cost/review/source/workflow issues resolved and a new immutable final protocol reviewed and frozen.",
         "Distinct explicit human consent to that exact finite 003 campaign, recorded with a new reference.",
@@ -431,14 +438,14 @@ _CONFIG = {
 
 
 def protocol_config() -> dict:
-    """Return a detached candidate plan, always unauthorized."""
+    """Return the detached fixed plan; authorization is external and absent here."""
     config = copy.deepcopy(_CONFIG)
     config["evaluation_matrix"] = [asdict(cell) for cell in evaluation_matrix()]
     return config
 
 
 def protocol_sha256() -> str:
-    """Hash candidate content for review; a hash is neither freeze nor consent."""
+    """Hash the fixed content for review; a hash is not consent."""
     return hashlib.sha256(canonical_json(protocol_config()).encode("utf-8")).hexdigest()
 
 

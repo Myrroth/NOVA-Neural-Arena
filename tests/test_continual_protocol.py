@@ -222,14 +222,15 @@ def test_candidate_hash_is_deterministic_detached_and_never_grants_authority():
     expected = hashlib.sha256(p.canonical_json(first).encode("utf-8")).hexdigest()
     assert p.protocol_sha256() == expected
     first["execution_authorized"] = True
+    first["frozen"] = False
     first["learner_config"]["context_length"] = 64
     first["evaluation_matrix"].clear()
     first["review_status"]["human_consent"] = "not actual permission"
     current = p.protocol_config()
     assert p.protocol_sha256() == expected
     assert current["mission"] == "NNA-CONTINUAL-003"
-    assert current["status"] == "CANDIDATE_NOT_AUTHORIZED"
-    assert current["frozen"] is current["execution_authorized"] is False
+    assert current["status"] == "FROZEN_APPROVAL_REQUIRED"
+    assert current["frozen"] is True and current["execution_authorized"] is False
     assert current["learner_config"]["context_length"] == 16
     assert len(current["evaluation_matrix"]) == 1735
     assert current["review_status"]["human_consent"] is None
@@ -237,17 +238,32 @@ def test_candidate_hash_is_deterministic_detached_and_never_grants_authority():
     assert current["scientific_status"]["transfer_benefit"] == "NOT_EVALUATED"
 
 
-def test_candidate_cost_ceiling_is_explicitly_unaccepted_with_all_required_blockers():
+def test_fixed_cost_proposal_and_remaining_execution_approvals_are_explicit():
     config = p.protocol_config()
-    assert config["limits"]["cpu_minutes"] == 300
-    assert config["limits"]["internal_stop_minutes"] == 285
+    assert config["limits"]["cpu_minutes"] == 720
+    assert config["limits"]["internal_stop_minutes"] == 330
     assert config["limits"]["rss_bytes"] == 3 * 1024**3
-    assert config["limits"]["cpu_cost_status"] == "CANDIDATE_UNMEASURED_NOT_ACCEPTED"
-    unresolved = " ".join(config["unresolved_before_freeze"]).lower()
-    assert all(
-        word in unresolved
-        for word in ("synthetic", "review", "runner", "workflow", "human", "consent")
+    assert (
+        config["limits"]["cpu_cost_status"]
+        == "MEASURED_LINUX_MODEL_REVIEWED_NOT_GUARANTEED_OR_AUTHORIZED"
     )
+    assert config["limits"]["wall_minutes"] == 360
+    assert config["limits"]["internal_stop_cpu_minutes"] == 660
+    assert config["limits"]["internal_stop_wall_minutes"] == 330
+    assert config["unresolved_before_freeze"] == []
+    requirements = " ".join(config["required_before_execution"]).lower()
+    assert all(
+        word in requirements
+        for word in (
+            "human",
+            "consent",
+            "source",
+            "protocol",
+            "workflow",
+            "reservation",
+        )
+    )
+    assert config["execution_authorized"] is False
     assert config["review_status"]["runner_source"] is None
     assert config["review_status"]["workflow_source"] is None
 
@@ -283,6 +299,6 @@ print(json.dumps({'status': payload['protocol']['status'], 'count': 1735}))
         check=True,
     )
     assert json.loads(result.stdout) == {
-        "status": "CANDIDATE_NOT_AUTHORIZED",
+        "status": "FROZEN_APPROVAL_REQUIRED",
         "count": 1735,
     }

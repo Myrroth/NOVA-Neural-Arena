@@ -58,7 +58,7 @@ def _manifest(root: Path):
         if path.is_file() and path != root / "SHA256SUMS":
             entries.append(f"{sha256_file(path)}  {path.relative_to(root).as_posix()}")
     (root / "SHA256SUMS").write_text("\n".join(entries) + "\n", encoding="utf-8")
-    verify_checksum_manifest(root)
+    return verify_checksum_manifest(root)
 
 
 def _source_state():
@@ -94,9 +94,6 @@ def validate_permit(permit: dict, *, source_state=None, _test_only=False):
             raise CampaignStopped(
                 "candidate/unresolved protocol is not frozen; permit JSON alone cannot authorize it"
             )
-        raise CampaignStopped(
-            "production once-only remote reservation transport is not yet certified"
-        )
     revision, digest = permit.get("source_revision", ""), permit.get(
         "protocol_sha256", ""
     )
@@ -113,12 +110,44 @@ def validate_permit(permit: dict, *, source_state=None, _test_only=False):
     parsed = urlparse(str(permit.get("planning_approval_reference", "")))
     if parsed.scheme != "https" or not parsed.netloc or not parsed.path:
         raise CampaignStopped("planning approval must be an explicit HTTPS source URL")
+    if not _test_only:
+        _validate_remote_transport(permit)
     state = _source_state() if source_state is None else source_state
     if state.get("head") != revision or state.get("clean") is not True:
         raise CampaignStopped(
             "real source HEAD must match the permit and working tree must be clean"
         )
     return state
+
+
+def _validate_remote_transport(permit):
+    """Consume the separate trusted job's bound receipt, never a local flag."""
+    from .workflow_reservation import read_and_validate_receipt
+
+    if (
+        os.environ.get("GITHUB_ACTIONS") != "true"
+        or os.environ.get("GITHUB_REPOSITORY") != "Myrroth/NOVA-Neural-Arena"
+        or os.environ.get("GITHUB_RUN_ATTEMPT") != "1"
+    ):
+        raise CampaignStopped(
+            "production requires the first attempt of the trusted GitHub workflow"
+        )
+    directory = os.environ.get("NNA003_GATE_DIR")
+    if not directory:
+        raise CampaignStopped("trusted reservation artifact directory is missing")
+    try:
+        return read_and_validate_receipt(
+            directory,
+            expected_receipt_sha256=os.environ.get("NNA003_RECEIPT_SHA256"),
+            expected_source_revision=permit["source_revision"],
+            expected_protocol_sha256=permit["protocol_sha256"],
+            expected_workflow_revision=os.environ.get("NNA003_WORKFLOW_REVISION"),
+            expected_run_id=os.environ.get("GITHUB_RUN_ID"),
+            expected_run_attempt=os.environ.get("GITHUB_RUN_ATTEMPT"),
+            permit=permit,
+        )
+    except Exception as exc:
+        raise CampaignStopped("trusted reservation receipt validation failed") from exc
 
 
 def _rss_bytes():
@@ -195,13 +224,13 @@ class Budget:
 
     def check(self):
         self.peak_rss_bytes = max(self.peak_rss_bytes, int(self.rss_reader()))
-        if self.elapsed() >= 285 * 60:
+        if self.elapsed() >= p.INTERNAL_STOP_MINUTES * 60:
             raise CampaignStopped(
-                "285-minute internal STOP; preserve finalization margin"
+                f"{p.INTERNAL_STOP_MINUTES}-minute internal wall STOP; preserve finalization margin"
             )
-        if self.cpu_elapsed() >= 285 * 60:
+        if self.cpu_elapsed() >= p.INTERNAL_STOP_CPU_MINUTES * 60:
             raise CampaignStopped(
-                "285-minute process CPU STOP; preserve finalization margin"
+                f"{p.INTERNAL_STOP_CPU_MINUTES}-minute process CPU STOP; preserve finalization margin"
             )
         if self.peak_rss_bytes > 3 * 1024**3:
             raise CampaignStopped("3 GiB process memory limit exceeded")
@@ -305,6 +334,8 @@ class _RealBackend:
     def __init__(self):
         import torch
 
+        if torch.get_num_interop_threads() != 2:
+            torch.set_num_interop_threads(2)
         torch.set_num_threads(2)
         torch.use_deterministic_algorithms(True)
 
@@ -514,7 +545,9 @@ def _update_audit(trainer, steps, deltas):
     }
 
 
-def _finalize_artifacts(root, status_name, status, operations, *, extra_roots=()):
+def _finalize_artifacts(
+    root, status_name, status, operations, *, extra_roots=(), budget=None
+):
     """Try independent cleanup actions; journal failures cannot imply success."""
 
     def record(phase, exc):
@@ -530,12 +563,44 @@ def _finalize_artifacts(root, status_name, status, operations, *, extra_roots=()
             operation()
         except BaseException as exc:
             record(name, exc)
-    _write_json(root / status_name, status)
+    # Hash and verify every large payload BEFORE closing the phase clocks.
+    # Only the small status and cached checksum catalog change afterward.
+    catalogs = {}
     for target in (root, *extra_roots):
         try:
-            _manifest(target)
+            catalogs[target] = _manifest(target)
         except BaseException as exc:
-            record("manifest", exc)
+            record("payload_manifest", exc)
+    if budget is not None:
+        try:
+            budget.check()
+        except BaseException as exc:
+            record("finalization_budget", exc)
+        status["budget"] = budget.report()
+    _write_json(root / status_name, status)
+    controlled = [root / status_name]
+    for target in (root, *extra_roots):
+        if target not in catalogs:
+            continue
+        try:
+            catalog = catalogs[target]
+            absolute_target = target.resolve()
+            for changed in controlled:
+                absolute_changed = changed.resolve()
+                if absolute_changed.is_relative_to(absolute_target):
+                    catalog[
+                        absolute_changed.relative_to(absolute_target).as_posix()
+                    ] = sha256_file(changed)
+            seal = target / "SHA256SUMS"
+            seal.write_text(
+                "".join(
+                    f"{digest}  {name}\n" for name, digest in sorted(catalog.items())
+                ),
+                encoding="utf-8",
+            )
+            controlled.append(seal)
+        except BaseException as exc:
+            record("cached_manifest_seal", exc)
             # Preserve a truthful receipt even if sealing the artifact fails.
             _write_json(root / status_name, status)
 
@@ -548,14 +613,14 @@ def train_once(
     _plan=None,
     _source=None,
     _clock=time.monotonic,
+    _cpu_clock=time.process_time,
     _rss_reader=_rss_bytes,
 ):
+    budget = Budget(clock=_clock, cpu_clock=_cpu_clock, rss_reader=_rss_reader)
     backend, plan, source, test_only = _setup(permit, _backend, _plan, _source)
+    budget.max_steps = plan.max_total_steps
     root = Path(output)
     _claim(root, permit, source, test_only)
-    budget = Budget(
-        max_steps=plan.max_total_steps, clock=_clock, rss_reader=_rss_reader
-    )
     curves, losses = _Journal(root, "training_curve"), _Journal(root, "training_losses")
     index, trainer, failure = {}, None, None
     _write_json(root / "protocol.json", p.protocol_config(), exclusive=True)
@@ -594,6 +659,7 @@ def train_once(
                 )
             destination = root / "models" / str(seed) / "from_scratch"
             receipt = backend.save(trainer, destination, permit)
+            budget.check()
             index[f"{seed}:from_scratch"] = {
                 "path": destination.relative_to(root).as_posix(),
                 "manifest_sha256": receipt["manifest_sha256"],
@@ -641,7 +707,9 @@ def train_once(
         ]
         if trainer is not None:
             operations.insert(0, ("close_trainer", lambda: _close_trainer(trainer)))
-        _finalize_artifacts(root, "TRAIN_STATUS.json", status, operations)
+        _finalize_artifacts(
+            root, "TRAIN_STATUS.json", status, operations, budget=budget
+        )
         failure = status["failure"]
     if failure:
         raise CampaignStopped(
@@ -685,9 +753,11 @@ def evaluate_final_once(
     _plan=None,
     _source=None,
     _clock=time.monotonic,
+    _cpu_clock=time.process_time,
     _rss_reader=_rss_bytes,
     _cells=None,
 ):
+    entry_wall, entry_cpu = _clock(), _cpu_clock()
     backend, plan, source, test_only = _setup(permit, _backend, _plan, _source)
     if _cells is not None and not test_only:
         raise CampaignStopped(
@@ -721,10 +791,11 @@ def evaluate_final_once(
         training_steps=prior["training_steps"],
         q_updates=prior["q_updates"],
         world_updates=prior["world_updates"],
-        prior_elapsed_seconds=prior["elapsed_seconds"],
+        prior_elapsed_seconds=prior["elapsed_seconds"] + _clock() - entry_wall,
         max_steps=plan.max_total_steps,
-        prior_cpu_seconds=prior["cpu_elapsed_seconds"],
+        prior_cpu_seconds=prior["cpu_elapsed_seconds"] + _cpu_clock() - entry_cpu,
         clock=_clock,
+        cpu_clock=_cpu_clock,
         rss_reader=_rss_reader,
     )
     journals = {
@@ -834,6 +905,7 @@ def evaluate_final_once(
             status,
             [("close_" + name, journal.close) for name, journal in journals.items()],
             extra_roots=(root,),
+            budget=budget,
         )
         failure = status["failure"]
     if failure:

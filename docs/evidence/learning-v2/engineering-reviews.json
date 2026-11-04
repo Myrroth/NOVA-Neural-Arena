@@ -29,10 +29,39 @@
     "local_profiles_automatic_repetition": false
   },
   "current_limitations": [
-    "003 candidate not frozen or authorized",
-    "300-minute feasibility not established on Linux",
-    "Remote production reservation transport not certified; runner blocks real path",
-    "Original six scientific FAIL remain; no new scientific results"
+    "Fixed content requires real new human consent and actual Planning review of exactA/B/P",
+    "Production reservation has only been tested with invented GitHub events/responses; no remote attempt consumed",
+    "Physics, IO and full-capacity replay costs are modeled headroom, not measured runtime guarantee",
+    "OriginalsixscientificFAILremain; no new scientific results"
   ],
-  "next_step": "Run complete engineering CI, then apply distinct synthetic cost label once to measure same reviewed source on Linux. No scientific label, merge or extensive game training."
+  "next_step": "Publish fixedsourceAandworkflow-onlyB for exactliteralreview; obtain actualPlanningdisposition and distincthumanapprovalbeforeonefinitecampaign. No automatic repeat.",
+  "linux_validation": {
+    "source": "635cf438d4334c5676341b893b4f2b1c898985da",
+    "ci_run": 41752162612,
+    "job": 126319600584,
+    "tests_passed": 780,
+    "subtests_passed": 31,
+    "cost_run": 41752386162,
+    "cost_job": 126320350175,
+    "artifact_id": 13285384416,
+    "artifact_zip_sha256": "29e26ebfa7c53e327251b5aea889ce230db7894d1f5bfd0d985e6c1b9c62115a",
+    "downloaded_and_verified": true
+  },
+  "new_remote_transport": {
+    "reviewer": "v2_remote_gate",
+    "tests": "74 offline fake API/event cases",
+    "production_actions_executed": false,
+    "independent_reader": "v2_cost_review",
+    "finding": "Heavy phase entry/verification and manifest sealing were outside cumulative clocks",
+    "root_resolution": "Start training clocks before setup; carry evaluation entry delta into prior counters; hash/verify large payload before closing clocks; update only small controlled status and cached catalogs afterward. Fakeclock case proves setup/verification/both seals are counted and nested manifests remain valid."
+  },
+  "new_budget_proposal": {
+    "wall_minutes": 360,
+    "process_cpu_minutes": 720,
+    "internal_stop_wall_minutes": 330,
+    "internal_stop_cpu_minutes": 660,
+    "rss_bytes": 3221225472,
+    "authorization_received": false,
+    "cost_review": "linux-cost-assessment.json"
+  }
 }

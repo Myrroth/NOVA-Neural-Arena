@@ -256,8 +256,8 @@ def test_budget_stops_on_wall_clock_memory_and_update_limits():
     budget = c.Budget(clock=lambda: now[0], rss_reader=lambda: 1)
     budget.account(training_steps=7, q_updates=2, world_updates=1)
     assert budget.report()["total_steps"] == 7
-    now[0] = 285 * 60
-    with pytest.raises(c.CampaignStopped, match="285-minute"):
+    now[0] = p.INTERNAL_STOP_MINUTES * 60
+    with pytest.raises(c.CampaignStopped, match="internal wall STOP"):
         budget.check()
     with pytest.raises(c.CampaignStopped, match="memory"):
         c.Budget(clock=lambda: 0.0, rss_reader=lambda: 3 * 1024**3 + 1).check()
@@ -288,7 +288,7 @@ def test_process_cpu_budget_accumulates_independently_from_wall_time():
         cpu_clock=lambda: cpu[0],
         rss_reader=lambda: 1,
     )
-    cpu[0] += 285 * 60 - 44
+    cpu[0] += p.INTERNAL_STOP_CPU_MINUTES * 60 - 44
     with pytest.raises(c.CampaignStopped, match="process CPU"):
         next_process.check()
     assert next_process.elapsed() == 17.0
@@ -388,3 +388,125 @@ def test_interrupted_evaluation_keeps_consumed_step_without_completed_row(
     assert status["budget"]["evaluation_steps"] == 1
     assert status["budget"]["total_steps"] == 7
     assert verify_checksum_manifest(root)
+
+
+def test_frozen_protocol_still_cannot_run_from_a_local_approved_json(
+    setup, monkeypatch
+):
+    permit, source, _ = setup
+    config = p.protocol_config()
+    config.update(status="FROZEN_APPROVAL_REQUIRED", unresolved_before_freeze=[])
+    monkeypatch.setattr(p, "protocol_config", lambda: config)
+    permit["protocol_sha256"] = p.protocol_sha256()
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    monkeypatch.setattr(
+        c,
+        "_source_state",
+        lambda: pytest.fail("local JSON reached source/backend setup"),
+    )
+    with pytest.raises(c.CampaignStopped, match="trusted GitHub workflow"):
+        c.validate_permit(permit)
+
+
+def test_runner_binds_trusted_receipt_output_to_exact_current_run(
+    setup, monkeypatch, tmp_path
+):
+    from arena.continual import workflow_reservation
+
+    permit, source, _ = setup
+    config = p.protocol_config()
+    config.update(status="FROZEN_APPROVAL_REQUIRED", unresolved_before_freeze=[])
+    monkeypatch.setattr(p, "protocol_config", lambda: config)
+    permit["protocol_sha256"] = p.protocol_sha256()
+    values = {
+        "GITHUB_ACTIONS": "true",
+        "GITHUB_REPOSITORY": "Myrroth/NOVA-Neural-Arena",
+        "GITHUB_RUN_ID": "831220",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "NNA003_GATE_DIR": str(tmp_path),
+        "NNA003_RECEIPT_SHA256": "c" * 64,
+        "NNA003_WORKFLOW_REVISION": "b" * 40,
+    }
+    for name, value in values.items():
+        monkeypatch.setenv(name, value)
+    captured = []
+
+    def validated(directory, **bindings):
+        captured.append((directory, bindings))
+        return {"transport": "SYNTHETIC ALREADY VERIFIED HELPER FIXTURE"}
+
+    monkeypatch.setattr(workflow_reservation, "read_and_validate_receipt", validated)
+    assert c.validate_permit(permit, source_state=source) == source
+    assert captured == [
+        (
+            str(tmp_path),
+            {
+                "expected_receipt_sha256": "c" * 64,
+                "expected_source_revision": permit["source_revision"],
+                "expected_protocol_sha256": permit["protocol_sha256"],
+                "expected_workflow_revision": "b" * 40,
+                "expected_run_id": "831220",
+                "expected_run_attempt": "1",
+                "permit": permit,
+            },
+        )
+    ]
+
+    def rejected(*args, **kwargs):
+        raise ValueError("synthetic wrong receipt binding")
+
+    monkeypatch.setattr(workflow_reservation, "read_and_validate_receipt", rejected)
+    with pytest.raises(c.CampaignStopped, match="receipt validation failed"):
+        c.validate_permit(permit, source_state=source)
+
+
+def test_phase_setup_verification_and_large_payload_hashing_share_cumulative_clocks(
+    tmp_path, setup, monkeypatch
+):
+    permit, source, plan = setup
+    backend = FakeBackend()
+    root = tmp_path / "count-all-heavy-io"
+    now = {"wall": 0.0, "cpu": 0.0, "sealing": False}
+    original_setup, original_manifest, original_verify = (
+        c._setup,
+        c._manifest,
+        c.verify_checksum_manifest,
+    )
+
+    def setup_cost(*args, **kwargs):
+        now["wall"] += 3
+        now["cpu"] += 5
+        return original_setup(*args, **kwargs)
+
+    def verify_cost(*args, **kwargs):
+        if not now["sealing"]:
+            now["wall"] += 5
+            now["cpu"] += 9
+        return original_verify(*args, **kwargs)
+
+    def manifest_cost(*args, **kwargs):
+        now["sealing"] = True
+        try:
+            result = original_manifest(*args, **kwargs)
+        finally:
+            now["sealing"] = False
+        now["wall"] += 7
+        now["cpu"] += 13
+        return result
+
+    monkeypatch.setattr(c, "_setup", setup_cost)
+    monkeypatch.setattr(c, "_manifest", manifest_cost)
+    monkeypatch.setattr(c, "verify_checksum_manifest", verify_cost)
+    options = {
+        **kwargs(backend, source, plan),
+        "_clock": lambda: now["wall"],
+        "_cpu_clock": lambda: now["cpu"],
+    }
+    trained = c.train_once(root, permit, **options)
+    assert trained["budget"]["elapsed_seconds"] == 10
+    assert trained["budget"]["cpu_elapsed_seconds"] == 18
+    cell = p.EvaluationCell("after_adaptation", "shared", "snake", 4103, 810201)
+    evaluated = c.evaluate_final_once(root, permit, _cells=(cell,), **options)
+    assert evaluated["budget"]["elapsed_seconds"] == 32
+    assert evaluated["budget"]["cpu_elapsed_seconds"] == 58
+    assert original_verify(root) and original_verify(root / "evaluation")
