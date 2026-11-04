@@ -1,0 +1,374 @@
+{
+  "schema_version": 1,
+  "status": "REVIEW_NOT_EXECUTION_APPROVAL",
+  "kind": "INDEPENDENT_OFFLINE_COST_ASSESSMENT",
+  "created_at_utc": "2026-11-04T01:19:07.419935+00:00",
+  "reviewer": "/root/v2_cost_review",
+  "method": "Local JSON, ZIP and checksum inspection followed by standard-library arithmetic only. No NN, game, profile, checkpoint load or network operation was executed during this assessment.",
+  "measured_source": {
+    "source_revision": "635cf438d4334c5676341b893b4f2b1c898985da",
+    "run_id": 41752386162,
+    "job_id": 126320350175,
+    "artifact_id": 13285384416,
+    "run_url": "https://github.com/Myrroth/NOVA-Neural-Arena/actions/runs/41752386162",
+    "archive_sha256": "29e26ebfa7c53e327251b5aea889ce230db7894d1f5bfd0d985e6c1b9c62115a",
+    "profile_sha256": "8de5f9cad594a54447198f8917ed13557be52b4598d938817dfeb33b74bd7011",
+    "clean_measured_checkout": true,
+    "source_hashes_unchanged_after_profile": true,
+    "runtime": {
+      "python": "3.11.17",
+      "system": "Linux",
+      "machine": "x86_64",
+      "torch": "2.10.0+cpu",
+      "numpy": "2.3.5",
+      "gymnasium": "1.4.0",
+      "device": "cpu",
+      "intraop_threads": 2,
+      "interop_threads": 2,
+      "deterministic_algorithms": true,
+      "cuda_initialized": false,
+      "ml_runtime_loaded_by_profile": true
+    },
+    "measured_whole_profile": {
+      "elapsed_wall_seconds": 8.648111987999997,
+      "elapsed_process_cpu_seconds": 14.220404313,
+      "process_peak_rss_bytes": 488599552
+    },
+    "completed_operations": {
+      "q_update": 50,
+      "world_update": 50,
+      "actor_uncached_prefix8": 20,
+      "actor_uncached_prefix16": 20,
+      "plan_values_all10": 20,
+      "frozen_control_step": 20,
+      "shared_after_audit_step": 20
+    },
+    "new_environment_interactions": 0,
+    "new_game_episodes": 0,
+    "official_models_loaded": false,
+    "source_files_sha256": {
+      "scripts/profile_continual_synthetic.py": "e2717b5a469c2ebe9d81bd492763ecd65d4ee56eb2c5a7863a9de90db30798b1",
+      "arena/continual/__init__.py": "b6a6a2de828c6b3555f38e273bf6ed43c06cd5d65f0ae464bb84f924be9b8d66",
+      "arena/continual/trainer.py": "761db3fefec9da6f49096aa3f59c2999b53c7161bef83735617f704b5a051749",
+      "arena/continual/network.py": "c09da099f99a45a80ce7a99cc6da4ee7924d2e583e382cd640969a5b1b97ed6b",
+      "arena/continual/replay.py": "33fe8b11e4b66422b4da5edb6ee05a48a31800f03a9afe53549ef8076872e6bb",
+      "arena/continual/objectives.py": "362fb41c3d187dcab1631536dbd7d2601256187b4d55692cbd644a5908e3735d",
+      "arena/continual/calibration.py": "dfb1e93857fe5a5542be3f2340b0e128480eb7af08f3cc85e2bc91c569090355",
+      "arena/continual/policy.py": "b515055b1c5388746d4cd3c3f31764d312e20d1464d12c05f925e27391b9a36c",
+      "arena/continual/evaluation.py": "f1bc3eeeecce2d5ca44fb1d30bc509378771a98630278d2c122a1feb23f04502",
+      "arena/universal/network.py": "52cd61f21c6fec0c20e81bff9ab7a15c123ee82889c80d2fc404496a8b734a45",
+      "arena/universal/replay.py": "afe5b4e00cacd15d5084069273e6cda604c86c72b5a3165eced78c50af990151",
+      "arena/universal/envs.py": "e83f727f24b9814fe4fcb3578a82fc923b52fb24dfcaa4818535de8ed09064a9",
+      "arena/universal/evaluation.py": "f1fa411f7f7cfb30d2524b32f5eee85fa1e47b734445ea3ba32b4104fa377b7d",
+      "arena/universal/campaign.py": "2444e20b37574b17942719f2752b94ff1bf8bfe75b885ac2d95282ac7300b636",
+      "pyproject.toml": "eab5ebfffeb43ba91584d2bebdf89d737c427030bea58603df120734a87991b4",
+      "requirements-ci.txt": "5ba4047bbe77232fbe0c6d59eef6ffc4b50d6aae1a0c71a1be6ce95096f51d8a"
+    }
+  },
+  "fixed_design_dimensions": {
+    "training_replicas": 3,
+    "training_interactions": 1080000,
+    "evaluation_episodes": 1735,
+    "maximum_steps_per_episode": 400,
+    "maximum_evaluation_interactions": 694000,
+    "scheduled_training_plus_maximum_evaluation_interactions": 1774000,
+    "global_interaction_ceiling": 1800000,
+    "q_update_ceiling": 67500,
+    "world_update_ceiling": 33750,
+    "random_control_interactions_unmeasured": 40000
+  },
+  "count_derivation": {
+    "source_q_ceiling": "3 replicas * 4 source games * 60000 steps / 16 = 45000",
+    "target_q_ceiling": "3 replicas * 2 target arms * 60000 steps / 16 = 22500",
+    "extra_reconstruction_proxy": "4 source actors * 45000 source Q revisions + 1 actor * 22500 target Q revisions = 202500 full-prefix16 calls",
+    "shared_after": "300 episodes * 400 steps = 120000 full same-state attribution/prediction audit calls",
+    "other_neural": "(300 before + 60 scratch + 300 untrained + 300 world_off + 300 gru_reset + 75 pixels_hidden) * 400 = 534000",
+    "random": "100 episodes * 400 = 40000; physics/input selection/IO are unmeasured rather than assigned zero cost"
+  },
+  "equations": {
+    "component_minutes": "assumed_call_count * measured_seconds_per_call / 60",
+    "mean_seconds_per_call": "operation_summary.total_seconds / operation_summary.count",
+    "p95_seconds_per_call": "the measured operation_summary.p95_seconds for each kernel",
+    "reserve_scenario": "sum(component_minutes) * 1.30; the extra 30% is an illustrative planning allowance chosen for this review, not a measured overhead bound",
+    "no_double_count_of_shared_plans": "shared_after_audit_step already includes three raw ten-action plans, three controller decisions, two forks, chosen-action forecast and continuous next-GRU target; no further plan cost is added for its 120000 calls"
+  },
+  "conservative_proxy_choices": [
+    "The adaptation-like Q-update measurement includes source teacher work and is applied to every Q-update ceiling, including source/scratch stages that do not always need that work.",
+    "A full frozen controller call is charged for every training interaction even though training uses a lighter internal actor without the frozen-wrapper checks.",
+    "A full prefix16 call is added for every possible actor invalidation; it also includes a current observation already covered by the control proxy, so this intentionally overcounts part of reconstruction work.",
+    "A separate ten-action planning call is charged on every training interaction and every other-neural evaluation step, including cold-gate, boundary and world-off steps that often do not plan.",
+    "All final episodes are assumed to reach 400 steps, irrespective of early termination."
+  ],
+  "scenarios": {
+    "mean": {
+      "wall": {
+        "components": {
+          "q_update": {
+            "count": 67500,
+            "kernel": "q_update",
+            "measured_seconds_per_call": 0.06714000938000027,
+            "projected_minutes": 75.5325105525003
+          },
+          "world_update": {
+            "count": 33750,
+            "kernel": "world_update",
+            "measured_seconds_per_call": 0.04303994838000023,
+            "projected_minutes": 24.20997096375013
+          },
+          "training_control": {
+            "count": 1080000,
+            "kernel": "frozen_control_step",
+            "measured_seconds_per_call": 0.0015232538499990512,
+            "projected_minutes": 27.418569299982924
+          },
+          "training_rebuild_prefix16": {
+            "count": 202500,
+            "kernel": "actor_uncached_prefix16",
+            "measured_seconds_per_call": 0.004238757599999943,
+            "projected_minutes": 14.305806899999807
+          },
+          "training_plan": {
+            "count": 1080000,
+            "kernel": "plan_values_all10",
+            "measured_seconds_per_call": 0.0005851155500010919,
+            "projected_minutes": 10.532079900019653
+          },
+          "shared_after_audit": {
+            "count": 120000,
+            "kernel": "shared_after_audit_step",
+            "measured_seconds_per_call": 0.008874887599999326,
+            "projected_minutes": 17.74977519999865
+          },
+          "other_neural_control": {
+            "count": 534000,
+            "kernel": "frozen_control_step",
+            "measured_seconds_per_call": 0.0015232538499990512,
+            "projected_minutes": 13.556959264991555
+          },
+          "other_neural_plan": {
+            "count": 534000,
+            "kernel": "plan_values_all10",
+            "measured_seconds_per_call": 0.0005851155500010919,
+            "projected_minutes": 5.207528395009717
+          }
+        },
+        "optimizer_only_minutes": 99.74248151625042,
+        "covered_components_minutes": 188.5132004762527,
+        "covered_components_with_illustrative_30_percent_reserve_minutes": 245.06716061912852
+      },
+      "process_cpu": {
+        "components": {
+          "q_update": {
+            "count": 67500,
+            "kernel": "q_update",
+            "measured_seconds_per_call": 0.13436778062000004,
+            "projected_minutes": 151.16375319750006
+          },
+          "world_update": {
+            "count": 33750,
+            "kernel": "world_update",
+            "measured_seconds_per_call": 0.08600956918000012,
+            "projected_minutes": 48.38038266375007
+          },
+          "training_control": {
+            "count": 1080000,
+            "kernel": "frozen_control_step",
+            "measured_seconds_per_call": 0.0028742271000000265,
+            "projected_minutes": 51.73608780000048
+          },
+          "training_rebuild_prefix16": {
+            "count": 202500,
+            "kernel": "actor_uncached_prefix16",
+            "measured_seconds_per_call": 0.008389061649999951,
+            "projected_minutes": 28.313083068749837
+          },
+          "training_plan": {
+            "count": 1080000,
+            "kernel": "plan_values_all10",
+            "measured_seconds_per_call": 0.0012360139500000368,
+            "projected_minutes": 22.24825110000066
+          },
+          "shared_after_audit": {
+            "count": 120000,
+            "kernel": "shared_after_audit_step",
+            "measured_seconds_per_call": 0.01787442864999993,
+            "projected_minutes": 35.748857299999855
+          },
+          "other_neural_control": {
+            "count": 534000,
+            "kernel": "frozen_control_step",
+            "measured_seconds_per_call": 0.0028742271000000265,
+            "projected_minutes": 25.580621190000233
+          },
+          "other_neural_plan": {
+            "count": 534000,
+            "kernel": "plan_values_all10",
+            "measured_seconds_per_call": 0.0012360139500000368,
+            "projected_minutes": 11.000524155000328
+          }
+        },
+        "optimizer_only_minutes": 199.54413586125014,
+        "covered_components_minutes": 374.17156047500157,
+        "covered_components_with_illustrative_30_percent_reserve_minutes": 486.42302861750204
+      }
+    },
+    "p95": {
+      "wall": {
+        "components": {
+          "q_update": {
+            "count": 67500,
+            "kernel": "q_update",
+            "measured_seconds_per_call": 0.06910435960000179,
+            "projected_minutes": 77.74240455000201
+          },
+          "world_update": {
+            "count": 33750,
+            "kernel": "world_update",
+            "measured_seconds_per_call": 0.04627130094999856,
+            "projected_minutes": 26.02760678437419
+          },
+          "training_control": {
+            "count": 1080000,
+            "kernel": "frozen_control_step",
+            "measured_seconds_per_call": 0.001577771899996705,
+            "projected_minutes": 28.399894199940686
+          },
+          "training_rebuild_prefix16": {
+            "count": 202500,
+            "kernel": "actor_uncached_prefix16",
+            "measured_seconds_per_call": 0.00438163495000481,
+            "projected_minutes": 14.788017956266232
+          },
+          "training_plan": {
+            "count": 1080000,
+            "kernel": "plan_values_all10",
+            "measured_seconds_per_call": 0.0006052892500008512,
+            "projected_minutes": 10.895206500015322
+          },
+          "shared_after_audit": {
+            "count": 120000,
+            "kernel": "shared_after_audit_step",
+            "measured_seconds_per_call": 0.00905517894999548,
+            "projected_minutes": 18.110357899990962
+          },
+          "other_neural_control": {
+            "count": 534000,
+            "kernel": "frozen_control_step",
+            "measured_seconds_per_call": 0.001577771899996705,
+            "projected_minutes": 14.042169909970674
+          },
+          "other_neural_plan": {
+            "count": 534000,
+            "kernel": "plan_values_all10",
+            "measured_seconds_per_call": 0.0006052892500008512,
+            "projected_minutes": 5.387074325007576
+          }
+        },
+        "optimizer_only_minutes": 103.77001133437619,
+        "covered_components_minutes": 195.39273212556765,
+        "covered_components_with_illustrative_30_percent_reserve_minutes": 254.01055176323794
+      },
+      "process_cpu": {
+        "components": {
+          "q_update": {
+            "count": 67500,
+            "kernel": "q_update",
+            "measured_seconds_per_call": 0.1385576738000003,
+            "projected_minutes": 155.87738302500034
+          },
+          "world_update": {
+            "count": 33750,
+            "kernel": "world_update",
+            "measured_seconds_per_call": 0.09216118074999943,
+            "projected_minutes": 51.84066417187468
+          },
+          "training_control": {
+            "count": 1080000,
+            "kernel": "frozen_control_step",
+            "measured_seconds_per_call": 0.0035720700999999798,
+            "projected_minutes": 64.29726179999963
+          },
+          "training_rebuild_prefix16": {
+            "count": 202500,
+            "kernel": "actor_uncached_prefix16",
+            "measured_seconds_per_call": 0.009379123400000045,
+            "projected_minutes": 31.65454147500015
+          },
+          "training_plan": {
+            "count": 1080000,
+            "kernel": "plan_values_all10",
+            "measured_seconds_per_call": 0.0016059439000002174,
+            "projected_minutes": 28.906990200003914
+          },
+          "shared_after_audit": {
+            "count": 120000,
+            "kernel": "shared_after_audit_step",
+            "measured_seconds_per_call": 0.018054883299999804,
+            "projected_minutes": 36.10976659999961
+          },
+          "other_neural_control": {
+            "count": 534000,
+            "kernel": "frozen_control_step",
+            "measured_seconds_per_call": 0.0035720700999999798,
+            "projected_minutes": 31.79142388999982
+          },
+          "other_neural_plan": {
+            "count": 534000,
+            "kernel": "plan_values_all10",
+            "measured_seconds_per_call": 0.0016059439000002174,
+            "projected_minutes": 14.292900710001936
+          }
+        },
+        "optimizer_only_minutes": 207.71804719687503,
+        "covered_components_minutes": 414.77093187188007,
+        "covered_components_with_illustrative_30_percent_reserve_minutes": 539.2022114334441
+      }
+    }
+  },
+  "current_300_minute_candidate": {
+    "wall_ceiling_minutes": 300,
+    "process_cpu_ceiling_minutes": 300,
+    "existing_internal_stop_minutes": 285,
+    "disposition": "NOT_DEMONSTRATED_BY_MEASURED_COMPONENT_ENVELOPE",
+    "reason": "Optimizer-only arithmetic fits 300 CPU minutes, but the covered mean and p95 NN/control envelopes exceed the 300-minute CPU ceiling before adding unmeasured physics, IO or replay overhead. A wall-only comparison would conceal process CPU use."
+  },
+  "proposed_revised_limits_assessed_only": {
+    "wall_ceiling_minutes": 360,
+    "process_cpu_ceiling_minutes": 720,
+    "internal_wall_stop_minutes": 330,
+    "internal_process_cpu_stop_minutes": 660,
+    "process_rss_ceiling_bytes": 3221225472,
+    "intraop_threads": 2,
+    "interop_threads": 2,
+    "runner": "standard public-repository ubuntu-24.04; one job",
+    "covered_p95_plus_30_percent_wall_minutes": 254.01055176323794,
+    "covered_p95_plus_30_percent_process_cpu_minutes": 539.2022114334441,
+    "headroom_to_internal_wall_stop_minutes": 75.98944823676206,
+    "headroom_to_internal_cpu_stop_minutes": 120.79778856655594,
+    "disposition": "MODELED_HEADROOM_FOR_REVIEW_ONLY_NOT_A_RUNTIME_OR_MEMORY_GUARANTEE",
+    "job_timeout_scope": "The six-hour GitHub job timeout covers setup, installation and artifact handling as well as the scientific process. A 330-minute internal wall stop leaves 30 minutes for the remaining job work; this is a design allowance, not measured completion proof.",
+    "current_protocol_modified": false,
+    "execution_authorized": false
+  },
+  "memory_assessment": {
+    "synthetic_profile_peak_rss_bytes": 488599552,
+    "synthetic_profile_peak_rss_gib": 0.4550437927246094,
+    "proposed_process_rss_ceiling_bytes": 3221225472,
+    "full_capacity_memory_validated": false,
+    "reason": "This profile used a smaller artificial replay and did not measure all full-capacity fit/source/calibration buffers, checkpoint serialization or artifact compression together."
+  },
+  "limitations": [
+    "The arithmetic is a component envelope constructed from 50 measurements per optimizer and 20 per forward kernel, not a complete campaign benchmark.",
+    "Summing per-kernel p95 values is a conservative planning heuristic for the measured sample; it is not a statistical 95% upper confidence limit or worst-case runtime bound for a future campaign.",
+    "Environment physics/reset/render time, all JSON/CSV/trajectory serialization, checkpoint IO/compression/hashing, output uploads, whole-episode fingerprints, full-capacity replay sampling and host variability are not measured here.",
+    "The illustrative 30% reserve is unmeasured. Missing work may exceed that allowance.",
+    "Peak RSS is from the small synthetic fixture and does not prove that the full campaign fits 3 GiB.",
+    "No result here demonstrates learning, retention, transfer, useful world predictions or game competence.",
+    "No new campaign, retry, merge, paid resource, authorization or protocol freeze is granted by this report."
+  ],
+  "official_constraints_context": {
+    "github_job_limit_reference": "https://docs.github.com/en/actions/reference/limits",
+    "standard_public_runner_reference": "https://docs.github.com/en/actions/reference/runners/github-hosted-runners",
+    "parent_verified_current_context": "Parent supplied live official GitHub documentation for six-hour hosted-job limit and standard public-repository runner compute. This assessment performed no network verification."
+  }
+}
