@@ -53,7 +53,7 @@ jobs:
       OMP_NUM_THREADS: '2'
       MKL_NUM_THREADS: '2'
       OPENBLAS_NUM_THREADS: '2'
-      PROFILE_OUTPUT: ${{ runner.temp }}/learning-v2-synthetic-cost
+      PROFILE_SUBDIRECTORY: learning-v2-synthetic-cost
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -72,13 +72,13 @@ jobs:
         run: >-
           timeout --signal=TERM --kill-after=15s 180s
           python scripts/profile_continual_synthetic.py --run
-          --output "$PROFILE_OUTPUT" --updates 100 --forwards 100
+          --output "$RUNNER_TEMP/$PROFILE_SUBDIRECTORY" --updates 100 --forwards 100
           --context-length 16 --threads 2
       - name: Preserve cost measurements, including a stopped profile
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: learning-v2-synthetic-cost-${{ github.run_id }}-attempt-${{ github.run_attempt }}
-          path: ${{ env.PROFILE_OUTPUT }}/
+          path: ${{ runner.temp }}/learning-v2-synthetic-cost/
           if-no-files-found: error
           retention-days: 14
