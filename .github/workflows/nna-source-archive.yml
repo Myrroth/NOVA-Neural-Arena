@@ -1,0 +1,59 @@
+name: NNA-FECHAMENTO-001 read-only source preservation (NO GAMES)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [feat/nna-fechamento-001-phase5]
+
+permissions:
+  contents: read
+
+jobs:
+  source-archive:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'chore/nna-fechamento-001-source-archive'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact already-approved scientific source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: 8468e0dad3a75ecfe06187d8dbbf7a523f468df0
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Assert source identity, archive history and manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = '8468e0dad3a75ecfe06187d8dbbf7a523f468df0'
+          mkdir -p "$RUNNER_TEMP/nna-source-preserved"
+          git archive --format=tar HEAD > "$RUNNER_TEMP/nna-source-preserved/source-at-approved-head.tar"
+          git bundle create "$RUNNER_TEMP/nna-source-preserved/full-source-history.bundle" --all
+          git bundle verify "$RUNNER_TEMP/nna-source-preserved/full-source-history.bundle"
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])/'nna-source-preserved'
+          names = ['source-at-approved-head.tar', 'full-source-history.bundle']
+          sizes = {n: (root/n).stat().st_size for n in names}
+          digests = {n: hashlib.sha256((root/n).read_bytes()).hexdigest() for n in names}
+          payload = {
+            "purpose": "NNA-FECHAMENTO-001 RECOVERY ONLY; NO EPISODES OR TRAINING",
+            "source_sha": "8468e0dad3a75ecfe06187d8dbbf7a523f468df0",
+            "source_tree": "PR #8 exactly as reviewed, includes Pong and Phase 5 infrastructure",
+            "original_checkpoints": "not bundled; preserved in original Drive v1",
+            "sha256": digests,
+            "bytes": sizes,
+          }
+          (root/'source-manifest.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload, sort_keys=True))
+          PY
+          ( cd "$RUNNER_TEMP/nna-source-preserved" && sha256sum source-at-approved-head.tar full-source-history.bundle source-manifest.json > SHA256SUMS && sha256sum -c SHA256SUMS )
+      - name: Preserve exact source artifacts
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: nna-source-preserved-${{ github.run_id }}
+          path: ${{ runner.temp }}/nna-source-preserved/
+          retention-days: 30
+          if-no-files-found: error
