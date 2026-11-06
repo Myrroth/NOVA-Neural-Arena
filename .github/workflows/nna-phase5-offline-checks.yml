@@ -1,0 +1,42 @@
+name: NNA-FECHAMENTO-001 Phase 5 OFFLINE analysis checks (NO GAMES)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [feat/nna-fechamento-001-phase5]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nna-closure-offline-analysis-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  offline-only:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'analysis/nna-fechamento-001-fase5-offline'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout draft offline analyzer only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Python 3.11
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.11'
+      - name: Install only pytest; no torch/gymnasium or checkpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'pytest==9.0.2'
+          python -m compileall -q arena/analysis tests/test_phase5_offline.py
+      - name: Validate synthetic tabular fixture, never start game or train
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q tests/test_phase5_offline.py
+          echo 'Tested 32200-row SYNTHETIC CSV, no scientific episodes were executed.'
